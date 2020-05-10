@@ -8,6 +8,7 @@ import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
 import cn.lanink.hotpotato.listener.RoomLevelProtection;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.ui.GuiListener;
+import cn.lanink.hotpotato.utils.MetricsLite;
 import cn.nukkit.Player;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "0.0.1-SNAPSHOT git-bb3d883";
+    public static String VERSION = "0.0.1-SNAPSHOT git-baf4191";
     private static HotPotato hotPotato;
     private Config config;
     private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();
@@ -72,7 +73,7 @@ public class HotPotato extends PluginBase {
         getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
         getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
-        //new MetricsLite(this, );
+        new MetricsLite(this, 7464);
         getLogger().info("§e插件加载完成！欢迎使用！");
     }
 

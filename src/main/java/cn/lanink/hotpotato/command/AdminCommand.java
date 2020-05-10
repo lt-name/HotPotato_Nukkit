@@ -48,7 +48,7 @@ public class AdminCommand extends Command {
                                         hotPotato.roomSetGameTime(Integer.valueOf(strings[1]), hotPotato.getRoomConfig(player.getLevel()));
                                         commandSender.sendMessage("§a爆炸等待时间已设置为：" + Integer.valueOf(strings[1]));
                                     } else {
-                                        commandSender.sendMessage("§a游戏时间最小不能低于5秒！");
+                                        commandSender.sendMessage("§a爆炸等待时间最小不能低于5秒！");
                                     }
                                 }else {
                                     commandSender.sendMessage("§a时间只能设置为正整数！");
@@ -70,7 +70,7 @@ public class AdminCommand extends Command {
                             commandSender.sendMessage("§a/" + name + " §e打开ui");
                             commandSender.sendMessage("§a/" + name + " setspawn §e设置当前位置为出生点");
                             commandSender.sendMessage("§a/" + name + " setwaittime 数字 §e设置游戏人数足够后的等待时间");
-                            commandSender.sendMessage("§a/" + name + " setgametime 数字 §e设置每回合游戏最长时间");
+                            commandSender.sendMessage("§a/" + name + " setgametime 数字 §e设置爆炸等待时间");
                             commandSender.sendMessage("§a/" + name + " reload §e重载所有房间");
                             commandSender.sendMessage("§a/" + name + " unload §e关闭所有房间,卸载配置");
                             return true;
