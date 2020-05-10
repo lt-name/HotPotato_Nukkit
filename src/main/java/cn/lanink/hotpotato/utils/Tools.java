@@ -91,12 +91,12 @@ public class Tools {
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setLevel(player.getFoodData().getMaxLevel());
         if (joinRoom) {
-            player.setNameTagVisible(false);
-            player.setNameTagAlwaysVisible(false);
+            /*player.setNameTagVisible(false);
+            player.setNameTagAlwaysVisible(false);*/
             player.setAllowModifyWorld(false);
         }else {
-            player.setNameTagVisible(true);
-            player.setNameTagAlwaysVisible(true);
+            /*player.setNameTagVisible(true);
+            player.setNameTagAlwaysVisible(true);*/
             setPlayerInvisible(player, false);
             player.setAllowModifyWorld(true);
         }

@@ -125,7 +125,7 @@ public class Room {
             SavePlayerInventory.savePlayerInventory(player, false);
             player.teleport(this.getSpawn());
             this.setRandomSkin(player, false);
-            NameTagMessage nameTagMessage = new NameTagMessage(this.world, true, "");
+            NameTagMessage nameTagMessage = new NameTagMessage(this.world, true, player.getName());
             Api.setPlayerShowMessage(player.getName(), nameTagMessage);
             player.sendMessage("你已加入房间: " + this.world);
         }

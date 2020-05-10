@@ -5,7 +5,7 @@ import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.tasks.VictoryTask;
 import cn.nukkit.Player;
-import cn.nukkit.Server;
+import cn.nukkit.scheduler.AsyncTask;
 import cn.nukkit.scheduler.PluginTask;
 
 import java.util.Map;
@@ -38,23 +38,32 @@ public class TimeTask extends PluginTask<HotPotato> {
                 }
             }
         }
-        int j = 0;
-        for (Map.Entry<Player, Integer> entry : this.room.getPlayers().entrySet()) {
-            if (entry.getValue() == 1) {
-                j++;
-            }
-        }
-/*        if (j <= 1) {
-            for (Map.Entry<Player, Integer> entry : this.room.getPlayers().entrySet()) {
-                if (entry.getValue() == 1) {
-                    this.room.victoryName = entry.getKey().getName();
-                    break;
+        if (!this.room.task.contains(this.taskName)) {
+            this.room.task.add(this.taskName);
+            owner.getServer().getScheduler().scheduleAsyncTask(owner, new AsyncTask() {
+                @Override
+                public void onRun() {
+                    int j = 0;
+                    for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                        if (entry.getValue() == 1) {
+                            j++;
+                        }
+                    }
+                    if (j <= 1) {
+                        for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                            if (entry.getValue() == 1) {
+                                room.victoryName = entry.getKey().getName();
+                                break;
+                            }
+                        }
+                        room.setMode(3);
+                        owner.getServer().getScheduler().scheduleRepeatingTask(
+                                owner, new VictoryTask(owner, room), 20, true);
+                    }
+                    room.task.remove(taskName);
                 }
-            }
-            this.room.setMode(3);
-            owner.getServer().getScheduler().scheduleRepeatingTask(
-                    owner, new VictoryTask(owner, this.room), 20, true);
-        }*/
+            });
+        }
     }
 
     private void sendMessage(String string) {

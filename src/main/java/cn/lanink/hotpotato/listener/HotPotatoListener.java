@@ -4,6 +4,7 @@ import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.*;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.tasks.VictoryTask;
+import cn.lanink.hotpotato.tasks.game.ParticleTask;
 import cn.lanink.hotpotato.tasks.game.TimeTask;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.AdventureSettings;
@@ -51,7 +52,9 @@ public class HotPotatoListener implements Listener {
         }
         room.setMode(2);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
-                HotPotato.getInstance(), new TimeTask(this.hotPotato, room), 20,true);
+                this.hotPotato, new TimeTask(this.hotPotato, room), 20,true);
+        Server.getInstance().getScheduler().scheduleRepeatingTask(
+                this.hotPotato, new ParticleTask(this.hotPotato, room), 5);
     }
 
     /**

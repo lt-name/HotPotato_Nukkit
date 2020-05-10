@@ -40,33 +40,12 @@ public class PlayerGameListener implements Listener {
             }
             Room room = this.hotPotato.getRooms().getOrDefault(player1.getLevel().getName(), null);
             if (room != null) {
-                if (room.isPlaying(player1) && room.getPlayerMode(player1) == 2 &&
+                if (room.getMode() == 2 && room.isPlaying(player1) && room.getPlayerMode(player1) == 2 &&
                         room.isPlaying(player2) && room.getPlayerMode(player2) != 0) {
                     Server.getInstance().getPluginManager().callEvent(new HotPotatoTransferEvent(room, player1, player2));
                 }
                 event.setCancelled(false);
                 event.setDamage(0);
-            }
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (player == null) return;
-        Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
-        if (room != null) {
-            if (room.isPlaying(player) && room.getPlayerMode(player) == 2) {
-                Level level = player.getLevel();
-                //四个方向粒子
-                Vector3 vector3 = new Vector3(player.x+1, player.y+1, player.z+1);
-                level.addParticle(new DustParticle(vector3, 255, 0, 0));
-                vector3 = new Vector3(player.x+1, player.y+1, player.z-1);
-                level.addParticle(new DustParticle(vector3, 255, 0, 0));
-                vector3 = new Vector3(player.x-1, player.y+1, player.z-1);
-                level.addParticle(new DustParticle(vector3, 255, 0, 0));
-                vector3 = new Vector3(player.x-1, player.y+1, player.z+1);
-                level.addParticle(new DustParticle(vector3, 255, 0, 0));
             }
         }
     }

@@ -34,7 +34,7 @@ public class VictoryTask extends PluginTask<HotPotato> {
                 @Override
                 public void onRun() {
                     for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                        if (entry.getValue() != 0) {
+                        if (entry.getValue() == 1) {
                             Tools.spawnFirework(entry.getKey());
                         }
                     }
