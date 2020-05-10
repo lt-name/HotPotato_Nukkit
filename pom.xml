@@ -85,7 +85,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>${project.basedir}/src/main/java/cn/lanink/murdermystery/MurderMystery.java</include>
+                                <include>${project.basedir}/src/main/java/cn/lanink/hotpotato/HotPotato.java</include>
                                 <include>${project.basedir}/src/main/resources/plugin.yml</include>
                             </includes>
                             <replacements>
