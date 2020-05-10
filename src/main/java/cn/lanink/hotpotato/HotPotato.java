@@ -14,7 +14,6 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
-import cn.nukkit.utils.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,13 +30,12 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "0.0.1-SNAPSHOT git-baf4191";
+    public static String VERSION = "0.0.1-SNAPSHOT git-52df612";
     private static HotPotato hotPotato;
     private Config config;
     private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();
     private LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
     private LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
-    private Skin sword;
 
     public static HotPotato getInstance() { return hotPotato; }
 
@@ -95,17 +93,12 @@ public class HotPotato extends PluginBase {
         }
         this.rooms.clear();
         this.roomConfigs.clear();
-        this.skins.clear();
         getServer().getScheduler().cancelTask(this);
         getLogger().info("§c插件卸载完成！");
     }
 
     public Config getConfig() {
         return this.config;
-    }
-
-    public Skin getSword() {
-        return this.sword;
     }
 
     public LinkedHashMap<String, Room> getRooms() {
