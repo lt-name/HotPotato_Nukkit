@@ -1,0 +1,16 @@
+name: HotPotato
+main: cn.lanink.hotpotato.HotPotato
+version: "0.0.1-SNAPSHOT"
+api:
+  - 1.0.0
+load: POSTWORLD
+author: "LT_Name"
+loadbefore:
+  - EconomyAPI
+  - Tips
+
+permissions:
+  HotPotato.all:
+    default: true
+  HotPotato.op:
+    default: op
