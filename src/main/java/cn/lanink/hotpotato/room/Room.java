@@ -11,6 +11,7 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
+import tip.messages.BossBarMessage;
 import tip.messages.NameTagMessage;
 import tip.utils.Api;
 
@@ -27,7 +28,7 @@ public class Room {
     private LinkedHashMap<Player, Integer> players = new LinkedHashMap<>(); //0未分配 1玩家 2持有土豆的玩家
     private LinkedHashMap<Player, Integer> skinNumber = new LinkedHashMap<>(); //玩家使用皮肤编号，用于防止重复使用
     private LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
-    private String spawn, world;
+    private String spawn, level;
     public ArrayList<String> task = new ArrayList<>();
     public String victoryName;
 
@@ -39,7 +40,7 @@ public class Room {
         this.setWaitTime = config.getInt("等待时间", 120);
         this.setGameTime = config.getInt("游戏时间", 20);
         this.spawn = config.getString("出生点", null);
-        this.world = config.getString("World", null);
+        this.level = config.getString("World", null);
         this.initTime();
         this.mode = 0;
     }
@@ -122,12 +123,14 @@ public class Room {
             }
             this.addPlaying(player);
             Tools.rePlayerState(player, true);
-            SavePlayerInventory.savePlayerInventory(player, false);
+            SavePlayerInventory.save(player);
             player.teleport(this.getSpawn());
             this.setRandomSkin(player, false);
-            NameTagMessage nameTagMessage = new NameTagMessage(this.world, true, player.getName());
+            NameTagMessage nameTagMessage = new NameTagMessage(this.level, true, player.getName());
             Api.setPlayerShowMessage(player.getName(), nameTagMessage);
-            player.sendMessage("你已加入房间: " + this.world);
+            BossBarMessage bossBarMessage = new BossBarMessage(this.level, false, 5, false, new LinkedList<>());
+            Api.setPlayerShowMessage(player.getName(), bossBarMessage);
+            player.sendMessage("你已加入房间: " + this.level);
         }
     }
 
@@ -149,10 +152,10 @@ public class Room {
             this.delPlaying(player);
         }
         if (online) {
-            Tools.removePlayerShowMessage(this.world, player);
+            Tools.removePlayerShowMessage(this.level, player);
             player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
             Tools.rePlayerState(player, false);
-            SavePlayerInventory.savePlayerInventory(player, true);
+            SavePlayerInventory.restore(player);
             this.setRandomSkin(player, true);
         }else {
             this.skinNumber.remove(player);
@@ -266,7 +269,7 @@ public class Room {
      * @return 游戏世界
      */
     public Level getLevel() {
-        return Server.getInstance().getLevelByName(this.world);
+        return Server.getInstance().getLevelByName(this.level);
     }
 
     /**

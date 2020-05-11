@@ -49,7 +49,7 @@ public class Tools {
     }
 
     public static void givePotato(Player player) {
-        Item item = Item.get(392, 0, 1);
+        Item item = Item.get(393, 0, 1);
         PlayerInventory inventory = player.getInventory();
         for (int i = 0; i < 9; i++) {
             inventory.setItem(i, item);
@@ -91,6 +91,10 @@ public class Tools {
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setLevel(player.getFoodData().getMaxLevel());
         if (joinRoom) {
+            NameTagMessage nameTagMessage = new NameTagMessage(player.getLevel().getName(), true, "");
+            Api.setPlayerShowMessage(player.getName(), nameTagMessage);
+            BossBarMessage bossBarMessage = new BossBarMessage(player.getLevel().getName(), false, 5, false, new LinkedList<>());
+            Api.setPlayerShowMessage(player.getName(), bossBarMessage);
             /*player.setNameTagVisible(false);
             player.setNameTagAlwaysVisible(false);*/
             player.setAllowModifyWorld(false);
