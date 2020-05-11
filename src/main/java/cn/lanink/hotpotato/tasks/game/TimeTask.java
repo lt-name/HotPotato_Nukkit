@@ -45,7 +45,7 @@ public class TimeTask extends PluginTask<HotPotato> {
                 public void onRun() {
                     int j = 0;
                     for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                        if (entry.getValue() == 1) {
+                        if (entry.getValue() != 0) {
                             j++;
                         }
                     }

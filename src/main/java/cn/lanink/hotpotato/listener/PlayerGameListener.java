@@ -9,10 +9,9 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.event.player.PlayerMoveEvent;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.DustParticle;
-import cn.nukkit.math.Vector3;
+import cn.nukkit.event.player.PlayerInteractEvent;
+import cn.nukkit.item.Item;
+import cn.nukkit.nbt.tag.CompoundTag;
 
 /**
  * 游戏监听器（nk事件）
@@ -40,12 +39,41 @@ public class PlayerGameListener implements Listener {
             }
             Room room = this.hotPotato.getRooms().getOrDefault(player1.getLevel().getName(), null);
             if (room != null) {
-                if (room.getMode() == 2 && room.isPlaying(player1) && room.getPlayerMode(player1) == 2 &&
-                        room.isPlaying(player2) && room.getPlayerMode(player2) != 0) {
-                    Server.getInstance().getPluginManager().callEvent(new HotPotatoTransferEvent(room, player1, player2));
+                if (room.getMode() == 2) {
+                    if (room.isPlaying(player1) && room.getPlayerMode(player1) == 2 &&
+                            room.isPlaying(player2) && room.getPlayerMode(player2) != 0) {
+                        Server.getInstance().getPluginManager().callEvent(new HotPotatoTransferEvent(room, player1, player2));
+                    }
+                    event.setCancelled(false);
+                    event.setDamage(0);
+                }else {
+                    event.setCancelled(true);
                 }
-                event.setCancelled(false);
-                event.setDamage(0);
+            }
+        }
+    }
+
+    /**
+     * 玩家点击事件
+     * @param event 事件
+     */
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Item item = event.getItem();
+        if (player == null || item == null || !item.hasCompoundTag()) {
+            return;
+        }
+        Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
+        if (room == null || !room.isPlaying(player)) {
+            return;
+        }
+        if (room.getMode() == 1) {
+            CompoundTag tag = item.getNamedTag();
+            if (tag.getBoolean("isHotPotatoItem") && tag.getInt("HotPotatoType") == 10) {
+                event.setCancelled(true);
+                room.quitRoom(player);
+                player.sendMessage("§a你已退出房间");
             }
         }
     }

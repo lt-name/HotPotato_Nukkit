@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "0.0.1-SNAPSHOT git-d1c5e0b";
+    public static String VERSION = "0.0.1-SNAPSHOT git-1a99627";
     private static HotPotato hotPotato;
     private Config config;
     private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();

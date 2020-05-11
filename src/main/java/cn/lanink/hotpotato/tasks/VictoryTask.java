@@ -2,12 +2,7 @@ package cn.lanink.hotpotato.tasks;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
-import cn.lanink.hotpotato.utils.Tools;
-import cn.nukkit.Player;
-import cn.nukkit.scheduler.AsyncTask;
 import cn.nukkit.scheduler.PluginTask;
-
-import java.util.Map;
 
 public class VictoryTask extends PluginTask<HotPotato> {
 
@@ -30,16 +25,11 @@ public class VictoryTask extends PluginTask<HotPotato> {
             this.cancel();
         }else {
             this.victoryTime--;
-            owner.getServer().getScheduler().scheduleAsyncTask(HotPotato.getInstance(), new AsyncTask() {
-                @Override
-                public void onRun() {
-                    for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                        if (entry.getValue() == 1) {
-                            Tools.spawnFirework(entry.getKey());
-                        }
-                    }
+            /*for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                if (entry.getValue() == 1) {
+                    Tools.spawnFirework(entry.getKey());
                 }
-            });
+            }*/
         }
     }
 

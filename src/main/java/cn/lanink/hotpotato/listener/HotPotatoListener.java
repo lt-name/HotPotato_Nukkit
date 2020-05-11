@@ -42,6 +42,7 @@ public class HotPotatoListener implements Listener {
         int i = new Random().nextInt(room.getPlayers().size());
         int j = 0;
         for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+            entry.getKey().getInventory().clearAll();
             if (i == j) {
                 entry.setValue(2);
                 Tools.givePotato(entry.getKey());

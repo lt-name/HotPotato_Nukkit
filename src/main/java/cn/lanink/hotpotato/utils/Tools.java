@@ -48,6 +48,23 @@ public class Tools {
                 new BossBarMessage(level, false, 5, false, new LinkedList<>()));
     }
 
+    public static void giveItem(Player player, int i) {
+        switch (i) {
+            case 1:
+                givePotato(player);
+                break;
+            case 10:
+                Item item = Item.get(324, 0, 1);
+                item.setNamedTag(new CompoundTag()
+                        .putBoolean("isHotPotatoItem", true)
+                        .putInt("HotPotatoType", 10));
+                item.setCustomName("§c退出房间");
+                item.setLore("手持点击,即可退出房间");
+                player.getInventory().setItem(8, item);
+                break;
+        }
+    }
+
     public static void givePotato(Player player) {
         Item item = Item.get(393, 0, 1);
         PlayerInventory inventory = player.getInventory();
@@ -134,9 +151,11 @@ public class Tools {
      * @param level 世界
      */
     public static void cleanEntity(Level level) {
-        for (Entity entity : level.getEntities()) {
-            if (!(entity instanceof Player)) {
-                entity.close();
+        if (level.getEntities() != null && level.getEntities().length > 0) {
+            for (Entity entity : level.getEntities()) {
+                if (!(entity instanceof Player)) {
+                    entity.close();
+                }
             }
         }
     }

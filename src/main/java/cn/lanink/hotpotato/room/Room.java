@@ -97,7 +97,7 @@ public class Room {
                 while(it.hasNext()) {
                     Map.Entry<Player, Integer> entry = it.next();
                     it.remove();
-                    this.quitRoom(entry.getKey());
+                    this.quitRoomOnline(entry.getKey());
                 }
             }
         }else {
@@ -126,6 +126,7 @@ public class Room {
             SavePlayerInventory.save(player);
             player.teleport(this.getSpawn());
             this.setRandomSkin(player, false);
+            Tools.giveItem(player, 10);
             NameTagMessage nameTagMessage = new NameTagMessage(this.level, true, player.getName());
             Api.setPlayerShowMessage(player.getName(), nameTagMessage);
             BossBarMessage bossBarMessage = new BossBarMessage(this.level, false, 5, false, new LinkedList<>());
@@ -152,15 +153,19 @@ public class Room {
             this.delPlaying(player);
         }
         if (online) {
-            Tools.removePlayerShowMessage(this.level, player);
-            player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
-            Tools.rePlayerState(player, false);
-            SavePlayerInventory.restore(player);
-            this.setRandomSkin(player, true);
+            this.quitRoomOnline(player);
         }else {
             this.skinNumber.remove(player);
             this.skinCache.remove(player);
         }
+    }
+
+    private void quitRoomOnline(Player player) {
+        Tools.removePlayerShowMessage(this.level, player);
+        player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+        Tools.rePlayerState(player, false);
+        SavePlayerInventory.restore(player);
+        this.setRandomSkin(player, true);
     }
 
     /**
