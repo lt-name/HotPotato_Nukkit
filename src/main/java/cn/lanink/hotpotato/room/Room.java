@@ -30,7 +30,7 @@ public class Room {
     private LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
     private String spawn, level;
     public ArrayList<String> task = new ArrayList<>();
-    public String victoryName;
+    public Player victoryPlayer;
 
     /**
      * 初始化
@@ -107,7 +107,7 @@ public class Room {
         this.skinNumber.clear();
         this.skinCache.clear();
         this.task.clear();
-        this.victoryName = "";
+        this.victoryPlayer = null;
         Tools.cleanEntity(this.getLevel());
     }
 

@@ -98,16 +98,11 @@ public class HotPotatoListener implements Listener {
                     playerList.add(entry.getKey());
                 }
             }
-            if (playerList.size() <= 1) {
-                room.victoryName = playerList.get(0).getName();
-                room.setMode(3);
-                Server.getInstance().getScheduler().scheduleRepeatingTask(
-                        this.hotPotato, new VictoryTask(this.hotPotato, room), 20, true);
-                return;
+            if (playerList.size() > 1) {
+                Player player2 = playerList.get(new Random().nextInt(playerList.size()));
+                room.addPlaying(player2, 2);
+                Tools.givePotato(player2);
             }
-            Player player2 = playerList.get(new Random().nextInt(playerList.size()));
-            room.addPlaying(player2, 2);
-            Tools.givePotato(player2);
         }
     }
 
