@@ -52,7 +52,7 @@ public class TimeTask extends PluginTask<HotPotato> {
                     if (j <= 1) {
                         for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
                             if (entry.getValue() == 1) {
-                                room.victoryName = entry.getKey().getName();
+                                room.victoryPlayer = entry.getKey();
                                 break;
                             }
                         }
