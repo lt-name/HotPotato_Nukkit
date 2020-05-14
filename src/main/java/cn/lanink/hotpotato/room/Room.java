@@ -42,6 +42,9 @@ public class Room {
         this.spawn = config.getString("出生点", null);
         this.level = config.getString("World", null);
         this.initTime();
+        if (this.getLevel() == null) {
+            Server.getInstance().loadLevel(this.level);
+        }
         this.mode = 0;
     }
 
@@ -93,12 +96,8 @@ public class Room {
         this.mode = 0;
         if (normal) {
             if (this.players.values().size() > 0 ) {
-                Iterator<Map.Entry<Player, Integer>> it = this.players.entrySet().iterator();
-                while(it.hasNext()) {
-                    Map.Entry<Player, Integer> entry = it.next();
-                    it.remove();
-                    this.quitRoomOnline(entry.getKey());
-                }
+                this.players.keySet().forEach(this::quitRoomOnline);
+                this.players.clear();
             }
         }else {
             this.getLevel().getPlayers().values().forEach(

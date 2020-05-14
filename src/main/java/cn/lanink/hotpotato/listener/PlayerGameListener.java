@@ -61,14 +61,19 @@ public class PlayerGameListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Item item = event.getItem();
-        if (player == null || item == null || !item.hasCompoundTag()) {
+        if (player == null || item == null) {
             return;
         }
         Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
         if (room == null || !room.isPlaying(player)) {
             return;
         }
+        if (event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+            event.setCancelled(true);
+            player.setAllowModifyWorld(false);
+        }
         if (room.getMode() == 1) {
+            if (!item.hasCompoundTag()) return;
             CompoundTag tag = item.getNamedTag();
             if (tag.getBoolean("isHotPotatoItem") && tag.getInt("HotPotatoType") == 10) {
                 event.setCancelled(true);
