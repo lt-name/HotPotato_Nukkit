@@ -86,9 +86,9 @@ public class TipsTask extends PluginTask<HotPotato> {
                                 }
                             }
                         }else if (room.getMode() == 3) {
-                            bottomMessage.setMessage("§e胜利者：" + room.victoryName);
+                            bottomMessage.setMessage("§e胜利者：" + room.victoryPlayer.getName());
                             LinkedList<String> ms = new LinkedList<>();
-                            ms.add("§e胜利者：" + room.victoryName);
+                            ms.add("§e胜利者：" + room.victoryPlayer.getName());
                             scoreBoardMessage.setMessages(ms);
                             this.sendMessage();
                         }
