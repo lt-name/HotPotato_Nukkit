@@ -20,8 +20,8 @@ public class TipsTask extends PluginTask<HotPotato> {
     private final String taskName = "TipsTask";
     private final Room room;
     private final boolean bottom, scoreBoard;
-    private TipMessage bottomMessage;
-    private ScoreBoardMessage scoreBoardMessage;
+    private final TipMessage bottomMessage;
+    private final ScoreBoardMessage scoreBoardMessage;
 
     public TipsTask(HotPotato owner, Room room) {
         super(owner);
@@ -68,23 +68,13 @@ public class TipsTask extends PluginTask<HotPotato> {
                                     playerNumber++;
                                 }
                             }
-                            for (Player player : room.getPlayers().keySet()) {
-                                if (bottom) {
-                                    TipMessage tip = new TipMessage(room.getLevel().getName(), true, 0, null);
-                                    tip.setMessage("§l§a倒计时： §e" + room.gameTime + " §a秒 \n" +
-                                            "§l§a存活人数：" + playerNumber);
-                                    Api.setPlayerShowMessage(player.getName(), tip);
-                                }
-                                if (scoreBoard) {
-                                    ScoreBoardMessage score = new ScoreBoardMessage(
-                                            room.getLevel().getName(), true, "§eGunWar", new LinkedList<>());
-                                    LinkedList<String> ms = new LinkedList<>();
-                                    ms.add("§l§a倒计时： §e" + room.gameTime + " §a秒 ");
-                                    ms.add("§l§a存活人数：" + playerNumber);
-                                    score.setMessages(ms);
-                                    Api.setPlayerShowMessage(player.getName(), score);
-                                }
-                            }
+                            bottomMessage.setMessage("§l§a倒计时： §e" + room.gameTime + " §a秒 \n" +
+                                    "§l§a存活人数：" + playerNumber);
+                            LinkedList<String> ms = new LinkedList<>();
+                            ms.add("§l§a倒计时： §e" + room.gameTime + " §a秒 ");
+                            ms.add("§l§a存活人数：" + playerNumber);
+                            scoreBoardMessage.setMessages(ms);
+                            this.sendMessage();
                         }else if (room.getMode() == 3) {
                             bottomMessage.setMessage("§e胜利者：" + room.victoryPlayer.getName());
                             LinkedList<String> ms = new LinkedList<>();
