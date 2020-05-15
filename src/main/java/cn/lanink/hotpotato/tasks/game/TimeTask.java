@@ -38,32 +38,6 @@ public class TimeTask extends PluginTask<HotPotato> {
                 }
             }
         }
-        if (!this.room.task.contains(this.taskName)) {
-            this.room.task.add(this.taskName);
-            owner.getServer().getScheduler().scheduleAsyncTask(owner, new AsyncTask() {
-                @Override
-                public void onRun() {
-                    int j = 0;
-                    for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                        if (entry.getValue() != 0) {
-                            j++;
-                        }
-                    }
-                    if (j <= 1) {
-                        for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                            if (entry.getValue() == 1) {
-                                room.victoryPlayer = entry.getKey();
-                                break;
-                            }
-                        }
-                        room.setMode(3);
-                        owner.getServer().getScheduler().scheduleRepeatingTask(
-                                owner, new VictoryTask(owner, room), 20, true);
-                    }
-                    room.task.remove(taskName);
-                }
-            });
-        }
     }
 
     private void sendMessage(String string) {

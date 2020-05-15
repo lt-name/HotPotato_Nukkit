@@ -2,6 +2,7 @@ package cn.lanink.hotpotato.tasks;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.scheduler.PluginTask;
@@ -29,24 +30,28 @@ public class VictoryTask extends PluginTask<HotPotato> {
         if (this.victoryTime < 1) {
             if (!this.room.task.contains(this.taskName)) {
                 this.room.task.add(this.taskName);
-                for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                    if (entry.getKey() == this.room.victoryPlayer) {
-                        this.cmd(entry.getKey(), owner.getConfig().getStringList("胜利执行命令"));
-                    }else {
-                        this.cmd(entry.getKey(), owner.getConfig().getStringList("失败执行命令"));
+                if (room.getPlayers().size() > 0) {
+                    for (Player player : room.getPlayers().keySet()) {
+                        if (player == this.room.victoryPlayer) {
+                            this.cmd(player, owner.getConfig().getStringList("胜利执行命令"));
+                        }else {
+                            this.cmd(player, owner.getConfig().getStringList("失败执行命令"));
+                        }
                     }
                 }
-                this.room.endGame();
                 this.room.task.remove(this.taskName);
+                this.room.endGame();
             }
             this.cancel();
         }else {
             this.victoryTime--;
-            /*for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                if (entry.getValue() == 1) {
-                    Tools.spawnFirework(entry.getKey());
+            if (room.getPlayers().size() > 0) {
+                for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                    if (entry.getValue() == 1) {
+                        Tools.spawnFirework(entry.getKey());
+                    }
                 }
-            }*/
+            }
         }
     }
 

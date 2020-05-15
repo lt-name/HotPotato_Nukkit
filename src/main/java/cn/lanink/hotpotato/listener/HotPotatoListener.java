@@ -55,7 +55,7 @@ public class HotPotatoListener implements Listener {
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 this.hotPotato, new TimeTask(this.hotPotato, room), 20,true);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
-                this.hotPotato, new ParticleTask(this.hotPotato, room), 5);
+                this.hotPotato, new ParticleTask(this.hotPotato, room), 5, true);
     }
 
     /**
@@ -102,6 +102,24 @@ public class HotPotatoListener implements Listener {
                 Player player2 = playerList.get(new Random().nextInt(playerList.size()));
                 room.addPlaying(player2, 2);
                 Tools.givePotato(player2);
+            }else {
+                int j = 0;
+                for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                    if (entry.getValue() != 0) {
+                        j++;
+                    }
+                }
+                if (j <= 1) {
+                    for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                        if (entry.getValue() == 1) {
+                            room.victoryPlayer = entry.getKey();
+                            break;
+                        }
+                    }
+                    room.setMode(3);
+                    Server.getInstance().getScheduler().scheduleRepeatingTask(
+                            this.hotPotato, new VictoryTask(this.hotPotato, room), 20);
+                }
             }
         }
     }
