@@ -36,14 +36,16 @@ public class ParticleTask extends PluginTask<HotPotato> {
                             Player player = entry.getKey();
                             Level level = player.getLevel();
                             //四个方向粒子
-                            Vector3 vector3 = new Vector3(player.x + 1, player.y + 1, player.z + 1);
-                            level.addParticle(new RedstoneParticle(vector3));
-                            vector3 = new Vector3(player.x + 1, player.y + 1, player.z - 1);
-                            level.addParticle(new RedstoneParticle(vector3));
-                            vector3 = new Vector3(player.x - 1, player.y + 1, player.z - 1);
-                            level.addParticle(new RedstoneParticle(vector3));
-                            vector3 = new Vector3(player.x - 1, player.y + 1, player.z + 1);
-                            level.addParticle(new RedstoneParticle(vector3));
+                            for (int y1 = 0; y1 < 3; y1++) {
+                                Vector3 vector3 = new Vector3(player.x + 1, player.y + y1, player.z + 1);
+                                level.addParticle(new RedstoneParticle(vector3));
+                                vector3 = new Vector3(player.x + 1, player.y + y1, player.z - 1);
+                                level.addParticle(new RedstoneParticle(vector3));
+                                vector3 = new Vector3(player.x - 1, player.y + y1, player.z - 1);
+                                level.addParticle(new RedstoneParticle(vector3));
+                                vector3 = new Vector3(player.x - 1, player.y + y1, player.z + 1);
+                                level.addParticle(new RedstoneParticle(vector3));
+                            }
                         }
                     }
                     room.task.remove(taskName);
