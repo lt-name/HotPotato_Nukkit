@@ -57,7 +57,8 @@ public class PlayerJoinAndQuit implements Listener {
         if (player == null || fromLevel == null || toLevel == null) return;
         if (!fromLevel.equals(toLevel)) {
             LinkedHashMap<String, Room> room =  HotPotato.getInstance().getRooms();
-            if (room.containsKey(fromLevel) && room.get(fromLevel).isPlaying(player)) {
+            if (room.containsKey(fromLevel) && room.get(fromLevel).isPlaying(player) &&
+                    room.get(fromLevel).getMode() != 0) {
                 event.setCancelled(true);
                 player.sendMessage("§e >> §c退出房间请使用命令！");
             }else if (!player.isOp() && room.containsKey(toLevel) &&
