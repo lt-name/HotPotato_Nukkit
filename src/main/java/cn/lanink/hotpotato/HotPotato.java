@@ -30,12 +30,13 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "0.0.1-SNAPSHOT git-b16c3a7";
+    public static String VERSION = "0.0.1-SNAPSHOT git-3b6e40d";
     private static HotPotato hotPotato;
     private Config config;
     private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();
     private LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
     private LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
+    private String cmdUser, cmdAdmin;
 
     public static HotPotato getInstance() { return hotPotato; }
 
@@ -64,8 +65,10 @@ public class HotPotato extends PluginBase {
         this.loadRooms();
         getLogger().info("§e开始加载皮肤");
         this.loadSkins();
-        getServer().getCommandMap().register("", new UserCommand(this.config.getString("插件命令", "hotpotato")));
-        getServer().getCommandMap().register("", new AdminCommand(this.config.getString("管理命令", "hotpotatoadmin")));
+        this.cmdUser = this.config.getString("插件命令", "hotpotato");
+        this.cmdAdmin = this.config.getString("管理命令", "hotpotatoadmin");
+        getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
+        getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
         getServer().getPluginManager().registerEvents(new PlayerJoinAndQuit(), this);
         getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
         getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
@@ -77,8 +80,7 @@ public class HotPotato extends PluginBase {
 
     @Override
     public void onDisable() {
-        this.config.save();
-        if (this.rooms.values().size() > 0) {
+        if (this.rooms.size() > 0) {
             Iterator<Map.Entry<String, Room>> it = this.rooms.entrySet().iterator();
             while(it.hasNext()){
                 Map.Entry<String, Room> entry = it.next();
@@ -216,6 +218,14 @@ public class HotPotato extends PluginBase {
         }else {
             getLogger().warning("§c当前皮肤数量小于16，部分玩家仍可使用自己的皮肤");
         }
+    }
+
+    public String getCmdUser() {
+        return this.cmdUser;
+    }
+
+    public String getCmdAdmin() {
+        return this.cmdAdmin;
     }
 
     public void roomSetSpawn(Player player, Config config) {

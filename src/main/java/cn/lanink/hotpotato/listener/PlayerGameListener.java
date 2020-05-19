@@ -9,6 +9,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
+import cn.nukkit.event.player.PlayerCommandPreprocessEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerRespawnEvent;
 import cn.nukkit.item.Item;
@@ -97,6 +98,26 @@ public class PlayerGameListener implements Listener {
                 break;
             }
         }
+    }
+
+    /**
+     * 玩家执行命令事件
+     * @param event 事件
+     */
+    @EventHandler
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
+        if (player == null || event.getMessage() == null) return;
+        Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
+        if (room == null || !room.isPlaying(player)) {
+            return;
+        }
+        if (event.getMessage().startsWith(this.hotPotato.getCmdUser(), 1) ||
+                event.getMessage().startsWith(this.hotPotato.getCmdAdmin(), 1)) {
+            return;
+        }
+        event.setCancelled(true);
+        player.sendMessage("§e >> §c游戏中无法使用其他命令");
     }
 
 }

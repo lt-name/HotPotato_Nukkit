@@ -56,6 +56,9 @@ public class VictoryTask extends PluginTask<HotPotato> {
     }
 
     private void cmd(Player player, List<String> cmds) {
+        if (player == null || cmds == null || cmds.size() < 1) {
+            return;
+        }
         for (String s : cmds) {
             String[] cmd = s.split("&");
             if ((cmd.length > 1) && (cmd[1].equals("con"))) {

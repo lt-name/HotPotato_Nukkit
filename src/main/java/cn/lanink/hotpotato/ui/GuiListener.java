@@ -22,8 +22,8 @@ public class GuiListener implements Listener {
         if (player == null || event.getWindow() == null || event.getResponse() == null) {
             return;
         }
-        String uName = HotPotato.getInstance().getConfig().getString("插件命令", "hotpotato");
-        String aName = HotPotato.getInstance().getConfig().getString("管理命令", "hotpotatoadmin");
+        String uName = HotPotato.getInstance().getCmdUser();
+        String aName = HotPotato.getInstance().getCmdAdmin();
         if (event.getWindow() instanceof FormWindowSimple) {
             FormWindowSimple simple = (FormWindowSimple) event.getWindow();
             if (event.getFormID() == GuiCreate.USER_MENU) {
