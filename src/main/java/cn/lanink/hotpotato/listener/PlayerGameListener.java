@@ -10,6 +10,7 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
+import cn.nukkit.event.player.PlayerRespawnEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 
@@ -79,6 +80,21 @@ public class PlayerGameListener implements Listener {
                 event.setCancelled(true);
                 room.quitRoom(player);
                 player.sendMessage("§a你已退出房间");
+            }
+        }
+    }
+
+    /**
+     * 玩家重生事件
+     * @param event 事件
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        for (Room room : this.hotPotato.getRooms().values()) {
+            if (room.isPlaying(player)) {
+                event.setRespawnPosition(room.getSpawn());
+                break;
             }
         }
     }
