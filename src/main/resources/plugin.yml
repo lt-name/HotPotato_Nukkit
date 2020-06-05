@@ -11,7 +11,7 @@ loadbefore:
   - EconomyAPI
 
 permissions:
-  HotPotato.all:
+  HotPotato.command.user:
     default: true
-  HotPotato.op:
+  HotPotato.command.admin:
     default: op

@@ -1,18 +1,19 @@
 package cn.lanink.hotpotato.command.base.adminsub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
+import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 
-public class SetWaitTimeCommand extends BaseSubCommand {
+public class SetSpawn extends BaseSubCommand {
 
-    public SetWaitTimeCommand(String name) {
+    public SetSpawn(String name) {
         super(name);
     }
 
     @Override
     public boolean canUser(CommandSender sender) {
-        return false;
+        return sender.isPlayer() && sender.isOp();
     }
 
     @Override
@@ -22,7 +23,10 @@ public class SetWaitTimeCommand extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return false;
+        Player player = (Player) sender;
+        hotPotato.roomSetSpawn(player, hotPotato.getRoomConfig(player.getLevel()));
+        sender.sendMessage("§a等待点设置成功！");
+        return true;
     }
 
     @Override
