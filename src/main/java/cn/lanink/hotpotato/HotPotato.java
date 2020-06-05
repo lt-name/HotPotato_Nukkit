@@ -8,6 +8,7 @@ import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
 import cn.lanink.hotpotato.listener.RoomLevelProtection;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.ui.GuiListener;
+import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.MetricsLite;
 import cn.nukkit.Player;
 import cn.nukkit.entity.data.Skin;
@@ -32,6 +33,7 @@ public class HotPotato extends PluginBase {
 
     public static String VERSION = "0.0.1-SNAPSHOT git-3b6e40d";
     private static HotPotato hotPotato;
+    private Language language;
     private Config config;
     private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();
     private LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
@@ -60,6 +62,17 @@ public class HotPotato extends PluginBase {
         }
         if (!file3.exists() && !file3.mkdirs()) {
             getLogger().warning("Skins 文件夹初始化失败");
+        }
+        //语言文件
+        saveResource("Language/zh_CN.yml", "/Language/zh_CN.yml", false);
+        String s = this.config.getString("language", "zh_CN");
+        File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
+        if (languageFile.exists()) {
+            getLogger().info("§aLanguage: " + s + " loaded !");
+            this.language = new Language(new Config(languageFile, 2));
+        }else {
+            getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
+            this.language = new Language(new Config());
         }
         getLogger().info("§e开始加载房间");
         this.loadRooms();
@@ -99,6 +112,11 @@ public class HotPotato extends PluginBase {
         getLogger().info("§c插件卸载完成！");
     }
 
+    public Language getLanguage() {
+        return this.language;
+    }
+
+    @Override
     public Config getConfig() {
         return this.config;
     }

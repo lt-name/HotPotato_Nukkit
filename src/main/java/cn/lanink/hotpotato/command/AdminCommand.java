@@ -1,21 +1,22 @@
 package cn.lanink.hotpotato.command;
 
 import cn.lanink.hotpotato.HotPotato;
+import cn.lanink.hotpotato.command.base.BaseCommand;
+import cn.lanink.hotpotato.command.base.adminsub.SetSpawnCommand;
 import cn.lanink.hotpotato.ui.GuiCreate;
 import cn.nukkit.Player;
-import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 
-public class AdminCommand extends Command {
+public class AdminCommand extends BaseCommand {
 
     HotPotato hotPotato = HotPotato.getInstance();
-    private final String name;
 
     public AdminCommand(String name) {
-        super(name, "HotPotato 管理命令", "/" + name + " help");
-        this.name = name;
+        super(name, "HotPotato 管理命令");
         this.setPermission("HotPotato.op");
-        this.setPermissionMessage("§c你没有权限");
+        this.addSubCommand(new SetSpawnCommand("setspawn"));
+
+        this.loadCommandBase();
     }
 
     @Override
@@ -25,10 +26,6 @@ public class AdminCommand extends Command {
             if (player.isOp()) {
                 if (strings.length > 0) {
                     switch (strings[0]) {
-                        case "setspawn":
-                            hotPotato.roomSetSpawn(player, hotPotato.getRoomConfig(player.getLevel()));
-                            commandSender.sendMessage("§a等待点设置成功！");
-                            return true;
                         case "setwaittime":
                             if (strings.length == 2) {
                                 if (strings[1].matches("[0-9]*")) {
@@ -38,7 +35,7 @@ public class AdminCommand extends Command {
                                     commandSender.sendMessage("§a时间只能设置为正整数！");
                                 }
                             }else {
-                                commandSender.sendMessage("§a查看帮助：/" + name + " help");
+                                commandSender.sendMessage("§a查看帮助：/" + getName() + " help");
                             }
                             return true;
                         case "setgametime":
@@ -54,7 +51,7 @@ public class AdminCommand extends Command {
                                     commandSender.sendMessage("§a时间只能设置为正整数！");
                                 }
                             }else {
-                                commandSender.sendMessage("§a查看帮助：/" + name + " help");
+                                commandSender.sendMessage("§a查看帮助：/" + getName() + " help");
                             }
                             return true;
                         case "reload": case "重载":
@@ -66,13 +63,7 @@ public class AdminCommand extends Command {
                             commandSender.sendMessage("§a已卸载所有房间！请在后台查看信息！");
                             return true;
                         default:
-                            commandSender.sendMessage("§eHotPotato--命令帮助");
-                            commandSender.sendMessage("§a/" + name + " §e打开ui");
-                            commandSender.sendMessage("§a/" + name + " setspawn §e设置当前位置为出生点");
-                            commandSender.sendMessage("§a/" + name + " setwaittime 数字 §e设置游戏人数足够后的等待时间");
-                            commandSender.sendMessage("§a/" + name + " setgametime 数字 §e设置爆炸等待时间");
-                            commandSender.sendMessage("§a/" + name + " reload §e重载所有房间");
-                            commandSender.sendMessage("§a/" + name + " unload §e关闭所有房间,卸载配置");
+
                             return true;
                     }
                 }else {
@@ -97,6 +88,17 @@ public class AdminCommand extends Command {
             }
             return true;
         }
+    }
+
+    @Override
+    public void sendHelp(CommandSender sender) {
+        sender.sendMessage("§eHotPotato--命令帮助");
+        sender.sendMessage("§a/" + getName() + " §e打开ui");
+        sender.sendMessage("§a/" + getName() + " setspawn §e设置当前位置为出生点");
+        sender.sendMessage("§a/" + getName() + " setwaittime 数字 §e设置游戏人数足够后的等待时间");
+        sender.sendMessage("§a/" + getName() + " setgametime 数字 §e设置爆炸等待时间");
+        sender.sendMessage("§a/" + getName() + " reload §e重载所有房间");
+        sender.sendMessage("§a/" + getName() + " unload §e关闭所有房间,卸载配置");
     }
 
 }
