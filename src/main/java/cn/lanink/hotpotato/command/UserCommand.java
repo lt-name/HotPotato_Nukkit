@@ -1,10 +1,7 @@
 package cn.lanink.hotpotato.command;
 
 import cn.lanink.hotpotato.command.base.BaseCommand;
-import cn.lanink.hotpotato.command.base.usersub.Join;
-import cn.lanink.hotpotato.command.base.usersub.List;
-import cn.lanink.hotpotato.command.base.usersub.Quit;
-import cn.lanink.hotpotato.command.base.usersub.Ui;
+import cn.lanink.hotpotato.command.usersub.*;
 import cn.nukkit.command.CommandSender;
 
 public class UserCommand extends BaseCommand {
@@ -21,11 +18,7 @@ public class UserCommand extends BaseCommand {
 
     @Override
     public void sendHelp(CommandSender sender) {
-        sender.sendMessage("§eHotPotato--命令帮助");
-        sender.sendMessage("§a/" + getName() + " ui §e打开ui");
-        sender.sendMessage("§a/" + getName() + " join 房间名称 §e加入游戏");
-        sender.sendMessage("§a/" + getName() + " quit §e退出游戏");
-        sender.sendMessage("§a/" + getName() + " list §e查看房间列表");
+        sender.sendMessage(this.language.userHelp.replace("%cmdName%", this.getName()));
     }
 
 }

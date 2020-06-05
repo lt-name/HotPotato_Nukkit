@@ -1,14 +1,14 @@
-package cn.lanink.hotpotato.command.base.usersub;
+package cn.lanink.hotpotato.command.usersub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
-import cn.lanink.hotpotato.ui.GuiCreate;
+import cn.lanink.hotpotato.room.Room;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 
-public class Ui extends BaseSubCommand {
+public class Quit extends BaseSubCommand {
 
-    public Ui(String name) {
+    public Quit(String name) {
         super(name);
     }
 
@@ -25,7 +25,14 @@ public class Ui extends BaseSubCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        GuiCreate.sendUserMenu(player);
+        for (Room room : hotPotato.getRooms().values()) {
+            if (room.isPlaying(player)) {
+                room.quitRoom(player, true);
+                sender.sendMessage(this.language.quitRoom);
+                return true;
+            }
+        }
+        sender.sendMessage(this.language.quitRoomNotInRoom);
         return true;
     }
 

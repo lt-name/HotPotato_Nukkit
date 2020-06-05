@@ -1,18 +1,20 @@
-package cn.lanink.hotpotato.command.base.usersub;
+package cn.lanink.hotpotato.command.adminsub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
+import cn.lanink.hotpotato.ui.GuiCreate;
+import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 
-public class List extends BaseSubCommand {
+public class UiCommand extends BaseSubCommand {
 
-    public List(String name) {
+    public UiCommand(String name) {
         super(name);
     }
 
     @Override
     public boolean canUser(CommandSender sender) {
-        return sender.isPlayer();
+        return sender.isPlayer() && sender.isOp();
     }
 
     @Override
@@ -22,11 +24,8 @@ public class List extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        StringBuilder list = new StringBuilder();
-        for (String string : hotPotato.getRooms().keySet()) {
-            list.append(string).append(" ");
-        }
-        sender.sendMessage("§e房间列表： §a" + list);
+        Player player = (Player) sender;
+        GuiCreate.sendAdminMenu(player);
         return true;
     }
 

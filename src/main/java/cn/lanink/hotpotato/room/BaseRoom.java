@@ -7,7 +7,6 @@ import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -18,7 +17,6 @@ public abstract class BaseRoom {
 
     protected final Language language = HotPotato.getInstance().getLanguage();
     public int waitTime, gameTime;
-    public ArrayList<String> task = new ArrayList<>();
     protected int mode; //0未初始化 1等待 2游戏 3胜利结算
     protected String level, waitSpawn;
     protected int setWaitTime, setGameTime;

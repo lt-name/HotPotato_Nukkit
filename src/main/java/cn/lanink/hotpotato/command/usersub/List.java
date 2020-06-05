@@ -1,18 +1,18 @@
-package cn.lanink.hotpotato.command.base.adminsub;
+package cn.lanink.hotpotato.command.usersub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 
-public class UnloadRoom extends BaseSubCommand {
+public class List extends BaseSubCommand {
 
-    public UnloadRoom(String name) {
+    public List(String name) {
         super(name);
     }
 
     @Override
     public boolean canUser(CommandSender sender) {
-        return false;
+        return sender.isPlayer();
     }
 
     @Override
@@ -22,8 +22,11 @@ public class UnloadRoom extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        hotPotato.unloadRooms();
-        sender.sendMessage("§a已卸载所有房间！请在后台查看信息！");
+        StringBuilder list = new StringBuilder();
+        for (String string : hotPotato.getRooms().keySet()) {
+            list.append(string).append(" ");
+        }
+        sender.sendMessage(this.language.listRoom.replace("%list%", list));
         return true;
     }
 

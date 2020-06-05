@@ -1,14 +1,15 @@
-package cn.lanink.hotpotato.command.base.adminsub;
+package cn.lanink.hotpotato.command.adminsub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
+import cn.nukkit.utils.Config;
 
-public class SetWaitTime extends BaseSubCommand {
+public class SetGameTime extends BaseSubCommand {
 
-    public SetWaitTime(String name) {
+    public SetGameTime(String name) {
         super(name);
     }
 
@@ -26,14 +27,20 @@ public class SetWaitTime extends BaseSubCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length == 2) {
             if (args[1].matches("[0-9]*")) {
-                Player player = (Player) sender;
-                hotPotato.roomSetWaitTime(Integer.valueOf(args[1]), hotPotato.getRoomConfig(player.getLevel()));
-                sender.sendMessage("§a等待时间已设置为：" + Integer.valueOf(args[1]));
+                if (Integer.parseInt(args[1]) > 5) {
+                    Player player = (Player) sender;
+                    Config config = hotPotato.getRoomConfig(player.getLevel());
+                    config.set("gameTime", Integer.valueOf(args[1]));
+                    config.save();
+                    sender.sendMessage(this.language.adminSetGameTime.replace("%time%", args[1]));
+                } else {
+                    sender.sendMessage(this.language.adminSetGameTimeShort);
+                }
             }else {
-                sender.sendMessage("§a时间只能设置为正整数！");
+                sender.sendMessage(this.language.adminNotNumber);
             }
         }else {
-            sender.sendMessage("§a查看帮助：/" + getName() + " help");
+            sender.sendMessage(this.language.cmdHelp.replace("%cmdName%", this.getName()));
         }
         return true;
     }

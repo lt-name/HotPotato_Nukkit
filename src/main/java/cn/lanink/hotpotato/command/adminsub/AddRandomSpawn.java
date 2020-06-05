@@ -1,13 +1,16 @@
-package cn.lanink.hotpotato.command.base.adminsub;
+package cn.lanink.hotpotato.command.adminsub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
+import cn.nukkit.utils.Config;
 
-public class SetSpawn extends BaseSubCommand {
+import java.util.List;
 
-    public SetSpawn(String name) {
+public class AddRandomSpawn extends BaseSubCommand {
+
+    public AddRandomSpawn(String name) {
         super(name);
     }
 
@@ -24,8 +27,13 @@ public class SetSpawn extends BaseSubCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        hotPotato.roomSetSpawn(player, hotPotato.getRoomConfig(player.getLevel()));
-        sender.sendMessage("§a等待点设置成功！");
+        Config config = this.hotPotato.getRoomConfig(player.getLevel());
+        String s = player.getFloorX() + ":" + player.getFloorY() + ":" + player.getFloorZ();
+        List<String> list = config.getStringList("randomSpawn");
+        list.add(s);
+        config.set("randomSpawn", list);
+        config.save();
+        sender.sendMessage(this.language.adminAddRandomSpawn.replace("%number%", list.size() + ""));
         return true;
     }
 

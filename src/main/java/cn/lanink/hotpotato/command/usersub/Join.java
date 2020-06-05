@@ -1,4 +1,4 @@
-package cn.lanink.hotpotato.command.base.usersub;
+package cn.lanink.hotpotato.command.usersub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.lanink.hotpotato.room.Room;
@@ -29,38 +29,38 @@ public class Join extends BaseSubCommand {
         if (hotPotato.getRooms().size() > 0) {
             for (Room room : hotPotato.getRooms().values()) {
                 if (room.isPlaying(player)) {
-                    sender.sendMessage("§c你已经在一个房间中了!");
+                    sender.sendMessage(this.language.joinRoomIsInRoom);
                     return true;
                 }
             }
             if (player.riding != null) {
-                sender.sendMessage("§a请勿在骑乘状态下进入房间！");
+                sender.sendMessage(this.language.joinRoomIsRiding);
                 return true;
             }
             if (args.length < 2) {
                 for (Room room : hotPotato.getRooms().values()) {
                     if (room.getMode() == 0 || room.getMode() == 1) {
                         room.joinRoom(player);
-                        sender.sendMessage("§a已为你随机分配房间！");
+                        sender.sendMessage(this.language.joinRandomRoom);
                         return true;
                     }
                 }
             }else if (hotPotato.getRooms().containsKey(args[1])) {
                 Room room = hotPotato.getRooms().get(args[1]);
                 if (room.getMode() == 2 || room.getMode() == 3) {
-                    sender.sendMessage("§a该房间正在游戏中，请稍后");
+                    sender.sendMessage(this.language.joinRoomIsPlaying);
                 }else if (room.getPlayers().values().size() > 15) {
-                    sender.sendMessage("§a该房间已满人，请稍后");
+                    sender.sendMessage(this.language.joinRoomIsFull);
                 } else {
                     room.joinRoom(player);
                 }
                 return true;
             }else {
-                sender.sendMessage("§a该房间不存在！");
+                sender.sendMessage(this.language.joinRoomIsNotFound);
                 return true;
             }
         }
-        sender.sendMessage("§a暂无房间可用！");
+        sender.sendMessage(this.language.joinRoomNotAvailable);
         return true;
     }
 

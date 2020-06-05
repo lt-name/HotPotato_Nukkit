@@ -10,7 +10,6 @@ import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.ui.GuiListener;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.MetricsLite;
-import cn.nukkit.Player;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
@@ -20,10 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * HotPotato
@@ -31,7 +27,7 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "0.0.1-SNAPSHOT git-3b6e40d";
+    public static String VERSION = "?";
     private static HotPotato hotPotato;
     private Language language;
     private Config config;
@@ -39,6 +35,7 @@ public class HotPotato extends PluginBase {
     private LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
     private LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
     private String cmdUser, cmdAdmin;
+    public final LinkedList<Integer> taskList = new LinkedList<>();
 
     public static HotPotato getInstance() { return hotPotato; }
 
@@ -49,8 +46,6 @@ public class HotPotato extends PluginBase {
             hotPotato = this;
         }
         getLogger().info("§l§e版本: " + VERSION);
-        saveDefaultConfig();
-        this.config = new Config(getDataFolder() + "/config.yml", 2);
         File file1 = new File(this.getDataFolder() + "/Rooms");
         File file2 = new File(this.getDataFolder() + "/PlayerInventory");
         File file3 = new File(this.getDataFolder() + "/Skins");
@@ -63,16 +58,18 @@ public class HotPotato extends PluginBase {
         if (!file3.exists() && !file3.mkdirs()) {
             getLogger().warning("Skins 文件夹初始化失败");
         }
+        saveDefaultConfig();
+        this.config = new Config(getDataFolder() + "/config.yml", 2);
         //语言文件
-        saveResource("Language/zh_CN.yml", "/Language/zh_CN.yml", false);
+        saveResource("Language/zh_CN.yml", false);
         String s = this.config.getString("language", "zh_CN");
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {
-            getLogger().info("§aLanguage: " + s + " loaded !");
             this.language = new Language(new Config(languageFile, 2));
+            getLogger().info("§aLanguage: " + s + " loaded !");
         }else {
-            getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
             this.language = new Language(new Config());
+            getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
         }
         getLogger().info("§e开始加载房间");
         this.loadRooms();
@@ -86,7 +83,7 @@ public class HotPotato extends PluginBase {
         getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
         getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
         getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
-        getServer().getPluginManager().registerEvents(new GuiListener(), this);
+        getServer().getPluginManager().registerEvents(new GuiListener(this), this);
         new MetricsLite(this, 7464);
         getLogger().info("§e插件加载完成！欢迎使用！");
     }
@@ -108,7 +105,10 @@ public class HotPotato extends PluginBase {
         }
         this.rooms.clear();
         this.roomConfigs.clear();
-        getServer().getScheduler().cancelTask(this);
+        for (int id : this.taskList) {
+            getServer().getScheduler().cancelTask(id);
+        }
+        this.taskList.clear();
         getLogger().info("§c插件卸载完成！");
     }
 
@@ -133,9 +133,6 @@ public class HotPotato extends PluginBase {
         if (this.roomConfigs.containsKey(level)) {
             return this.roomConfigs.get(level);
         }
-        if (!new File(getDataFolder() + "/Rooms/" + level + ".yml").exists()) {
-            saveResource("room.yml", "/Rooms/" + level + ".yml", false);
-        }
         Config config = new Config(getDataFolder() + "/Rooms/" + level + ".yml", 2);
         this.roomConfigs.put(level, config);
         return config;
@@ -155,10 +152,11 @@ public class HotPotato extends PluginBase {
                 String[] fileName = file1.getName().split("\\.");
                 if (fileName.length > 0) {
                     Config config = getRoomConfig(fileName[0]);
-                    if (config.getInt("等待时间", 0) == 0 ||
-                            config.getInt("游戏时间", 0) == 0 ||
-                            config.getString("出生点", null) == null ||
-                            config.getString("World", null) == null) {
+                    if (config.getInt("waitTime", 0) == 0 ||
+                            config.getInt("gameTime", 0) == 0 ||
+                            config.getString("waitSpawn", "").trim().equals("") ||
+                            config.getStringList("randomSpawn").size() == 0 ||
+                            config.getString("World", "").trim().equals("")) {
                         getLogger().warning("§c房间：" + fileName[0] + " 配置不完整，加载失败！");
                         continue;
                     }
@@ -188,7 +186,10 @@ public class HotPotato extends PluginBase {
         if (this.roomConfigs.values().size() > 0) {
             this.roomConfigs.clear();
         }
-        getServer().getScheduler().cancelTask(this);
+        for (int id : this.taskList) {
+            getServer().getScheduler().cancelTask(id);
+        }
+        this.taskList.clear();
     }
 
     /**
@@ -244,36 +245,6 @@ public class HotPotato extends PluginBase {
 
     public String getCmdAdmin() {
         return this.cmdAdmin;
-    }
-
-    public void roomSetSpawn(Player player, Config config) {
-        String spawn = player.getFloorX() + ":" + player.getFloorY() + ":" + player.getFloorZ();
-        String world = player.getLevel().getName();
-        config.set("World", world);
-        config.set("出生点", spawn);
-        config.save();
-    }
-
-    public void roomAddRandomSpawn(Player player, Config config) {
-        this.roomAddRandomSpawn(player.getFloorX(), player.getFloorY(), player.getFloorZ(), config);
-    }
-
-    private void roomAddRandomSpawn(int x, int y, int z, Config config) {
-        String s = x + ":" + y + ":" + z;
-        List<String> list = config.getStringList("randomSpawn");
-        list.add(s);
-        config.set("randomSpawn", list);
-        config.save();
-    }
-
-    public void roomSetWaitTime(Integer waitTime, Config config) {
-        config.set("等待时间", waitTime);
-        config.save();
-    }
-
-    public void roomSetGameTime(Integer gameTime, Config config) {
-        config.set("游戏时间", gameTime);
-        config.save();
     }
 
 }

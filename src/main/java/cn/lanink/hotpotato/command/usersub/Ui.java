@@ -1,18 +1,20 @@
-package cn.lanink.hotpotato.command.base.adminsub;
+package cn.lanink.hotpotato.command.usersub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
+import cn.lanink.hotpotato.ui.GuiCreate;
+import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 
-public class ReloadRoom extends BaseSubCommand {
+public class Ui extends BaseSubCommand {
 
-    public ReloadRoom(String name) {
+    public Ui(String name) {
         super(name);
     }
 
     @Override
     public boolean canUser(CommandSender sender) {
-        return sender.isOp();
+        return sender.isPlayer();
     }
 
     @Override
@@ -22,8 +24,8 @@ public class ReloadRoom extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        hotPotato.reLoadRooms();
-        sender.sendMessage("§a配置重载完成！请在后台查看信息！");
+        Player player = (Player) sender;
+        GuiCreate.sendUserMenu(player);
         return true;
     }
 

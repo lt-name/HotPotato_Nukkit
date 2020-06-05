@@ -1,7 +1,7 @@
 package cn.lanink.hotpotato.room;
 
 import cn.lanink.hotpotato.HotPotato;
-import cn.lanink.hotpotato.tasks.TipsTask;
+import cn.lanink.hotpotato.tasks.game.TipsTask;
 import cn.lanink.hotpotato.tasks.WaitTask;
 import cn.lanink.hotpotato.utils.SavePlayerInventory;
 import cn.lanink.hotpotato.utils.Tools;
@@ -12,6 +12,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
 import tip.messages.BossBarMessage;
 import tip.messages.NameTagMessage;
+import tip.messages.TipMessage;
 import tip.utils.Api;
 
 import java.util.*;
@@ -21,8 +22,9 @@ import java.util.*;
  */
 public class Room extends BaseRoom {
 
-    private LinkedHashMap<Player, Integer> skinNumber = new LinkedHashMap<>(); //玩家使用皮肤编号，用于防止重复使用
-    private LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
+    private final ArrayList<Position> randomSpawn = new ArrayList<>();
+    private final LinkedHashMap<Player, Integer> skinNumber = new LinkedHashMap<>(); //玩家使用皮肤编号，用于防止重复使用
+    private final LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
     public Player victoryPlayer;
 
     /**
@@ -30,14 +32,22 @@ public class Room extends BaseRoom {
      * @param config 配置文件
      */
     public Room(Config config) {
-        this.setWaitTime = config.getInt("等待时间", 120);
-        this.setGameTime = config.getInt("游戏时间", 20);
-        this.waitSpawn = config.getString("出生点", null);
+        this.setWaitTime = config.getInt("waitTime", 120);
+        this.setGameTime = config.getInt("gameTime", 20);
+        this.waitSpawn = config.getString("waitSpawn", null);
         this.level = config.getString("World", null);
-        this.initTime();
         if (this.getLevel() == null) {
             Server.getInstance().loadLevel(this.level);
         }
+        for (String string : config.getStringList("randomSpawn")) {
+            String[] s = string.split(":");
+            this.randomSpawn.add(new Position(
+                    Integer.parseInt(s[0]),
+                    Integer.parseInt(s[1]),
+                    Integer.parseInt(s[2]),
+                    this.getLevel()));
+        }
+        this.initTime();
         this.mode = 0;
     }
 
@@ -48,9 +58,7 @@ public class Room extends BaseRoom {
     public void initTask() {
         this.setMode(1);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
-                HotPotato.getInstance(), new WaitTask(HotPotato.getInstance(), this), 20, true);
-        Server.getInstance().getScheduler().scheduleRepeatingTask(
-                HotPotato.getInstance(), new TipsTask(HotPotato.getInstance(), this), 10);
+                HotPotato.getInstance(), new WaitTask(HotPotato.getInstance(), this), 20);
     }
 
     /**
@@ -69,17 +77,20 @@ public class Room extends BaseRoom {
         this.mode = 0;
         if (normal) {
             if (this.players.values().size() > 0 ) {
-                this.players.keySet().forEach(this::quitRoomOnline);
-                this.players.clear();
+                Iterator<Map.Entry<Player, Integer>> it = this.players.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<Player, Integer> entry = it.next();
+                    it.remove();
+                    this.quitRoomOnline(entry.getKey());
+                }
             }
         }else {
             this.getLevel().getPlayers().values().forEach(
-                    player -> player.kick("\n§c房间非正常关闭!\n为了您的背包安全，请稍后重进服务器！"));
+                    player -> player.kick(HotPotato.getInstance().getLanguage().roomSafeKick));
         }
         this.initTime();
         this.skinNumber.clear();
         this.skinCache.clear();
-        this.task.clear();
         this.victoryPlayer = null;
         Tools.cleanEntity(this.getLevel());
     }
@@ -97,14 +108,16 @@ public class Room extends BaseRoom {
             this.addPlaying(player);
             Tools.rePlayerState(player, true);
             SavePlayerInventory.save(player);
-            player.teleport(this.getSpawn());
+            player.teleport(this.getWaitSpawn());
             this.setRandomSkin(player, false);
             Tools.giveItem(player, 10);
+            TipMessage tipMessage = new TipMessage(this.level, false, 0, "");
+            Api.setPlayerShowMessage(player.getName(), tipMessage);
             NameTagMessage nameTagMessage = new NameTagMessage(this.level, true, player.getName());
             Api.setPlayerShowMessage(player.getName(), nameTagMessage);
             BossBarMessage bossBarMessage = new BossBarMessage(this.level, false, 5, false, new LinkedList<>());
             Api.setPlayerShowMessage(player.getName(), bossBarMessage);
-            player.sendMessage("你已加入房间: " + this.level);
+            player.sendMessage(HotPotato.getInstance().getLanguage().joinRoom.replace("%name%", this.level));
         }
     }
 
@@ -195,10 +208,11 @@ public class Room extends BaseRoom {
     }
 
     /**
-     * @return 出生点
+     * 获取随机出生点
+     * @return 随机出生点列表
      */
-    public Position getSpawn() {
-        return super.getWaitSpawn();
+    public ArrayList<Position> getRandomSpawn() {
+        return this.randomSpawn;
     }
 
     /**
