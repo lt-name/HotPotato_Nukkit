@@ -47,7 +47,7 @@ public class Language {
     public String tpQuitRoomLevel = "§e >> §c退出房间请使用命令！";
     public String scoreBoardTitle = "§e烫手山芋";
     public String waitTimeScoreBoard = " 玩家: §a%playerNumber%/16 \n §a开始倒计时: §e%time% ";
-    public String waitScoreBoard = " 玩家: §a%playerNumber%/16 \n 最低游戏人数为 3 人 \n 等待玩家加入中 ";
+    public String waitScoreBoard = " 玩家: §a%playerNumber%/16 \n 最少游戏人数为 3 人 \n 等待玩家加入中 ";
     public String waitTimeBottom = "§a当前已有: %playerNumber% 位玩家 \n §a游戏还有: %time% 秒开始！";
     public String waitBottom = "§c等待玩家加入中,当前已有: %playerNumber% 位玩家";
     public String gameTimeScoreBoard = "§l§a爆炸时间:§e %time% 秒 \n §l§a存活人数: %playerNumber%";

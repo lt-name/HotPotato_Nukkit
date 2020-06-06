@@ -1,7 +1,9 @@
 package cn.lanink.hotpotato.listener;
 
 import cn.lanink.hotpotato.HotPotato;
-import cn.lanink.hotpotato.event.*;
+import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
+import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
+import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.tasks.VictoryTask;
 import cn.lanink.hotpotato.tasks.game.ParticleTask;
@@ -55,10 +57,10 @@ public class HotPotatoListener implements Listener {
                 entry.setValue(1);
             }
             j++;
-            if (room.getRandomSpawn().size() <= x) {
+            if (x >= room.getRandomSpawn().size()) {
                 x = 0;
             }
-            entry.getKey().teleport(room.getRandomSpawn().get(j));
+            entry.getKey().teleport(room.getRandomSpawn().get(x));
             x++;
         }
         room.setMode(2);
