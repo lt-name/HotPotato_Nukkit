@@ -28,6 +28,7 @@ public class TimeTask extends PluginTask<HotPotato> {
     public void onRun(int i) {
         if (this.room.getMode() != 2) {
             this.cancel();
+            return;
         }
         if (this.room.gameTime > 0) {
             this.room.gameTime--;

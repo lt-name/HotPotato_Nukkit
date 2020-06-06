@@ -30,6 +30,7 @@ public class TipsTask extends PluginTask<HotPotato> {
     public void onRun(int i) {
         if (this.room.getMode() != 2) {
             this.cancel();
+            return;
         }
         if (room.getPlayers().values().size() > 0) {
             int playerNumber = 0;

@@ -29,6 +29,7 @@ public class WaitTask extends PluginTask<HotPotato> {
     public void onRun(int i) {
         if (this.room.getMode() != 1) {
             this.cancel();
+            return;
         }
         if (this.room.getPlayers().size() >= 3) {
             if (this.room.waitTime > 0) {

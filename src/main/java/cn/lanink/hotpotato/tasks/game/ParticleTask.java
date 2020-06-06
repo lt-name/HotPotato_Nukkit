@@ -24,6 +24,7 @@ public class ParticleTask extends PluginTask<HotPotato> {
     public void onRun(int i) {
         if (this.room.getMode() != 2) {
             this.cancel();
+            return;
         }
         for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
             if (entry.getValue() == 2) {
