@@ -3,6 +3,7 @@ package cn.lanink.hotpotato.listener;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.utils.Language;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.event.EventHandler;
@@ -15,6 +16,8 @@ import cn.nukkit.event.player.PlayerRespawnEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 
+import java.util.Random;
+
 /**
  * 游戏监听器（nk事件）
  * @author lt_name
@@ -22,9 +25,11 @@ import cn.nukkit.nbt.tag.CompoundTag;
 public class PlayerGameListener implements Listener {
 
     private final HotPotato hotPotato;
+    private final Language language;
 
     public PlayerGameListener(HotPotato hotPotato) {
         this.hotPotato = hotPotato;
+        this.language = hotPotato.getLanguage();
     }
 
     /**
@@ -80,7 +85,7 @@ public class PlayerGameListener implements Listener {
             if (tag.getBoolean("isHotPotatoItem") && tag.getInt("HotPotatoType") == 10) {
                 event.setCancelled(true);
                 room.quitRoom(player);
-                player.sendMessage("§a你已退出房间");
+                player.sendMessage(this.language.quitRoom);
             }
         }
     }
@@ -94,7 +99,11 @@ public class PlayerGameListener implements Listener {
         Player player = event.getPlayer();
         for (Room room : this.hotPotato.getRooms().values()) {
             if (room.isPlaying(player)) {
-                event.setRespawnPosition(room.getSpawn());
+                if (room.getMode() == 2) {
+                    event.setRespawnPosition(room.getRandomSpawn().get(new Random().nextInt(room.getRandomSpawn().size())));
+                }else {
+                    event.setRespawnPosition(room.getWaitSpawn());
+                }
                 break;
             }
         }
@@ -117,7 +126,7 @@ public class PlayerGameListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        player.sendMessage("§e >> §c游戏中无法使用其他命令");
+        player.sendMessage(this.language.useCmdInRoom);
     }
 
 }

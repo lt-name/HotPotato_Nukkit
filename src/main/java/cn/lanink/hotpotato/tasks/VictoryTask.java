@@ -2,24 +2,37 @@ package cn.lanink.hotpotato.tasks;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.scheduler.PluginTask;
+import tip.messages.ScoreBoardMessage;
+import tip.utils.Api;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class VictoryTask extends PluginTask<HotPotato> {
 
-    private final String taskName = "VictoryTask";
+    private final Language language;
     private final Room room;
     private int victoryTime;
 
     public VictoryTask(HotPotato owner, Room room) {
         super(owner);
+        owner.taskList.add(this.getTaskId());
+        this.language = owner.getLanguage();
         this.room = room;
         this.victoryTime = 10;
+        LinkedList<String> ms = new LinkedList<>();
+        ms.add(this.language.victoryMessage.replace("%player%", room.victoryPlayer.getName()));
+        ScoreBoardMessage score = new ScoreBoardMessage(
+                room.getLevel().getName(), true, this.language.scoreBoardTitle, ms);
+        for (Player player : this.room.getPlayers().keySet()) {
+            Api.setPlayerShowMessage(player.getName(), score);
+        }
     }
 
     @Override
@@ -28,20 +41,16 @@ public class VictoryTask extends PluginTask<HotPotato> {
             this.cancel();
         }
         if (this.victoryTime < 1) {
-            if (!this.room.task.contains(this.taskName)) {
-                this.room.task.add(this.taskName);
-                if (room.getPlayers().size() > 0) {
-                    for (Player player : room.getPlayers().keySet()) {
-                        if (player == this.room.victoryPlayer) {
-                            this.cmd(player, owner.getConfig().getStringList("胜利执行命令"));
-                        }else {
-                            this.cmd(player, owner.getConfig().getStringList("失败执行命令"));
-                        }
+            if (room.getPlayers().size() > 0) {
+                for (Player player : room.getPlayers().keySet()) {
+                    if (player == this.room.victoryPlayer) {
+                        this.cmd(player, owner.getConfig().getStringList("胜利执行命令"));
+                    }else {
+                        this.cmd(player, owner.getConfig().getStringList("失败执行命令"));
                     }
                 }
-                this.room.task.remove(this.taskName);
-                this.room.endGame();
             }
+            this.room.endGame();
             this.cancel();
         }else {
             this.victoryTime--;
@@ -50,6 +59,8 @@ public class VictoryTask extends PluginTask<HotPotato> {
                     if (entry.getValue() == 1) {
                         Tools.spawnFirework(entry.getKey());
                     }
+                    entry.getKey().sendActionBar(
+                            this.language.victoryMessage.replace("%player%", room.victoryPlayer.getName()));
                 }
             }
         }
@@ -67,6 +78,14 @@ public class VictoryTask extends PluginTask<HotPotato> {
                 owner.getServer().dispatchCommand(player, cmd[0].replace("@p", player.getName()));
             }
         }
+    }
+
+    @Override
+    public void cancel() {
+        while (owner.taskList.contains(this.getTaskId())) {
+            owner.taskList.remove(this.getTaskId());
+        }
+        super.cancel();
     }
 
 }

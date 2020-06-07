@@ -141,7 +141,7 @@ public class RoomLevelProtection implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         Level level = event.getEntity() == null ? null : event.getEntity().getLevel();
         if (level != null && HotPotato.getInstance().getRooms().containsKey(level.getName())) {
-            event.setCancelled();
+            event.setDamage(0);
         }
     }
 

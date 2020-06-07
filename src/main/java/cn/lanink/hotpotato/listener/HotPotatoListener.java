@@ -1,11 +1,15 @@
 package cn.lanink.hotpotato.listener;
 
 import cn.lanink.hotpotato.HotPotato;
-import cn.lanink.hotpotato.event.*;
+import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
+import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
+import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.tasks.VictoryTask;
 import cn.lanink.hotpotato.tasks.game.ParticleTask;
 import cn.lanink.hotpotato.tasks.game.TimeTask;
+import cn.lanink.hotpotato.tasks.game.TipsTask;
+import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.AdventureSettings;
 import cn.nukkit.Player;
@@ -27,9 +31,11 @@ import java.util.Random;
 public class HotPotatoListener implements Listener {
 
     private final HotPotato hotPotato;
+    private final Language language;
 
     public HotPotatoListener(HotPotato hotPotato) {
         this.hotPotato = hotPotato;
+        this.language = hotPotato.getLanguage();
     }
 
     /**
@@ -41,6 +47,7 @@ public class HotPotatoListener implements Listener {
         Room room = event.getRoom();
         int i = new Random().nextInt(room.getPlayers().size());
         int j = 0;
+        int x = 0;
         for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
             entry.getKey().getInventory().clearAll();
             if (i == j) {
@@ -50,12 +57,19 @@ public class HotPotatoListener implements Listener {
                 entry.setValue(1);
             }
             j++;
+            if (x >= room.getRandomSpawn().size()) {
+                x = 0;
+            }
+            entry.getKey().teleport(room.getRandomSpawn().get(x));
+            x++;
         }
         room.setMode(2);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
-                this.hotPotato, new TimeTask(this.hotPotato, room), 20,true);
+                this.hotPotato, new TimeTask(this.hotPotato, room), 20);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 this.hotPotato, new ParticleTask(this.hotPotato, room), 5, true);
+        Server.getInstance().getScheduler().scheduleRepeatingTask(
+                this.hotPotato, new TipsTask(this.hotPotato, room), 18, true);
     }
 
     /**
