@@ -2,6 +2,7 @@ package cn.lanink.hotpotato.listener;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
+import cn.lanink.hotpotato.event.HotPotatoRoomEndEvent;
 import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
@@ -70,6 +71,20 @@ public class HotPotatoListener implements Listener {
                 this.hotPotato, new ParticleTask(this.hotPotato, room), 5, true);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 this.hotPotato, new TipsTask(this.hotPotato, room), 18, true);
+    }
+
+    @EventHandler
+    public void onRoomEnd(HotPotatoRoomEndEvent event) {
+        Room room = event.getRoom();
+        if (room.getPlayers().size() > 0) {
+            for (Player player : room.getPlayers().keySet()) {
+                if (player == room.victoryPlayer) {
+                    Tools.cmd(player, this.hotPotato.getConfig().getStringList("胜利执行命令"));
+                }else {
+                    Tools.cmd(player, this.hotPotato.getConfig().getStringList("失败执行命令"));
+                }
+            }
+        }
     }
 
     /**

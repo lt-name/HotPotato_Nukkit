@@ -1,17 +1,16 @@
 package cn.lanink.hotpotato.tasks;
 
 import cn.lanink.hotpotato.HotPotato;
+import cn.lanink.hotpotato.event.HotPotatoRoomEndEvent;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
-import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.scheduler.PluginTask;
 import tip.messages.ScoreBoardMessage;
 import tip.utils.Api;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class VictoryTask extends PluginTask<HotPotato> {
@@ -41,15 +40,7 @@ public class VictoryTask extends PluginTask<HotPotato> {
             this.cancel();
         }
         if (this.victoryTime < 1) {
-            if (room.getPlayers().size() > 0) {
-                for (Player player : room.getPlayers().keySet()) {
-                    if (player == this.room.victoryPlayer) {
-                        this.cmd(player, owner.getConfig().getStringList("胜利执行命令"));
-                    }else {
-                        this.cmd(player, owner.getConfig().getStringList("失败执行命令"));
-                    }
-                }
-            }
+            owner.getServer().getPluginManager().callEvent(new HotPotatoRoomEndEvent(this.room, this.room.victoryPlayer));
             this.room.endGame();
             this.cancel();
         }else {
@@ -62,20 +53,6 @@ public class VictoryTask extends PluginTask<HotPotato> {
                     entry.getKey().sendActionBar(
                             this.language.victoryMessage.replace("%player%", room.victoryPlayer.getName()));
                 }
-            }
-        }
-    }
-
-    private void cmd(Player player, List<String> cmds) {
-        if (player == null || cmds == null || cmds.size() < 1) {
-            return;
-        }
-        for (String s : cmds) {
-            String[] cmd = s.split("&");
-            if ((cmd.length > 1) && (cmd[1].equals("con"))) {
-                owner.getServer().dispatchCommand(new ConsoleCommandSender(), cmd[0].replace("@p", player.getName()));
-            } else {
-                owner.getServer().dispatchCommand(player, cmd[0].replace("@p", player.getName()));
             }
         }
     }
