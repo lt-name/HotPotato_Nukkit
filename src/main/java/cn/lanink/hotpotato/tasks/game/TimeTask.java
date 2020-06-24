@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class TimeTask extends PluginTask<HotPotato> {
 
-    private Language language;
+    private final Language language;
     private final Room room;
 
     public TimeTask(HotPotato owner, Room room) {
@@ -52,6 +52,7 @@ public class TimeTask extends PluginTask<HotPotato> {
                 if (entry.getValue() == 2) {
                     owner.getServer().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(this.room, entry.getKey()));
                     this.sendMessage(this.language.playerDeath.replace("%player%", entry.getKey().getName()));
+                    break;
                 }
             }
         }
