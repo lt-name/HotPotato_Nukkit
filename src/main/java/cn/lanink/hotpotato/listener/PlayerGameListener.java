@@ -63,7 +63,7 @@ public class PlayerGameListener implements Listener {
     }
 
     /**
-     * 实体收到伤害事件
+     * 实体受到伤害事件
      * @param event 事件
      */
     @EventHandler

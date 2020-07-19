@@ -24,7 +24,7 @@ adminHelp: |-
   §a/%cmdName% §e打开ui
   §a/%cmdName% setwaitspawn §e设置当前位置为等待出生点
   §a/%cmdName% addrandomspawn §e添加当前位置为随机出生点
-  §a/%cmdName% setwaittime 数字 §e设置游戏人数足够后的等待时间
+  §a/%cmdName% setwaittime 数字 §e设置游戏人数达到最少人数后的等待时间
   §a/%cmdName% setgametime 数字 §e设置爆炸时间
   §a/%cmdName% startroom §e强制开启所在地图的房间
   §a/%cmdName% stoproom §e强制关闭所在地图的房间

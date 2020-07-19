@@ -29,7 +29,7 @@ public class Language {
             "§a/%cmdName% §e打开ui \n" +
             "§a/%cmdName% setwaitspawn §e设置当前位置为等待出生点 \n" +
             "§a/%cmdName% addrandomspawn §e添加当前位置为随机出生点 \n" +
-            "§a/%cmdName% setwaittime 数字 §e设置游戏人数足够后的等待时间 \n" +
+            "§a/%cmdName% setwaittime 数字 §e设置游戏人数达到最少人数的等待时间 \n" +
             "§a/%cmdName% setgametime 数字 §e设置爆炸时间 \n" +
             "§a/%cmdName% startroom §e强制开启所在地图的房间 \n" +
             "§a/%cmdName% stoproom §e强制关闭所在地图的房间 \n" +

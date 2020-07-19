@@ -27,19 +27,19 @@ public class Join extends BaseSubCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
         if (hotPotato.getRooms().size() > 0) {
+            if (player.riding != null) {
+                sender.sendMessage(this.language.joinRoomIsRiding);
+                return true;
+            }
             for (Room room : hotPotato.getRooms().values()) {
                 if (room.isPlaying(player)) {
                     sender.sendMessage(this.language.joinRoomIsInRoom);
                     return true;
                 }
             }
-            if (player.riding != null) {
-                sender.sendMessage(this.language.joinRoomIsRiding);
-                return true;
-            }
             if (args.length < 2) {
                 for (Room room : hotPotato.getRooms().values()) {
-                    if (room.getMode() == 0 || room.getMode() == 1) {
+                    if ((room.getMode() == 0 || room.getMode() == 1) && room.getPlayers().size() < 16) {
                         room.joinRoom(player);
                         sender.sendMessage(this.language.joinRandomRoom);
                         return true;
@@ -49,7 +49,7 @@ public class Join extends BaseSubCommand {
                 Room room = hotPotato.getRooms().get(args[1]);
                 if (room.getMode() == 2 || room.getMode() == 3) {
                     sender.sendMessage(this.language.joinRoomIsPlaying);
-                }else if (room.getPlayers().values().size() > 15) {
+                }else if (room.getPlayers().values().size() >= 16) {
                     sender.sendMessage(this.language.joinRoomIsFull);
                 } else {
                     room.joinRoom(player);
