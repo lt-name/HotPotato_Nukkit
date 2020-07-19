@@ -43,6 +43,7 @@ public class Language {
     public String adminSetGameTimeShort = "§a爆炸等待时间最小不能低于5秒！";
     public String adminStartRoom = "§a已强制开启游戏！";
     public String adminStartNoPlayer = "§a房间人数不足2人,无法开始游戏！";
+    public String adminStartRoomIsPlaying = "§c房间已经开始了！";
     public String adminLevelNoRoom = "§a当前地图不是游戏房间！";
     public String adminStopRoom = "§a已强制结束房间！";
     public String adminReload = "§a配置重载完成！请在后台查看信息！";
@@ -102,6 +103,7 @@ public class Language {
         this.adminSetGameTimeShort = config.getString("adminSetGameTimeShort", this.adminSetGameTimeShort);
         this.adminStartRoom = config.getString("adminStartRoom", this.adminStartRoom);
         this.adminStartNoPlayer = config.getString("adminStartNoPlayer", this.adminStartNoPlayer);
+        this.adminStartRoomIsPlaying = config.getString("adminStartRoomIsPlaying", this.adminStartRoomIsPlaying);
         this.adminLevelNoRoom = config.getString("adminLevelNoRoom", this.adminLevelNoRoom);
         this.adminStopRoom = config.getString("adminStopRoom", this.adminStopRoom);
         this.adminReload = config.getString("adminReload", this.adminReload);
