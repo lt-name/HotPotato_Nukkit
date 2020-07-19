@@ -7,10 +7,10 @@ public class Language {
     //命令
     public String useCmdInRoom = "§e >> §c游戏中无法使用其他命令";
     public String cmdHelp = "§a查看帮助：/%cmdName% help";
-    public String userHelp = "§eHotPotato--命令帮助 \n " +
-            "§a/%cmdName% ui §e打开ui \n " +
-            "§a/%cmdName% join 房间名称 §e加入游戏 \n " +
-            "§a/%cmdName% quit §e退出游戏 \n " +
+    public String userHelp = "§eHotPotato--命令帮助 \n" +
+            "§a/%cmdName% §e打开ui \n" +
+            "§a/%cmdName% join 房间名称 §e加入游戏 \n" +
+            "§a/%cmdName% quit §e退出游戏 \n" +
             "§a/%cmdName% list §e查看房间列表";
     public String noPermission = "§c你没有权限使用这个命令！";
     public String joinRoom = "§a你已加入房间: %name%";
@@ -25,13 +25,15 @@ public class Language {
     public String quitRoomNotInRoom = "§a你本来就不在游戏房间！";
     public String listRoom = "§e房间列表： §a %list%";
     public String useCmdInCon = "请不要在控制台执行此指令!";
-    public String adminHelp = "§eHotPotato--命令帮助 \n " +
-            "§a/%cmdName% ui §e打开ui \n " +
-            "§a/%cmdName% setwaitspawn §e设置当前位置为等待出生点 \n " +
-            "§a/%cmdName% addrandomspawn §e添加当前位置为随机出生点 \n " +
-            "§a/%cmdName% setwaittime 数字 §e设置游戏人数足够后的等待时间 \n " +
-            "§a/%cmdName% setgametime 数字 §e设置爆炸时间 \n " +
-            "§a/%cmdName% reloadroom §e重载所有房间 \n " +
+    public String adminHelp = "§eHotPotato--命令帮助 \n" +
+            "§a/%cmdName% §e打开ui \n" +
+            "§a/%cmdName% setwaitspawn §e设置当前位置为等待出生点 \n" +
+            "§a/%cmdName% addrandomspawn §e添加当前位置为随机出生点 \n" +
+            "§a/%cmdName% setwaittime 数字 §e设置游戏人数足够后的等待时间 \n" +
+            "§a/%cmdName% setgametime 数字 §e设置爆炸时间 \n" +
+            "§a/%cmdName% startroom §e强制开启所在地图的房间 \n" +
+            "§a/%cmdName% stoproom §e强制关闭所在地图的房间 \n" +
+            "§a/%cmdName% reloadroom §e重载所有房间 \n" +
             "§a/%cmdName% unloadroom §e关闭所有房间,并卸载配置";
     public String adminSetWaitSpawn = "§a等待出生点设置成功！";
     public String adminAddRandomSpawn = "§a随机出生点已添加, 当前已有 %number% 个随机出生点";
@@ -39,6 +41,10 @@ public class Language {
     public String adminSetWaitTime = "§a等待时间已设置为：%time%";
     public String adminSetGameTime = "§a爆炸时间已设置为：%time%";
     public String adminSetGameTimeShort = "§a爆炸等待时间最小不能低于5秒！";
+    public String adminStartRoom = "§a已强制开启游戏！";
+    public String adminStartNoPlayer = "§a房间人数不足2人,无法开始游戏！";
+    public String adminLevelNoRoom = "§a当前地图不是游戏房间！";
+    public String adminStopRoom = "§a已强制结束房间！";
     public String adminReload = "§a配置重载完成！请在后台查看信息！";
     public String adminUnload = "§a已卸载所有房间！请在后台查看信息！";
     //游戏内显示
@@ -94,6 +100,10 @@ public class Language {
         this.adminSetWaitTime = config.getString("adminSetWaitTime", this.adminSetWaitTime);
         this.adminSetGameTime = config.getString("adminSetGameTime", this.adminSetGameTime);
         this.adminSetGameTimeShort = config.getString("adminSetGameTimeShort", this.adminSetGameTimeShort);
+        this.adminStartRoom = config.getString("adminStartRoom", this.adminStartRoom);
+        this.adminStartNoPlayer = config.getString("adminStartNoPlayer", this.adminStartNoPlayer);
+        this.adminLevelNoRoom = config.getString("adminLevelNoRoom", this.adminLevelNoRoom);
+        this.adminStopRoom = config.getString("adminStopRoom", this.adminStopRoom);
         this.adminReload = config.getString("adminReload", this.adminReload);
         this.adminUnload = config.getString("adminUnload", this.adminUnload);
         this.roomSafeKick = config.getString("roomSafeKick", this.roomSafeKick);

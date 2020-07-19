@@ -1,6 +1,7 @@
 package cn.lanink.hotpotato.listener;
 
 import cn.lanink.hotpotato.HotPotato;
+import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
@@ -10,6 +11,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
+import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerCommandPreprocessEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerRespawnEvent;
@@ -56,6 +58,27 @@ public class PlayerGameListener implements Listener {
                 }else {
                     event.setCancelled(true);
                 }
+            }
+        }
+    }
+
+    /**
+     * 实体收到伤害事件
+     * @param event 事件
+     */
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
+            if (room == null) return;
+            if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                if (room.getMode() == 2) {
+                    Server.getInstance().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(room, player));
+                }else {
+                    player.teleport(room.getWaitSpawn());
+                }
+                event.setCancelled(true);
             }
         }
     }

@@ -1,7 +1,6 @@
 package cn.lanink.hotpotato.command.base;
 
 import cn.lanink.hotpotato.HotPotato;
-
 import cn.lanink.hotpotato.utils.Language;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
@@ -48,16 +47,18 @@ abstract public class BaseCommand extends Command {
                         sender.sendMessage(this.language.noPermission);
                     }else {
                         sender.sendMessage(this.language.useCmdInCon);
-                        return true;
                     }
                 }else {
-                    sendHelp(sender);
-                    return true;
+                    this.sendHelp(sender);
                 }
             }else {
-                sendHelp(sender);
-                return true;
+                if (sender.isPlayer()) {
+                    this.sendUI(sender);
+                }else {
+                    this.sendHelp(sender);
+                }
             }
+            return true;
         }
         sender.sendMessage(this.language.noPermission);
         return true;
@@ -68,6 +69,12 @@ abstract public class BaseCommand extends Command {
      * @param sender 玩家
      * */
     public abstract void sendHelp(CommandSender sender);
+
+    /**
+     * 发送UI
+     * @param sender 玩家
+     */
+    public abstract void sendUI(CommandSender sender);
 
     protected void addSubCommand(BaseSubCommand cmd) {
         this.subCommand.add(cmd);

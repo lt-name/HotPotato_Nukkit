@@ -38,6 +38,7 @@ public class VictoryTask extends PluginTask<HotPotato> {
     public void onRun(int i) {
         if (this.room.getMode() != 3) {
             this.cancel();
+            return;
         }
         if (this.victoryTime < 1) {
             owner.getServer().getPluginManager().callEvent(new HotPotatoRoomEndEvent(this.room, this.room.victoryPlayer));

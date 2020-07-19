@@ -3,12 +3,17 @@ package cn.lanink.hotpotato.tasks.game;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.tasks.VictoryTask;
 import cn.lanink.hotpotato.utils.Language;
+import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.scheduler.PluginTask;
 
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 游戏时间计算
@@ -52,8 +57,28 @@ public class TimeTask extends PluginTask<HotPotato> {
                 if (entry.getValue() == 2) {
                     owner.getServer().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(this.room, entry.getKey()));
                     this.sendMessage(this.language.playerDeath.replace("%player%", entry.getKey().getName()));
-                    break;
                 }
+            }
+            LinkedList<Player> playerList = new LinkedList<>();
+            for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                if (entry.getValue() == 1) {
+                    playerList.add(entry.getKey());
+                }
+            }
+            if (playerList.size() > 1) {
+                Player player2 = playerList.get(new Random().nextInt(playerList.size()));
+                this.room.addPlaying(player2, 2);
+                Tools.givePotato(player2);
+            }else {
+                for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+                    if (entry.getValue() == 1) {
+                        this.room.victoryPlayer = entry.getKey();
+                        break;
+                    }
+                }
+                this.room.setMode(3);
+                Server.getInstance().getScheduler().scheduleRepeatingTask(
+                        owner, new VictoryTask(owner, room), 20);
             }
         }
     }

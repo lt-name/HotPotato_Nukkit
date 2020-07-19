@@ -1,20 +1,23 @@
-package cn.lanink.hotpotato.command.usersub;
+package cn.lanink.hotpotato.command.adminsub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
-import cn.lanink.hotpotato.ui.GuiCreate;
+import cn.lanink.hotpotato.room.Room;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 
-public class Ui extends BaseSubCommand {
+/**
+ * @author lt_name
+ */
+public class StopRoom extends BaseSubCommand {
 
-    public Ui(String name) {
+    public StopRoom(String name) {
         super(name);
     }
 
     @Override
     public boolean canUser(CommandSender sender) {
-        return sender.isPlayer();
+        return sender.isPlayer() && sender.isOp();
     }
 
     @Override
@@ -25,7 +28,13 @@ public class Ui extends BaseSubCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        GuiCreate.sendUserMenu(player);
+        Room room = this.hotPotato.getRooms().get(player.getLevel().getName());
+        if (room != null) {
+            room.endGame(true);
+            sender.sendMessage(this.language.adminStopRoom);
+        }else {
+            sender.sendMessage(this.language.adminLevelNoRoom);
+        }
         return true;
     }
 
@@ -33,5 +42,4 @@ public class Ui extends BaseSubCommand {
     public CommandParameter[] getParameters() {
         return new CommandParameter[0];
     }
-
 }

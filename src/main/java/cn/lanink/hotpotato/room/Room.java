@@ -1,7 +1,6 @@
 package cn.lanink.hotpotato.room;
 
 import cn.lanink.hotpotato.HotPotato;
-import cn.lanink.hotpotato.tasks.game.TipsTask;
 import cn.lanink.hotpotato.tasks.WaitTask;
 import cn.lanink.hotpotato.utils.SavePlayerInventory;
 import cn.lanink.hotpotato.utils.Tools;
@@ -109,7 +108,7 @@ public class Room extends BaseRoom {
             Tools.rePlayerState(player, true);
             SavePlayerInventory.save(player);
             player.teleport(this.getWaitSpawn());
-            this.setRandomSkin(player, false);
+            this.setRandomSkin(player);
             Tools.giveItem(player, 10);
             TipMessage tipMessage = new TipMessage(this.level, false, 0, "");
             Api.setPlayerShowMessage(player.getName(), tipMessage);
@@ -153,31 +152,34 @@ public class Room extends BaseRoom {
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
         Tools.rePlayerState(player, false);
         SavePlayerInventory.restore(player);
-        this.setRandomSkin(player, true);
+        this.restoreSkin(player);
     }
 
     /**
-     * 设置玩家随机皮肤
+     * 为玩家设置随机皮肤
      * @param player 玩家
-     * @param restore 是否为还原
      */
-    public void setRandomSkin(Player player, boolean restore) {
-        if (restore) {
-            if (this.skinCache.containsKey(player)) {
-                Tools.setPlayerSkin(player, this.skinCache.get(player));
-                this.skinCache.remove(player);
-            }
-            this.skinNumber.remove(player);
-        }else {
-            for (Map.Entry<Integer, Skin> entry : HotPotato.getInstance().getSkins().entrySet()) {
-                if (!this.skinNumber.containsValue(entry.getKey())) {
-                    this.skinCache.put(player, player.getSkin());
-                    this.skinNumber.put(player, entry.getKey());
-                    Tools.setPlayerSkin(player, entry.getValue());
-                    return;
-                }
+    public void setRandomSkin(Player player) {
+        for (Map.Entry<Integer, Skin> entry : HotPotato.getInstance().getSkins().entrySet()) {
+            if (!this.skinNumber.containsValue(entry.getKey())) {
+                this.skinCache.put(player, player.getSkin());
+                this.skinNumber.put(player, entry.getKey());
+                Tools.setPlayerSkin(player, entry.getValue());
+                return;
             }
         }
+    }
+
+    /**
+     * 还原玩家皮肤
+     * @param player 玩家
+     */
+    public void restoreSkin(Player player) {
+        if (this.skinCache.containsKey(player)) {
+            Tools.setPlayerSkin(player, this.skinCache.get(player));
+            this.skinCache.remove(player);
+        }
+        this.skinNumber.remove(player);
     }
 
     /**

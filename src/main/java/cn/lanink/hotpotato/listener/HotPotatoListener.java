@@ -6,7 +6,6 @@ import cn.lanink.hotpotato.event.HotPotatoRoomEndEvent;
 import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
-import cn.lanink.hotpotato.tasks.VictoryTask;
 import cn.lanink.hotpotato.tasks.game.ParticleTask;
 import cn.lanink.hotpotato.tasks.game.TimeTask;
 import cn.lanink.hotpotato.tasks.game.TipsTask;
@@ -20,7 +19,6 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.HugeExplodeSeedParticle;
 
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
@@ -121,35 +119,6 @@ public class HotPotatoListener implements Listener {
             Tools.setPlayerInvisible(player, true);
             player.getLevel().addParticle(new HugeExplodeSeedParticle(player));
             Tools.addSound(room, Sound.RANDOM_EXPLODE);
-            LinkedList<Player> playerList = new LinkedList<>();
-            for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                if (entry.getValue() == 1) {
-                    playerList.add(entry.getKey());
-                }
-            }
-            if (playerList.size() > 1) {
-                Player player2 = playerList.get(new Random().nextInt(playerList.size()));
-                room.addPlaying(player2, 2);
-                Tools.givePotato(player2);
-            }else {
-                int j = 0;
-                for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                    if (entry.getValue() != 0) {
-                        j++;
-                    }
-                }
-                if (j <= 1) {
-                    for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
-                        if (entry.getValue() == 1) {
-                            room.victoryPlayer = entry.getKey();
-                            break;
-                        }
-                    }
-                    room.setMode(3);
-                    Server.getInstance().getScheduler().scheduleRepeatingTask(
-                            this.hotPotato, new VictoryTask(this.hotPotato, room), 20);
-                }
-            }
         }
     }
 
