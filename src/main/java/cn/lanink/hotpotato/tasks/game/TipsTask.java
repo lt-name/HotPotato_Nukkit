@@ -32,7 +32,7 @@ public class TipsTask extends PluginTask<HotPotato> {
             this.cancel();
             return;
         }
-        if (room.getPlayers().values().size() > 0) {
+        if (room.getPlayers().size() > 0) {
             int playerNumber = 0;
             for (Integer integer : this.room.getPlayers().values()) {
                 if (integer != 0) {

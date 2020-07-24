@@ -20,7 +20,7 @@ public abstract class BaseRoom {
     protected int mode; //0未初始化 1等待 2游戏 3胜利结算
     protected String level, waitSpawn;
     protected int setWaitTime, setGameTime;
-    protected LinkedHashMap<Player, Integer> players = new LinkedHashMap<>(); //0未分配 1 11红队 2 12蓝队
+    protected LinkedHashMap<Player, Integer> players = new LinkedHashMap<>();
 
     /**
      * 初始化task

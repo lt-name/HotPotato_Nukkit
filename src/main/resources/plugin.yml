@@ -1,12 +1,14 @@
 name: HotPotato
 main: cn.lanink.hotpotato.HotPotato
-version: "1.0.0-SNAPSHOT"
+version: "1.0.1"
 api:
   - 1.0.0
 load: POSTWORLD
 author: "LT_Name"
 depend:
   - "Tips"
+loadbefore:
+  - "AutoUpData"
 
 permissions:
   HotPotato.command.user:
