@@ -23,6 +23,8 @@
     </properties>
 
     <build>
+        <defaultGoal>clean package</defaultGoal>
+        <finalName>${artifactId}-v${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
