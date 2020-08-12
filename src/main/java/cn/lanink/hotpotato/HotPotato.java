@@ -14,7 +14,6 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
-import updata.AutoData;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,7 +30,7 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "?";
+    public static String VERSION = "1.0.1 git-3ce425f";
     private static HotPotato hotPotato;
     private Language language;
     private Config config;
@@ -45,12 +44,6 @@ public class HotPotato extends PluginBase {
 
     @Override
     public void onEnable() {
-        if(getServer().getPluginManager().getPlugin("AutoUpData") != null){
-            if(AutoData.defaultUpData(this, this.getFile(),"lt-name","HotPotato_Nukkit")) {
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
         getLogger().info("§e插件开始加载！本插件是免费哒~如果你花钱了，那一定是被骗了~");
         if (hotPotato == null) {
             hotPotato = this;
@@ -222,6 +215,7 @@ public class HotPotato extends PluginBase {
                 File skinFile = new File(getDataFolder() + "/Skins/" + skinName + "/skin.png");
                 if (skinFile.exists()) {
                     Skin skin = new Skin();
+                    skin.setSkinResourcePatch(Skin.GEOMETRY_CUSTOM);
                     BufferedImage skinData = null;
                     try {
                         skinData = ImageIO.read(skinFile);
