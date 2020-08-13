@@ -1,13 +1,19 @@
 name: HotPotato
 main: cn.lanink.hotpotato.HotPotato
-version: "1.0.1"
+version: "1.0.2-SNAPSHOT"
 api:
   - 1.0.0
 load: POSTWORLD
 author: "LT_Name"
-depend:
+softdepend:
+  - "ScoreboardPlugin"
+  - "ScoreboardAPI"
   - "Tips"
+  - "AutoUpData"
 loadbefore:
+  - "ScoreboardPlugin"
+  - "ScoreboardAPI"
+  - "Tips"
   - "AutoUpData"
 
 permissions:

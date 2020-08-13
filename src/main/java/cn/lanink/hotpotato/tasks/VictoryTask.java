@@ -7,8 +7,6 @@ import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.scheduler.PluginTask;
-import tip.messages.ScoreBoardMessage;
-import tip.utils.Api;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -27,10 +25,8 @@ public class VictoryTask extends PluginTask<HotPotato> {
         this.victoryTime = 10;
         LinkedList<String> ms = new LinkedList<>();
         ms.add(this.language.victoryMessage.replace("%player%", room.victoryPlayer.getName()));
-        ScoreBoardMessage score = new ScoreBoardMessage(
-                room.getLevel().getName(), true, this.language.scoreBoardTitle, ms);
         for (Player player : this.room.getPlayers().keySet()) {
-            Api.setPlayerShowMessage(player.getName(), score);
+            owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
         }
     }
 
@@ -51,8 +47,8 @@ public class VictoryTask extends PluginTask<HotPotato> {
                     if (entry.getValue() == 1) {
                         Tools.spawnFirework(entry.getKey());
                     }
-                    entry.getKey().sendActionBar(
-                            this.language.victoryMessage.replace("%player%", room.victoryPlayer.getName()));
+                    entry.getKey().sendTip(this.language.victoryMessage
+                            .replace("%player%", room.victoryPlayer.getName()));
                 }
             }
         }

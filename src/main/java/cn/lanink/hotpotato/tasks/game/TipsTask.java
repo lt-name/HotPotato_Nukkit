@@ -5,8 +5,6 @@ import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
 import cn.nukkit.Player;
 import cn.nukkit.scheduler.PluginTask;
-import tip.messages.ScoreBoardMessage;
-import tip.utils.Api;
 
 import java.util.LinkedList;
 
@@ -44,12 +42,10 @@ public class TipsTask extends PluginTask<HotPotato> {
                 ms.add(string.replace("%time%", this.room.gameTime + "")
                         .replace("%playerNumber%", playerNumber + ""));
             }
-            ScoreBoardMessage score = new ScoreBoardMessage(
-                    room.getLevel().getName(), true, this.language.scoreBoardTitle, ms);
             for (Player player : this.room.getPlayers().keySet()) {
                 player.sendTip(this.language.gameTimeBottom.replace("%time%", this.room.gameTime + "")
                         .replace("%playerNumber%", playerNumber + ""));
-                Api.setPlayerShowMessage(player.getName(), score);
+                owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
             }
         }
     }
