@@ -8,8 +8,6 @@ import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.level.Sound;
 import cn.nukkit.scheduler.PluginTask;
-import tip.messages.ScoreBoardMessage;
-import tip.utils.Api;
 
 import java.util.LinkedList;
 
@@ -37,18 +35,16 @@ public class WaitTask extends PluginTask<HotPotato> {
                 if (this.room.waitTime <= 5) {
                     Tools.addSound(this.room, Sound.RANDOM_CLICK);
                 }
+                LinkedList<String> ms = new LinkedList<>();
+                for (String string : language.waitTimeScoreBoard.split("\n")) {
+                    ms.add(string.replace("%playerNumber%", room.getPlayers().size() + "")
+                            .replace("%time%", room.waitTime + ""));
+                }
                 for (Player player : this.room.getPlayers().keySet()) {
-                    player.sendActionBar(this.language.waitTimeBottom
+                    player.sendTip(this.language.waitTimeBottom
                             .replace("%playerNumber%", this.room.getPlayers().size() + "")
                             .replace("%time%", this.room.waitTime + ""));
-                    LinkedList<String> ms = new LinkedList<>();
-                    for (String string : language.waitTimeScoreBoard.split("\n")) {
-                        ms.add(string.replace("%playerNumber%", room.getPlayers().size() + "")
-                                .replace("%time%", room.waitTime + ""));
-                    }
-                    ScoreBoardMessage score = new ScoreBoardMessage(
-                            room.getLevel().getName(), true, this.language.scoreBoardTitle, ms);
-                    Api.setPlayerShowMessage(player.getName(), score);
+                    owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
                 }
             }else {
                 owner.getServer().getPluginManager().callEvent(new HotPotatoRoomStartEvent(this.room));
@@ -58,16 +54,14 @@ public class WaitTask extends PluginTask<HotPotato> {
             if (this.room.waitTime != this.room.getSetWaitTime()) {
                 this.room.waitTime = this.room.getSetWaitTime();
             }
+            LinkedList<String> ms = new LinkedList<>();
+            for (String string : language.waitScoreBoard.split("\n")) {
+                ms.add(string.replace("%playerNumber%", room.getPlayers().size() + ""));
+            }
             for (Player player : this.room.getPlayers().keySet()) {
-                player.sendActionBar(language.waitBottom
+                player.sendTip(language.waitBottom
                         .replace("%playerNumber%", room.getPlayers().size() + ""));
-                LinkedList<String> ms = new LinkedList<>();
-                for (String string : language.waitScoreBoard.split("\n")) {
-                    ms.add(string.replace("%playerNumber%", room.getPlayers().size() + ""));
-                }
-                ScoreBoardMessage score = new ScoreBoardMessage(
-                        room.getLevel().getName(), true, this.language.scoreBoardTitle, ms);
-                Api.setPlayerShowMessage(player.getName(), score);
+                owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
             }
         }else {
             this.room.endGame();

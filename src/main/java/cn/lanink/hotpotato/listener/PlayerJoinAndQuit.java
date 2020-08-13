@@ -3,6 +3,7 @@ package cn.lanink.hotpotato.listener;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.SavePlayerInventory;
+import cn.lanink.hotpotato.utils.Tips;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
@@ -27,12 +28,15 @@ public class PlayerJoinAndQuit implements Listener {
                 @Override
                 public void onRun(int i) {
                     if (player.isOnline()) {
+                        if (HotPotato.getInstance().isHasTips()) {
+                            Tips.removeTipsConfig(player.getLevel().getName(), player);
+                        }
                         Tools.rePlayerState(player ,false);
                         SavePlayerInventory.restore(player);
                         player.teleport(HotPotato.getInstance().getServer().getDefaultLevel().getSafeSpawn());
                     }
                 }
-            }, 120);
+            }, 1);
         }
     }
 
@@ -47,6 +51,7 @@ public class PlayerJoinAndQuit implements Listener {
                 room.quitRoom(player, false);
             }
         }
+        HotPotato.getInstance().getIScoreboard().delCache(player);
     }
 
     @EventHandler

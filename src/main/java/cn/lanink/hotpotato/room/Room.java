@@ -3,18 +3,18 @@ package cn.lanink.hotpotato.room;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.tasks.WaitTask;
 import cn.lanink.hotpotato.utils.SavePlayerInventory;
+import cn.lanink.hotpotato.utils.Tips;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
-import tip.messages.BossBarMessage;
-import tip.messages.NameTagMessage;
-import tip.messages.TipMessage;
-import tip.utils.Api;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 房间类
@@ -110,13 +110,9 @@ public class Room extends BaseRoom {
             player.teleport(this.getWaitSpawn());
             this.setRandomSkin(player);
             Tools.giveItem(player, 10);
-            TipMessage tipMessage = new TipMessage(this.level, false, 0, "");
-            Api.setPlayerShowMessage(player.getName(), tipMessage);
-            NameTagMessage nameTagMessage = new NameTagMessage(this.level, true, player.getName());
-            Api.setPlayerShowMessage(player.getName(), nameTagMessage);
-            BossBarMessage bossBarMessage = new BossBarMessage(this.level, false, 5, false, new LinkedList<>());
-            Api.setPlayerShowMessage(player.getName(), bossBarMessage);
-            player.sendMessage(HotPotato.getInstance().getLanguage().joinRoom.replace("%name%", this.level));
+            if (HotPotato.getInstance().isHasTips()) {
+                Tips.closeTipsShow(this.level, player);
+            }
         }
     }
 
@@ -140,15 +136,18 @@ public class Room extends BaseRoom {
         }
         if (online) {
             this.quitRoomOnline(player);
+            HotPotato.getInstance().getIScoreboard().closeScoreboard(player);
         }else {
             this.skinNumber.remove(player);
             this.skinCache.remove(player);
+        }
+        if (HotPotato.getInstance().isHasTips()) {
+            Tips.removeTipsConfig(this.level, player);
         }
     }
 
     @Override
     public void quitRoomOnline(Player player) {
-        Tools.removePlayerShowMessage(this.level, player);
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
         Tools.rePlayerState(player, false);
         SavePlayerInventory.restore(player);

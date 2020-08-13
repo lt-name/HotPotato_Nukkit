@@ -2,6 +2,9 @@ package cn.lanink.hotpotato;
 
 import cn.lanink.hotpotato.command.AdminCommand;
 import cn.lanink.hotpotato.command.UserCommand;
+import cn.lanink.hotpotato.lib.scoreboard.IScoreboard;
+import cn.lanink.hotpotato.lib.scoreboard.ScoreboardDe;
+import cn.lanink.hotpotato.lib.scoreboard.ScoreboardGt;
 import cn.lanink.hotpotato.listener.HotPotatoListener;
 import cn.lanink.hotpotato.listener.PlayerGameListener;
 import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
@@ -40,6 +43,8 @@ public class HotPotato extends PluginBase {
     private LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
     private String cmdUser, cmdAdmin;
     public final LinkedList<Integer> taskList = new LinkedList<>();
+    private IScoreboard iScoreboard;
+    private boolean hasTips = false;
 
     public static HotPotato getInstance() { return hotPotato; }
 
@@ -70,6 +75,36 @@ public class HotPotato extends PluginBase {
         }
         saveDefaultConfig();
         this.config = new Config(getDataFolder() + "/config.yml", 2);
+        //加载计分板
+        try {
+            Class.forName("de.theamychan.scoreboard.ScoreboardPlugin");
+            if (getServer().getPluginManager().getPlugin("ScoreboardPlugin").isDisabled()) {
+                throw new Exception("Not Loaded");
+            }
+            this.iScoreboard = new ScoreboardDe();
+        } catch (Exception e) {
+            try {
+                Class.forName("gt.creeperface.nukkit.scoreboardapi.ScoreboardAPI");
+                if (getServer().getPluginManager().getPlugin("ScoreboardAPI").isDisabled()) {
+                    throw new Exception("Not Loaded");
+                }
+                this.iScoreboard = new ScoreboardGt();
+            } catch (Exception ignored) {
+                getLogger().error("§c请安装计分板前置！");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
+            }
+        }
+        //检查Tips
+        try {
+            Class.forName("tip.Main");
+            if (getServer().getPluginManager().getPlugin("Tips").isDisabled()) {
+                throw new Exception("Not Loaded");
+            }
+            this.hasTips = true;
+        } catch (Exception ignored) {
+
+        }
         //语言文件
         saveResource("Language/zh_CN.yml", false);
         String s = this.config.getString("language", "zh_CN");
@@ -120,6 +155,14 @@ public class HotPotato extends PluginBase {
         }
         this.taskList.clear();
         getLogger().info("§c插件卸载完成！");
+    }
+
+    public IScoreboard getIScoreboard() {
+        return this.iScoreboard;
+    }
+
+    public boolean isHasTips() {
+        return this.hasTips;
     }
 
     public Language getLanguage() {

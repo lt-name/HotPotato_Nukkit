@@ -23,13 +23,7 @@ import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.PlaySoundPacket;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
 import cn.nukkit.utils.DyeColor;
-import tip.messages.BossBarMessage;
-import tip.messages.NameTagMessage;
-import tip.messages.ScoreBoardMessage;
-import tip.messages.TipMessage;
-import tip.utils.Api;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -48,21 +42,6 @@ public class Tools {
                 Server.getInstance().dispatchCommand(player, cmd[0].replace("@p", player.getName()));
             }
         }
-    }
-
-    /**
-     * 移除显示信息
-     * @param level 地图
-     */
-    public static void removePlayerShowMessage(String level, Player player) {
-        Api.removePlayerShowMessage(player.getName(),
-                new NameTagMessage(level, true, ""));
-        Api.removePlayerShowMessage(player.getName(),
-                new TipMessage(level, true, 0, ""));
-        Api.removePlayerShowMessage(player.getName(),
-                new ScoreBoardMessage(level, true, "", new LinkedList<>()));
-        Api.removePlayerShowMessage(player.getName(),
-                new BossBarMessage(level, false, 5, false, new LinkedList<>()));
     }
 
     public static void giveItem(Player player, int i) {
@@ -124,21 +103,14 @@ public class Tools {
         player.removeAllEffects();
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setLevel(player.getFoodData().getMaxLevel());
+        player.setNameTag(player.getName());
         if (joinRoom) {
-            NameTagMessage nameTagMessage = new NameTagMessage(player.getLevel().getName(), true, "");
-            Api.setPlayerShowMessage(player.getName(), nameTagMessage);
-            BossBarMessage bossBarMessage = new BossBarMessage(player.getLevel().getName(), false, 5, false, new LinkedList<>());
-            Api.setPlayerShowMessage(player.getName(), bossBarMessage);
-            /*player.setNameTagVisible(false);
-            player.setNameTagAlwaysVisible(false);*/
             player.setAllowModifyWorld(false);
         }else {
-            /*player.setNameTagVisible(true);
-            player.setNameTagAlwaysVisible(true);*/
             setPlayerInvisible(player, false);
             player.setAllowModifyWorld(true);
         }
-        player.setAdventureSettings((new AdventureSettings(player)).set(AdventureSettings.Type.ALLOW_FLIGHT, false));
+        player.getAdventureSettings().set(AdventureSettings.Type.ALLOW_FLIGHT, false);
     }
 
     /**

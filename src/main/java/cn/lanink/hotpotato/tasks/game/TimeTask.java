@@ -43,7 +43,7 @@ public class TimeTask extends PluginTask<HotPotato> {
                     if (effect == null) {
                         effect = Effect.getEffect(1);
                         effect.setVisible(false);
-                        effect.setDuration(100);
+                        effect.setDuration(10000);
                         effect.setAmplifier(2);
                         entry.getKey().addEffect(effect);
                     }
@@ -77,8 +77,8 @@ public class TimeTask extends PluginTask<HotPotato> {
                     }
                 }
                 this.room.setMode(3);
-                Server.getInstance().getScheduler().scheduleRepeatingTask(
-                        owner, new VictoryTask(owner, room), 20);
+                Server.getInstance().getScheduler().scheduleRepeatingTask(owner,
+                        new VictoryTask(owner, this.room), 20);
             }
         }
     }
