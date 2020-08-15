@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class HotPotato extends PluginBase {
 
-    public static String VERSION = "?";
+    public static final String VERSION = "?";
     private static HotPotato hotPotato;
     private Language language;
     private Config config;
