@@ -2,7 +2,6 @@ package cn.lanink.hotpotato.utils;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
-import cn.nukkit.AdventureSettings;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
@@ -100,7 +99,6 @@ public class Tools {
      * @param joinRoom 是否为加入房间
      */
     public static void rePlayerState(Player player, boolean joinRoom) {
-        player.setGamemode(0);
         player.removeAllEffects();
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setLevel(player.getFoodData().getMaxLevel());
@@ -111,7 +109,7 @@ public class Tools {
             setPlayerInvisible(player, false);
             player.setAllowModifyWorld(true);
         }
-        player.getAdventureSettings().set(AdventureSettings.Type.ALLOW_FLIGHT, false);
+        player.setGamemode(0);
     }
 
     /**

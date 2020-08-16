@@ -18,7 +18,9 @@ import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerRespawnEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.scheduler.Task;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -30,6 +32,7 @@ public class PlayerGameListener implements Listener {
 
     private final HotPotato hotPotato;
     private final Language language;
+    private final HashSet<Player> playerAttackCooldown = new HashSet<>();
 
     public PlayerGameListener(HotPotato hotPotato) {
         this.hotPotato = hotPotato;
@@ -43,23 +46,34 @@ public class PlayerGameListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-            Player player1 = (Player) event.getDamager();
-            Player player2 = (Player) event.getEntity();
-            if (player1 == null || player2 == null) {
+            Player damager = (Player) event.getDamager();
+            Player player = (Player) event.getEntity();
+            if (damager == null || player == null) {
                 return;
             }
-            Room room = this.hotPotato.getRooms().getOrDefault(player1.getLevel().getName(), null);
-            if (room != null) {
-                if (room.getMode() == 2) {
-                    if (room.isPlaying(player1) && room.getPlayerMode(player1) == 2 &&
-                            room.isPlaying(player2) && room.getPlayerMode(player2) != 0) {
-                        Server.getInstance().getPluginManager().callEvent(new HotPotatoTransferEvent(room, player1, player2));
-                    }
-                    event.setCancelled(false);
-                    event.setDamage(0);
-                }else {
+            Room room = this.hotPotato.getRooms().getOrDefault(damager.getLevel().getName(), null);
+            if (room == null || !room.isPlaying(damager) || !room.isPlaying(player)) {
+                return;
+            }
+            if (room.getMode() == 2) {
+                if (room.getPlayerMode(damager) != 2 && this.playerAttackCooldown.contains(damager)) {
                     event.setCancelled(true);
+                    return;
                 }
+                if (room.getPlayerMode(damager) == 2 && room.getPlayerMode(player) != 0) {
+                    Server.getInstance().getPluginManager().callEvent(new HotPotatoTransferEvent(room, damager, player));
+                }
+                event.setCancelled(false);
+                event.setDamage(0);
+                this.playerAttackCooldown.add(damager);
+                Server.getInstance().getScheduler().scheduleDelayedTask(this.hotPotato, new Task() {
+                    @Override
+                    public void onRun(int i) {
+                        playerAttackCooldown.remove(damager);
+                    }
+                }, 20);
+            }else {
+                event.setCancelled(true);
             }
         }
     }

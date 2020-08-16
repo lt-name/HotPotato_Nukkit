@@ -17,16 +17,12 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
-import updata.AutoData;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * HotPotato
@@ -38,7 +34,7 @@ public class HotPotato extends PluginBase {
     private static HotPotato hotPotato;
     private Language language;
     private Config config;
-    private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();
+    private HashMap<String, Config> roomConfigs = new HashMap<>();
     private LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
     private LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
     private String cmdUser, cmdAdmin;
@@ -50,12 +46,6 @@ public class HotPotato extends PluginBase {
 
     @Override
     public void onEnable() {
-        if(getServer().getPluginManager().getPlugin("AutoUpData") != null){
-            if(AutoData.defaultUpData(this, this.getFile(),"lt-name","HotPotato_Nukkit")) {
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
         getLogger().info("§e插件开始加载！本插件是免费哒~如果你花钱了，那一定是被骗了~");
         if (hotPotato == null) {
             hotPotato = this;

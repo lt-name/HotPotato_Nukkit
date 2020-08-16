@@ -156,13 +156,6 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/Tips_v1.6.3.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>updata.AutoData</groupId>
-            <artifactId>AutoUpData</artifactId>
-            <version>1.2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/AutoUpData_v1.2.2.jar</systemPath>
-        </dependency>
     </dependencies>
 
 </project>
