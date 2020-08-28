@@ -18,7 +18,6 @@ public class WaitTask extends PluginTask<HotPotato> {
 
     public WaitTask(HotPotato owner, Room room) {
         super(owner);
-        owner.taskList.add(this.getTaskId());
         this.language = owner.getLanguage();
         this.room = room;
     }
@@ -67,14 +66,6 @@ public class WaitTask extends PluginTask<HotPotato> {
             this.room.endGame();
             this.cancel();
         }
-    }
-
-    @Override
-    public void cancel() {
-        while (owner.taskList.contains(this.getTaskId())) {
-            owner.taskList.remove(this.getTaskId());
-        }
-        super.cancel();
     }
 
 }

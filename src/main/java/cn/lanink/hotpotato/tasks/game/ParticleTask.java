@@ -16,7 +16,6 @@ public class ParticleTask extends PluginTask<HotPotato> {
 
     public ParticleTask(HotPotato owner, Room room) {
         super(owner);
-        owner.taskList.add(this.getTaskId());
         this.room = room;
     }
 
@@ -43,14 +42,6 @@ public class ParticleTask extends PluginTask<HotPotato> {
                 }
             }
         }
-    }
-
-    @Override
-    public void cancel() {
-        while (owner.taskList.contains(this.getTaskId())) {
-            owner.taskList.remove(this.getTaskId());
-        }
-        super.cancel();
     }
 
 }
