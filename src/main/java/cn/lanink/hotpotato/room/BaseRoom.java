@@ -64,19 +64,8 @@ public abstract class BaseRoom {
      * @param online 是否在线
      */
     public void quitRoom(Player player, boolean online) {
-        if (this.isPlaying(player)) {
-            this.players.remove(player);
-        }
-        if (online) {
-            this.quitRoomOnline(player);
-        }
+        this.players.remove(player);
     }
-
-    /**
-     * 退出房间(玩家在线)
-     * @param player 玩家
-     */
-    public abstract void quitRoomOnline(Player player);
 
     /**
      * 获取玩家是否在房间内

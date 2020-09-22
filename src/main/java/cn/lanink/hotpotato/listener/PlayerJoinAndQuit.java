@@ -24,7 +24,7 @@ public class PlayerJoinAndQuit implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (player != null && HotPotato.getInstance().getRooms().containsKey(player.getLevel().getName())) {
-            HotPotato.getInstance().getServer().getScheduler().scheduleDelayedTask(new Task() {
+            HotPotato.getInstance().getServer().getScheduler().scheduleDelayedTask(HotPotato.getInstance(), new Task() {
                 @Override
                 public void onRun(int i) {
                     if (player.isOnline()) {
@@ -51,7 +51,6 @@ public class PlayerJoinAndQuit implements Listener {
                 room.quitRoom(player, false);
             }
         }
-        HotPotato.getInstance().getIScoreboard().delCache(player);
     }
 
     @EventHandler
