@@ -132,14 +132,14 @@ public class Room extends BaseRoom {
     @Override
     public void quitRoom(Player player, boolean online) {
         this.players.remove(player);
+        if (HotPotato.getInstance().isHasTips()) {
+            Tips.removeTipsConfig(this.level, player);
+        }
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
         Tools.rePlayerState(player, false);
         SavePlayerInventory.restore(player);
         this.restoreSkin(player);
         HotPotato.getInstance().getIScoreboard().closeScoreboard(player);
-        if (HotPotato.getInstance().isHasTips()) {
-            Tips.removeTipsConfig(this.level, player);
-        }
     }
 
     /**
