@@ -99,7 +99,8 @@ public class HotPotato extends PluginBase {
 
         }
         //语言文件
-        saveResource("Language/zh_CN.yml", false);
+        saveResource("Language/zh_CN.yml");
+        saveResource("Language/es_MX.yml");
         String s = this.config.getString("language", "zh_CN");
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {
