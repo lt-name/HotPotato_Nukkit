@@ -7,7 +7,7 @@ import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 /**
  * 基础/通用 房间类
@@ -20,7 +20,7 @@ public abstract class BaseRoom {
     protected int mode; //0未初始化 1等待 2游戏 3胜利结算
     protected String level, waitSpawn;
     protected int setWaitTime, setGameTime;
-    protected LinkedHashMap<Player, Integer> players = new LinkedHashMap<>();
+    protected HashMap<Player, Integer> players = new HashMap<>();
 
     /**
      * 初始化task
@@ -64,19 +64,8 @@ public abstract class BaseRoom {
      * @param online 是否在线
      */
     public void quitRoom(Player player, boolean online) {
-        if (this.isPlaying(player)) {
-            this.players.remove(player);
-        }
-        if (online) {
-            this.quitRoomOnline(player);
-        }
+        this.players.remove(player);
     }
-
-    /**
-     * 退出房间(玩家在线)
-     * @param player 玩家
-     */
-    public abstract void quitRoomOnline(Player player);
 
     /**
      * 获取玩家是否在房间内
@@ -91,7 +80,7 @@ public abstract class BaseRoom {
      * 获取玩家列表
      * @return 玩家列表
      */
-    public LinkedHashMap<Player, Integer> getPlayers() {
+    public HashMap<Player, Integer> getPlayers() {
         return this.players;
     }
 

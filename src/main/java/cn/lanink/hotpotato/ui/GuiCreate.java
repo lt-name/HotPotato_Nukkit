@@ -4,24 +4,29 @@ import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.element.ElementInput;
+import cn.nukkit.form.window.FormWindow;
 import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
+import cn.nukkit.scheduler.Task;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
 public class GuiCreate {
 
     public static final String PLUGIN_NAME = "§l§7[§1H§2o§3t§4P§5o§6t§aa§ct§bo§7]";
-    public static final int USER_MENU = 1858874311;
+    public static final HashMap<Player, HashMap<Integer, GuiType>> UI_CACHE = new HashMap<>();
+    /*public static final int USER_MENU = 1858874311;
     public static final int ADMIN_MENU = 1858874312;
     public static final int ADMIN_TIME_MENU = 1858874313;
     public static final int ROOM_LIST_MENU = 1858874314;
-    public static final int ROOM_JOIN_OK = 1858874315;
+    public static final int ROOM_JOIN_OK = 1858874315;*/
 
     /**
      * 显示用户菜单
@@ -33,7 +38,7 @@ public class GuiCreate {
         simple.addButton(new ElementButton(language.userMenuButton1, new ElementButtonImageData("path", "textures/ui/switch_start_button")));
         simple.addButton(new ElementButton(language.userMenuButton2, new ElementButtonImageData("path", "textures/ui/switch_select_button")));
         simple.addButton(new ElementButton(language.userMenuButton3, new ElementButtonImageData("path", "textures/ui/servers")));
-        player.showFormWindow(simple, USER_MENU);
+        showFormWindow(player, simple, GuiType.USER_MENU);
     }
 
     /**
@@ -48,7 +53,7 @@ public class GuiCreate {
         simple.addButton(new ElementButton(language.adminMenuButton3, new ElementButtonImageData("path", "textures/ui/timer")));
         simple.addButton(new ElementButton(language.adminMenuButton4,  new ElementButtonImageData("path", "textures/ui/refresh_light")));
         simple.addButton(new ElementButton(language.adminMenuButton5, new ElementButtonImageData("path", "textures/ui/redX1")));
-        player.showFormWindow(simple, ADMIN_MENU);
+        showFormWindow(player, simple, GuiType.ADMIN_MENU);
     }
 
     /**
@@ -60,7 +65,7 @@ public class GuiCreate {
         FormWindowCustom custom = new FormWindowCustom(PLUGIN_NAME);
         custom.addElement(new ElementInput(language.adminTimeMenuInputText1, "", "60"));
         custom.addElement(new ElementInput(language.adminTimeMenuInputText2, "", "20"));
-        player.showFormWindow(custom, ADMIN_TIME_MENU);
+        showFormWindow(player, custom, GuiType.ADMIN_TIME_MENU);
     }
 
     /**
@@ -71,10 +76,12 @@ public class GuiCreate {
         Language language = HotPotato.getInstance().getLanguage();
         FormWindowSimple simple = new FormWindowSimple(PLUGIN_NAME, "");
         for (Map.Entry<String, Room> entry : HotPotato.getInstance().getRooms().entrySet()) {
-            simple.addButton(new ElementButton("§e" + entry.getKey(), new ElementButtonImageData("path", "textures/ui/switch_start_button")));
+            simple.addButton(new ElementButton("§e" + entry.getKey() +
+                    "\nPlayer: " + entry.getValue().getPlayers().size() + "/16",
+                    new ElementButtonImageData("path", "textures/ui/switch_start_button")));
         }
         simple.addButton(new ElementButton(language.buttonReturn, new ElementButtonImageData("path", "textures/ui/cancel")));
-        player.showFormWindow(simple, ROOM_LIST_MENU);
+        showFormWindow(player, simple, GuiType.ROOM_LIST_MENU);
     }
 
     /**
@@ -88,21 +95,40 @@ public class GuiCreate {
             if (room.getMode() == 2 || room.getMode() == 3) {
                 FormWindowModal modal = new FormWindowModal(
                         PLUGIN_NAME, language.joinRoomIsPlaying, language.buttonReturn, language.buttonReturn);
-                player.showFormWindow(modal, ROOM_JOIN_OK);
+                showFormWindow(player, modal, GuiType.ROOM_JOIN_OK);
             }else if (room.getPlayers().size() > 15){
                 FormWindowModal modal = new FormWindowModal(
                         PLUGIN_NAME, language.joinRoomIsFull, language.buttonReturn, language.buttonReturn);
-                player.showFormWindow(modal, ROOM_JOIN_OK);
+                showFormWindow(player, modal, GuiType.ROOM_JOIN_OK);
             }else {
                 FormWindowModal modal = new FormWindowModal(
                         PLUGIN_NAME, language.joinRoomOK.replace("%name%", "\"" + roomName + "\""), language.buttonOK, language.buttonReturn);
-                player.showFormWindow(modal, ROOM_JOIN_OK);
+                showFormWindow(player, modal, GuiType.ROOM_JOIN_OK);
             }
         }else {
             FormWindowModal modal = new FormWindowModal(
                     PLUGIN_NAME, language.joinRoomIsNotFound, language.buttonReturn, language.buttonReturn);
-            player.showFormWindow(modal, ROOM_JOIN_OK);
+            showFormWindow(player, modal, GuiType.ROOM_JOIN_OK);
         }
+    }
+
+    public static void showFormWindow(Player player, FormWindow window, GuiType guiType) {
+        HashMap<Integer, GuiType> map;
+        if (!UI_CACHE.containsKey(player)) {
+            map = new HashMap<>();
+            UI_CACHE.put(player, map);
+        }else {
+            map = UI_CACHE.get(player);
+        }
+        int id = player.showFormWindow(window);
+        map.put(id, guiType);
+        Server.getInstance().getScheduler().scheduleDelayedTask(HotPotato.getInstance(), new Task() {
+            @Override
+            public void onRun(int i) {
+                if (UI_CACHE.containsKey(player))
+                    UI_CACHE.get(player).remove(id);
+            }
+        }, 2400);
     }
 
 }

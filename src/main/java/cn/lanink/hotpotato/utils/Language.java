@@ -76,6 +76,9 @@ public class Language {
     public String joinRoomOK = "§l§a确认要加入房间: %name% §l§a？";
     public String buttonOK = "§a确定";
     public String buttonReturn = "§c返回";
+    //物品
+    public String itemQuitRoom = "§c退出房间";
+    public String itemQuitRoomLore = "手持点击,即可退出房间";
 
     public Language(Config config) {
         this.useCmdInRoom = config.getString("useCmdInRoom", this.useCmdInRoom);
@@ -134,6 +137,9 @@ public class Language {
         this.joinRoomOK = config.getString("joinRoomOK", this.joinRoomOK);
         this.buttonOK = config.getString("buttonOK", this.buttonOK);
         this.buttonReturn = config.getString("buttonReturn", this.buttonReturn);
+        //物品
+        this.itemQuitRoom = config.getString("itemQuitRoom", this.itemQuitRoom);
+        this.itemQuitRoomLore = config.getString("itemQuitRoomLore", this.itemQuitRoomLore);
     }
 
 }

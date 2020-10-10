@@ -75,12 +75,12 @@ public class Room extends BaseRoom {
     public void endGame(boolean normal) {
         this.mode = 0;
         if (normal) {
-            if (this.players.values().size() > 0 ) {
+            if (this.players.size() > 0 ) {
                 Iterator<Map.Entry<Player, Integer>> it = this.players.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry<Player, Integer> entry = it.next();
                     it.remove();
-                    this.quitRoomOnline(entry.getKey());
+                    this.quitRoom(entry.getKey());
                 }
             }
         }else {
@@ -131,27 +131,15 @@ public class Room extends BaseRoom {
      */
     @Override
     public void quitRoom(Player player, boolean online) {
-        if (this.isPlaying(player)) {
-            this.delPlaying(player);
-        }
-        if (online) {
-            this.quitRoomOnline(player);
-            HotPotato.getInstance().getIScoreboard().closeScoreboard(player);
-        }else {
-            this.skinNumber.remove(player);
-            this.skinCache.remove(player);
-        }
+        this.players.remove(player);
         if (HotPotato.getInstance().isHasTips()) {
             Tips.removeTipsConfig(this.level, player);
         }
-    }
-
-    @Override
-    public void quitRoomOnline(Player player) {
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
         Tools.rePlayerState(player, false);
         SavePlayerInventory.restore(player);
         this.restoreSkin(player);
+        HotPotato.getInstance().getIScoreboard().closeScoreboard(player);
     }
 
     /**

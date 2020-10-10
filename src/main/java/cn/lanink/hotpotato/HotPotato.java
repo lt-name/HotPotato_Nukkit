@@ -22,9 +22,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -37,13 +37,13 @@ public class HotPotato extends PluginBase {
     private static HotPotato hotPotato;
     private Language language;
     private Config config;
-    private LinkedHashMap<String, Config> roomConfigs = new LinkedHashMap<>();
-    private LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
-    private LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
+    private final HashMap<String, Config> roomConfigs = new HashMap<>();
+    private final LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
+    private final LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
     private String cmdUser, cmdAdmin;
-    public final LinkedList<Integer> taskList = new LinkedList<>();
     private IScoreboard iScoreboard;
     private boolean hasTips = false;
+    public static boolean debug = false;
 
     public static HotPotato getInstance() { return hotPotato; }
 
@@ -99,7 +99,8 @@ public class HotPotato extends PluginBase {
 
         }
         //语言文件
-        saveResource("Language/zh_CN.yml", false);
+        saveResource("Language/zh_CN.yml");
+        saveResource("Language/es_MX.yml");
         String s = this.config.getString("language", "zh_CN");
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {
@@ -143,10 +144,6 @@ public class HotPotato extends PluginBase {
         }
         this.rooms.clear();
         this.roomConfigs.clear();
-        for (int id : this.taskList) {
-            getServer().getScheduler().cancelTask(id);
-        }
-        this.taskList.clear();
         getLogger().info("§c插件卸载完成！");
     }
 
@@ -232,10 +229,6 @@ public class HotPotato extends PluginBase {
         if (this.roomConfigs.values().size() > 0) {
             this.roomConfigs.clear();
         }
-        for (int id : this.taskList) {
-            getServer().getScheduler().cancelTask(id);
-        }
-        this.taskList.clear();
     }
 
     /**

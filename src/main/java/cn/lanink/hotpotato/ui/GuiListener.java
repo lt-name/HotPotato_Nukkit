@@ -12,8 +12,8 @@ import cn.nukkit.form.window.FormWindowSimple;
 
 public class GuiListener implements Listener {
 
-    private HotPotato hotPotato;
-    private Language language;
+    private final HotPotato hotPotato;
+    private final Language language;
 
     public GuiListener(HotPotato hotPotato) {
         this.hotPotato = hotPotato;
@@ -31,11 +31,16 @@ public class GuiListener implements Listener {
         if (player == null || event.getWindow() == null || event.getResponse() == null) {
             return;
         }
-        String uName = HotPotato.getInstance().getCmdUser();
-        String aName = HotPotato.getInstance().getCmdAdmin();
+        GuiType cache = GuiCreate.UI_CACHE.containsKey(player) ? GuiCreate.UI_CACHE.get(player).get(event.getFormID()) : null;
+        if (cache == null) {
+            return;
+        }
+        GuiCreate.UI_CACHE.get(player).remove(event.getFormID());
+        String uName = this.hotPotato.getCmdUser();
+        String aName = this.hotPotato.getCmdAdmin();
         if (event.getWindow() instanceof FormWindowSimple) {
             FormWindowSimple simple = (FormWindowSimple) event.getWindow();
-            if (event.getFormID() == GuiCreate.USER_MENU) {
+            if (cache == GuiType.USER_MENU) {
                 switch (simple.getResponse().getClickedButtonId()) {
                     case 0:
                         HotPotato.getInstance().getServer().dispatchCommand(player, uName + " join");
@@ -47,13 +52,14 @@ public class GuiListener implements Listener {
                         GuiCreate.sendRoomListMenu(player);
                         break;
                 }
-            }else if (event.getFormID() == GuiCreate.ROOM_LIST_MENU) {
+            }else if (cache == GuiType.ROOM_LIST_MENU) {
                 if (simple.getResponse().getClickedButton().getText().equals(language.buttonReturn)) {
                     GuiCreate.sendUserMenu(player);
                 }else {
-                    GuiCreate.sendRoomJoinOkMenu(player, simple.getResponse().getClickedButton().getText());
+                    GuiCreate.sendRoomJoinOkMenu(player,
+                            simple.getResponse().getClickedButton().getText().split("\n")[0]);
                 }
-            }else if (event.getFormID() == GuiCreate.ADMIN_MENU) {
+            }else if (cache == GuiType.ADMIN_MENU) {
                 switch (simple.getResponse().getClickedButtonId()) {
                     case 0:
                         HotPotato.getInstance().getServer().dispatchCommand(player, aName + " setwaitspawn");
@@ -74,13 +80,13 @@ public class GuiListener implements Listener {
             }
         }else if (event.getWindow() instanceof FormWindowCustom) {
             FormWindowCustom custom = (FormWindowCustom) event.getWindow();
-            if (event.getFormID() == GuiCreate.ADMIN_TIME_MENU) {
+            if (cache == GuiType.ADMIN_TIME_MENU) {
                 HotPotato.getInstance().getServer().dispatchCommand(player, aName + " setwaittime " + custom.getResponse().getInputResponse(0));
                 HotPotato.getInstance().getServer().dispatchCommand(player, aName + " setgametime " + custom.getResponse().getInputResponse(1));
             }
         }else if (event.getWindow() instanceof FormWindowModal) {
             FormWindowModal modal = (FormWindowModal) event.getWindow();
-            if (event.getFormID() == GuiCreate.ROOM_JOIN_OK) {
+            if (cache == GuiType.ROOM_JOIN_OK) {
                 if (modal.getResponse().getClickedButtonId() == 0 && !modal.getButton1().equals(language.buttonReturn)) {
                     String[] s = modal.getContent().split("\"");
                     HotPotato.getInstance().getServer().dispatchCommand(

@@ -1,5 +1,6 @@
 package cn.lanink.hotpotato.utils;
 
+import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
 import cn.nukkit.AdventureSettings;
 import cn.nukkit.Player;
@@ -54,8 +55,8 @@ public class Tools {
                 item.setNamedTag(new CompoundTag()
                         .putBoolean("isHotPotatoItem", true)
                         .putInt("HotPotatoType", 10));
-                item.setCustomName("§c退出房间");
-                item.setLore("手持点击,即可退出房间");
+                item.setCustomName(HotPotato.getInstance().getLanguage().itemQuitRoom);
+                item.setLore(HotPotato.getInstance().getLanguage().itemQuitRoomLore.split("\n"));
                 player.getInventory().setItem(8, item);
                 break;
         }
@@ -99,18 +100,19 @@ public class Tools {
      * @param joinRoom 是否为加入房间
      */
     public static void rePlayerState(Player player, boolean joinRoom) {
-        player.setGamemode(0);
         player.removeAllEffects();
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setLevel(player.getFoodData().getMaxLevel());
         player.setNameTag(player.getName());
+        player.setGamemode(0);
         if (joinRoom) {
             player.setAllowModifyWorld(false);
         }else {
             setPlayerInvisible(player, false);
-            player.setAllowModifyWorld(true);
         }
+        player.getAdventureSettings().set(AdventureSettings.Type.FLYING, false);
         player.getAdventureSettings().set(AdventureSettings.Type.ALLOW_FLIGHT, false);
+        player.getAdventureSettings().update();
     }
 
     /**

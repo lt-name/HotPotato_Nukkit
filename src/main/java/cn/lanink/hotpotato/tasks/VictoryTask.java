@@ -19,7 +19,6 @@ public class VictoryTask extends PluginTask<HotPotato> {
 
     public VictoryTask(HotPotato owner, Room room) {
         super(owner);
-        owner.taskList.add(this.getTaskId());
         this.language = owner.getLanguage();
         this.room = room;
         this.victoryTime = 10;
@@ -52,14 +51,6 @@ public class VictoryTask extends PluginTask<HotPotato> {
                 }
             }
         }
-    }
-
-    @Override
-    public void cancel() {
-        while (owner.taskList.contains(this.getTaskId())) {
-            owner.taskList.remove(this.getTaskId());
-        }
-        super.cancel();
     }
 
 }

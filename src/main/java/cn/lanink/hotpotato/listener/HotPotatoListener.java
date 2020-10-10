@@ -48,7 +48,9 @@ public class HotPotatoListener implements Listener {
         int j = 0;
         int x = 0;
         for (Map.Entry<Player, Integer> entry : room.getPlayers().entrySet()) {
+            Tools.rePlayerState(entry.getKey(), true);
             entry.getKey().getInventory().clearAll();
+            entry.getKey().getUIInventory().clearAll();
             if (i == j) {
                 entry.setValue(2);
                 Tools.givePotato(entry.getKey());

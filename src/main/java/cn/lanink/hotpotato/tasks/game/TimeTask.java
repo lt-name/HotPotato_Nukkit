@@ -25,7 +25,6 @@ public class TimeTask extends PluginTask<HotPotato> {
 
     public TimeTask(HotPotato owner, Room room) {
         super(owner);
-        owner.taskList.add(this.getTaskId());
         this.language = owner.getLanguage();
         this.room = room;
     }
@@ -87,14 +86,6 @@ public class TimeTask extends PluginTask<HotPotato> {
         for (Player player : this.room.getPlayers().keySet()) {
             player.sendMessage(string);
         }
-    }
-
-    @Override
-    public void cancel() {
-        while (owner.taskList.contains(this.getTaskId())) {
-            owner.taskList.remove(this.getTaskId());
-        }
-        super.cancel();
     }
 
 }

@@ -19,7 +19,6 @@ public class TipsTask extends PluginTask<HotPotato> {
 
     public TipsTask(HotPotato owner, Room room) {
         super(owner);
-        owner.taskList.add(this.getTaskId());
         this.language = owner.getLanguage();
         this.room = room;
     }
@@ -48,14 +47,6 @@ public class TipsTask extends PluginTask<HotPotato> {
                 owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
             }
         }
-    }
-
-    @Override
-    public void cancel() {
-        while (owner.taskList.contains(this.getTaskId())) {
-            owner.taskList.remove(this.getTaskId());
-        }
-        super.cancel();
     }
 
 }
