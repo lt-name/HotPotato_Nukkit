@@ -28,7 +28,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onPlayerFormResponded(PlayerFormRespondedEvent event) {
         Player player = event.getPlayer();
-        if (player == null || event.getWindow() == null || event.getResponse() == null) {
+        if (player == null || event.getWindow() == null) {
             return;
         }
         GuiType cache = GuiCreate.UI_CACHE.containsKey(player) ? GuiCreate.UI_CACHE.get(player).get(event.getFormID()) : null;
@@ -36,6 +36,9 @@ public class GuiListener implements Listener {
             return;
         }
         GuiCreate.UI_CACHE.get(player).remove(event.getFormID());
+        if (event.getResponse() == null) {
+            return;
+        }
         String uName = this.hotPotato.getCmdUser();
         String aName = this.hotPotato.getCmdAdmin();
         if (event.getWindow() instanceof FormWindowSimple) {

@@ -4,7 +4,6 @@ import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.element.ElementInput;
@@ -12,7 +11,6 @@ import cn.nukkit.form.window.FormWindow;
 import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
-import cn.nukkit.scheduler.Task;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +20,6 @@ public class GuiCreate {
 
     public static final String PLUGIN_NAME = "§l§7[§1H§2o§3t§4P§5o§6t§aa§ct§bo§7]";
     public static final HashMap<Player, HashMap<Integer, GuiType>> UI_CACHE = new HashMap<>();
-    /*public static final int USER_MENU = 1858874311;
-    public static final int ADMIN_MENU = 1858874312;
-    public static final int ADMIN_TIME_MENU = 1858874313;
-    public static final int ROOM_LIST_MENU = 1858874314;
-    public static final int ROOM_JOIN_OK = 1858874315;*/
 
     /**
      * 显示用户菜单
@@ -113,22 +106,7 @@ public class GuiCreate {
     }
 
     public static void showFormWindow(Player player, FormWindow window, GuiType guiType) {
-        HashMap<Integer, GuiType> map;
-        if (!UI_CACHE.containsKey(player)) {
-            map = new HashMap<>();
-            UI_CACHE.put(player, map);
-        }else {
-            map = UI_CACHE.get(player);
-        }
-        int id = player.showFormWindow(window);
-        map.put(id, guiType);
-        Server.getInstance().getScheduler().scheduleDelayedTask(HotPotato.getInstance(), new Task() {
-            @Override
-            public void onRun(int i) {
-                if (UI_CACHE.containsKey(player))
-                    UI_CACHE.get(player).remove(id);
-            }
-        }, 2400);
+        UI_CACHE.computeIfAbsent(player, obj -> new HashMap<>()).put(player.showFormWindow(window), guiType);
     }
 
 }
