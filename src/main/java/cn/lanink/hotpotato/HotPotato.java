@@ -45,29 +45,34 @@ public class HotPotato extends PluginBase {
     private boolean hasTips = false;
     public static boolean debug = false;
 
-    public static HotPotato getInstance() { return hotPotato; }
-
+    public static HotPotato getInstance() {
+        return hotPotato;
+    }
+    
     @Override
-    public void onEnable() {
-        getLogger().info("§e插件开始加载！本插件是免费哒~如果你花钱了，那一定是被骗了~");
-        if (hotPotato == null) {
-            hotPotato = this;
-        }
-        getLogger().info("§l§e版本: " + VERSION);
+    public void onLoad() {
+        hotPotato = this;
+    
         File file1 = new File(this.getDataFolder() + "/Rooms");
         File file2 = new File(this.getDataFolder() + "/PlayerInventory");
         File file3 = new File(this.getDataFolder() + "/Skins");
         if (!file1.exists() && !file1.mkdirs()) {
-            getLogger().error("Rooms 文件夹初始化失败");
+            this.getLogger().error("Rooms 文件夹初始化失败");
         }
         if (!file2.exists() && !file2.mkdirs()) {
-            getLogger().error("PlayerInventory 文件夹初始化失败");
+            this.getLogger().error("PlayerInventory 文件夹初始化失败");
         }
         if (!file3.exists() && !file3.mkdirs()) {
-            getLogger().warning("Skins 文件夹初始化失败");
+            this.getLogger().warning("Skins 文件夹初始化失败");
         }
-        saveDefaultConfig();
+        this.saveDefaultConfig();
         this.config = new Config(getDataFolder() + "/config.yml", 2);
+    }
+    
+    @Override
+    public void onEnable() {
+        this.getLogger().info("§e插件开始加载！本插件是免费哒~如果你花钱了，那一定是被骗了~");
+        this.getLogger().info("§l§e版本: " + VERSION);
         //加载计分板
         try {
             Class.forName("de.theamychan.scoreboard.ScoreboardPlugin");
@@ -110,26 +115,30 @@ public class HotPotato extends PluginBase {
             this.language = new Language(new Config());
             getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
         }
-        getLogger().info("§e开始加载房间");
+        
         this.loadRooms();
+        
         getLogger().info("§e开始加载皮肤");
         this.loadSkins();
+        
         this.cmdUser = this.config.getString("插件命令", "hotpotato");
         this.cmdAdmin = this.config.getString("管理命令", "hotpotatoadmin");
         getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
         getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
+        
         getServer().getPluginManager().registerEvents(new PlayerJoinAndQuit(), this);
         getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
         getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
         getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
         getServer().getPluginManager().registerEvents(new GuiListener(this), this);
+        
         new MetricsLite(this, 7464);
         getLogger().info("§e插件加载完成！欢迎使用！");
     }
 
     @Override
     public void onDisable() {
-        if (this.rooms.size() > 0) {
+        if (!this.rooms.isEmpty()) {
             Iterator<Map.Entry<String, Room>> it = this.rooms.entrySet().iterator();
             while(it.hasNext()){
                 Map.Entry<String, Room> entry = it.next();
@@ -144,7 +153,7 @@ public class HotPotato extends PluginBase {
         }
         this.rooms.clear();
         this.roomConfigs.clear();
-        getLogger().info("§c插件卸载完成！");
+        this.getLogger().info("§c插件卸载完成！");
     }
 
     public IScoreboard getIScoreboard() {
@@ -189,6 +198,7 @@ public class HotPotato extends PluginBase {
      * 加载所有房间
      */
     private void loadRooms() {
+        this.getLogger().info("§e开始加载房间");
         File[] s = new File(getDataFolder() + "/Rooms").listFiles();
         if (s != null) {
             for (File file1 : s) {
@@ -200,16 +210,16 @@ public class HotPotato extends PluginBase {
                             config.getString("waitSpawn", "").trim().equals("") ||
                             config.getStringList("randomSpawn").size() == 0 ||
                             config.getString("World", "").trim().equals("")) {
-                        getLogger().warning("§c房间：" + fileName[0] + " 配置不完整，加载失败！");
+                        this.getLogger().warning("§c房间：" + fileName[0] + " 配置不完整，加载失败！");
                         continue;
                     }
                     Room room = new Room(config);
                     this.rooms.put(fileName[0], room);
-                    getLogger().info("§a房间：" + fileName[0] + " 已加载！");
+                    this.getLogger().info("§a房间：" + fileName[0] + " 已加载！");
                 }
             }
         }
-        getLogger().info("§e房间加载完成！当前已加载 " + this.rooms.size() + " 个房间！");
+        this.getLogger().info("§e房间加载完成！当前已加载 " + this.rooms.size() + " 个房间！");
     }
 
     /**

@@ -168,12 +168,17 @@ public class PlayerGameListener implements Listener {
         player.sendMessage(this.language.useCmdInRoom);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
         if (player == null || event.getMessage() == null) return;
         Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
         if (room == null || !room.isPlaying(player)) {
+            for (Room r : this.hotPotato.getRooms().values()) {
+                for (Player p : r.getPlayers().keySet()) {
+                    event.getRecipients().remove(p);
+                }
+            }
             return;
         }
         if (room.getPlayerMode(player) == 0) {
