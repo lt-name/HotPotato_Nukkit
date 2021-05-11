@@ -132,7 +132,11 @@ public class HotPotato extends PluginBase {
         getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
         getServer().getPluginManager().registerEvents(new GuiListener(this), this);
         
-        new MetricsLite(this, 7464);
+        try {
+            new MetricsLite(this, 7464);
+        } catch (Exception ignored) {
+        
+        }
         getLogger().info("§e插件加载完成！欢迎使用！");
     }
 
