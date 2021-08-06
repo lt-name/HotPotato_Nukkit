@@ -124,6 +124,10 @@ public class Room {
         Tools.cleanEntity(this.getLevel());
     }
 
+    public boolean canJoin() {
+        return (this.getMode() == 0 || this.getMode() == 1) && this.getPlayers().size() < 16;
+    }
+
     /**
      * 加入房间
      * @param player 玩家
