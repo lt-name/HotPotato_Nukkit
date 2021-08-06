@@ -14,7 +14,10 @@ import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
 import lombok.Getter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 房间类
@@ -115,27 +118,9 @@ public class Room {
      * 结束本局游戏
      */
     public void endGame() {
-        this.endGame(true);
-    }
-
-    /**
-     * 结束本局游戏
-     * @param normal 正常关闭
-     */
-    public void endGame(boolean normal) {
         this.status = 0;
-        if (normal) {
-            if (this.players.size() > 0 ) {
-                Iterator<Map.Entry<Player, Integer>> it = this.players.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<Player, Integer> entry = it.next();
-                    it.remove();
-                    this.quitRoom(entry.getKey());
-                }
-            }
-        }else {
-            this.getLevel().getPlayers().values().forEach(
-                    player -> player.kick(HotPotato.getInstance().getLanguage().roomSafeKick));
+        for (Player player : new ArrayList<>(this.getPlayers().keySet())) {
+            this.quitRoom(player);
         }
         this.initTime();
         this.skinNumber.clear();

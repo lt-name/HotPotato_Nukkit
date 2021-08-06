@@ -6,7 +6,7 @@
 
     <groupId>cn.lanink</groupId>
     <artifactId>HotPotato</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3<!-- -SNAPSHOT--></version>
 
     <licenses>
         <license>
@@ -30,12 +30,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-Xlint:deprecation</arg>
-                    </compilerArgs>
-                    <compilerArguments>
-                        <bootclasspath>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</bootclasspath>
-                    </compilerArguments>
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
@@ -148,6 +142,7 @@
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>de.theamychan.scoreboard</groupId>
             <artifactId>ScoreboardAPI</artifactId>
@@ -155,6 +150,7 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ScoreboardAPI-1.3.jar</systemPath>
         </dependency>
+
         <dependency>
             <groupId>gt.creeperface.nukkit.scoreboardapi</groupId>
             <artifactId>ScoreboardAPI</artifactId>
@@ -162,12 +158,27 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ScoreboardAPI-1.4(creeperface).jar</systemPath>
         </dependency>
+
         <dependency>
             <groupId>tip.Main</groupId>
             <artifactId>Tips</artifactId>
             <version>1.6.3</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/Tips_v1.6.3.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>21.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

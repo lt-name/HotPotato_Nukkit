@@ -31,17 +31,23 @@ import java.util.*;
 public class HotPotato extends PluginBase {
 
     public static final String VERSION = "?";
+    public static boolean debug = false;
     public static final Random RANDOM = new Random();
     private static HotPotato hotPotato;
+
     private Language language;
     private Config config;
+
     private final HashMap<String, Config> roomConfigs = new HashMap<>();
     private final LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
+
     private final LinkedHashMap<Integer, Skin> skins = new LinkedHashMap<>();
-    private String cmdUser, cmdAdmin;
+
+    private String cmdUser;
+    private String cmdAdmin;
     private IScoreboard iScoreboard;
+
     private boolean hasTips = false;
-    public static boolean debug = false;
 
     public static HotPotato getInstance() {
         return hotPotato;
@@ -145,7 +151,7 @@ public class HotPotato extends PluginBase {
             while(it.hasNext()){
                 Map.Entry<String, Room> entry = it.next();
                 if (entry.getValue().getPlayers().size() > 0) {
-                    entry.getValue().endGame(false);
+                    entry.getValue().endGame();
                     getLogger().info("§c房间：" + entry.getKey() + " 非正常结束！");
                 }else {
                     getLogger().info("§c房间：" + entry.getKey() + " 已卸载！");
