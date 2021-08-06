@@ -11,14 +11,17 @@ public class AdminCommand extends BaseCommand {
     public AdminCommand(String name) {
         super(name, "HotPotato 管理命令");
         this.setPermission("HotPotato.command.admin");
-        this.addSubCommand(new SetWaitSpawn("setwaitspawn"));
-        this.addSubCommand(new AddRandomSpawn("addrandomspawn"));
-        this.addSubCommand(new SetWaitTime("setwaittime"));
-        this.addSubCommand(new SetGameTime("setgametime"));
-        this.addSubCommand(new StartRoom("startroom"));
-        this.addSubCommand(new StopRoom("stoproom"));
-        this.addSubCommand(new ReloadRoom("reloadroom"));
-        this.addSubCommand(new UnloadRoom("unloadroom"));
+
+        this.addSubCommand(new SetWaitSpawn("SetWaitSpawn"));
+        this.addSubCommand(new AddRandomSpawn("AddRandomSpawn"));
+        this.addSubCommand(new SetWaitTime("SetWaitTime"));
+        this.addSubCommand(new SetGameTime("SetGameTime"));
+
+        this.addSubCommand(new StartRoom("StartRoom"));
+        this.addSubCommand(new StopRoom("StopRoom"));
+        this.addSubCommand(new ReloadRoom("ReloadRoom"));
+        this.addSubCommand(new UnloadRoom("UnloadRoom"));
+
         this.loadCommandBase();
     }
 
