@@ -22,10 +22,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * HotPotato
@@ -34,6 +31,7 @@ import java.util.Map;
 public class HotPotato extends PluginBase {
 
     public static final String VERSION = "?";
+    public static final Random RANDOM = new Random();
     private static HotPotato hotPotato;
     private Language language;
     private Config config;

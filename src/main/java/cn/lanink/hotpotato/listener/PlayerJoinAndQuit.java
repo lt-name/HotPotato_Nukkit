@@ -48,7 +48,7 @@ public class PlayerJoinAndQuit implements Listener {
         }
         for (Room room : HotPotato.getInstance().getRooms().values()) {
             if (room.isPlaying(player)) {
-                room.quitRoom(player, false);
+                room.quitRoom(player);
             }
         }
     }
