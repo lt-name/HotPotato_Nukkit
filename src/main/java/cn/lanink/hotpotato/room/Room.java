@@ -2,28 +2,52 @@ package cn.lanink.hotpotato.room;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.tasks.WaitTask;
+import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.SavePlayerInventory;
 import cn.lanink.hotpotato.utils.Tips;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
+import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * 房间类
  */
-public class Room extends BaseRoom {
+public class Room {
+
+    protected final Language language = HotPotato.getInstance().getLanguage();
+
+    public int waitTime;
+    public int gameTime;
+
+    protected int status; //0未初始化 1等待 2游戏 3胜利结算
+    protected String level;
+    protected String waitSpawn;
+
+    protected int setWaitTime;
+    protected int setGameTime;
+
+    @Getter
+    protected int minPlayers;
+    @Getter
+    protected int maxPlayers;
+
+    protected HashMap<Player, Integer> players = new HashMap<>();
 
     private final ArrayList<Position> randomSpawn = new ArrayList<>();
+
     private final LinkedHashMap<Player, Integer> skinNumber = new LinkedHashMap<>(); //玩家使用皮肤编号，用于防止重复使用
     private final LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
+
     public Player victoryPlayer;
 
     /**
@@ -46,16 +70,46 @@ public class Room extends BaseRoom {
                     Integer.parseInt(s[2]),
                     this.getLevel()));
         }
+
+        this.minPlayers = config.getInt("minPlayers", 3);
+        if (this.minPlayers < 2) {
+            this.minPlayers = 2;
+        }
+        this.maxPlayers = config.getInt("maxPlayers", 16);
+        if (this.maxPlayers < this.minPlayers) {
+            this.maxPlayers = this.minPlayers;
+        }
+
         this.initTime();
-        this.mode = 0;
+
+        this.status = 0;
+    }
+
+    public int getStatus() {
+        return this.status;
+    }
+
+    /**
+     * 设置房间状态
+     * @param status 状态
+     */
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    /**
+     * 初始化倒计时时间
+     */
+    protected void initTime() {
+        this.waitTime = this.setWaitTime;
+        this.gameTime = this.setGameTime;
     }
 
     /**
      * 初始化Task
      */
-    @Override
     public void initTask() {
-        this.setMode(1);
+        this.setStatus(1);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 HotPotato.getInstance(), new WaitTask(HotPotato.getInstance(), this), 20);
     }
@@ -63,29 +117,10 @@ public class Room extends BaseRoom {
     /**
      * 结束本局游戏
      */
-    @Override
     public void endGame() {
-        this.endGame(true);
-    }
-
-    /**
-     * 结束本局游戏
-     * @param normal 正常关闭
-     */
-    public void endGame(boolean normal) {
-        this.mode = 0;
-        if (normal) {
-            if (this.players.size() > 0 ) {
-                Iterator<Map.Entry<Player, Integer>> it = this.players.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<Player, Integer> entry = it.next();
-                    it.remove();
-                    this.quitRoom(entry.getKey());
-                }
-            }
-        }else {
-            this.getLevel().getPlayers().values().forEach(
-                    player -> player.kick(HotPotato.getInstance().getLanguage().roomSafeKick));
+        this.status = 0;
+        for (Player player : new ArrayList<>(this.getPlayers().keySet())) {
+            this.quitRoom(player);
         }
         this.initTime();
         this.skinNumber.clear();
@@ -94,14 +129,17 @@ public class Room extends BaseRoom {
         Tools.cleanEntity(this.getLevel());
     }
 
+    public boolean canJoin() {
+        return (this.getStatus() == 0 || this.getStatus() == 1) && this.getPlayers().size() < this.getMaxPlayers();
+    }
+
     /**
      * 加入房间
      * @param player 玩家
      */
-    @Override
     public void joinRoom(Player player) {
-        if (this.players.values().size() < 16) {
-            if (this.mode == 0) {
+        if (this.canJoin()) {
+            if (this.status == 0) {
                 this.initTask();
             }
             this.addPlaying(player);
@@ -121,16 +159,6 @@ public class Room extends BaseRoom {
      * @param player 玩家
      */
     public void quitRoom(Player player) {
-        this.quitRoom(player, true);
-    }
-
-    /**
-     * 退出房间
-     * @param player 玩家
-     * @param online 是否在线
-     */
-    @Override
-    public void quitRoom(Player player, boolean online) {
         this.players.remove(player);
         if (HotPotato.getInstance().isHasTips()) {
             Tips.removeTipsConfig(this.level, player);
@@ -214,6 +242,71 @@ public class Room extends BaseRoom {
             return HotPotato.getInstance().getSkins().get(this.skinNumber.get(player));
         }
         return player.getSkin();
+    }
+
+    /**
+     * 获取玩家是否在房间内
+     * @param player 玩家
+     * @return 是否在房间
+     */
+    public boolean isPlaying(Player player) {
+        return this.players.containsKey(player);
+    }
+
+    /**
+     * 获取玩家列表
+     * @return 玩家列表
+     */
+    public HashMap<Player, Integer> getPlayers() {
+        return this.players;
+    }
+
+    /**
+     * 获取玩家身份
+     * @param player 玩家
+     * @return 玩家身份
+     */
+    public int getPlayerMode(Player player) {
+        if (this.isPlaying(player)) {
+            return this.players.get(player);
+        }
+        return 0;
+    }
+
+    /**
+     * 获取设置的等待时间
+     * @return 等待时间
+     */
+    public int getSetWaitTime() {
+        return this.setWaitTime;
+    }
+
+    /**
+     * 获取设置的游戏时间
+     * @return 游戏时间
+     */
+    public int getSetGameTime() {
+        return this.setGameTime;
+    }
+
+    /**
+     * 获取世界
+     * @return 世界
+     */
+    public Level getLevel() {
+        return Server.getInstance().getLevelByName(this.level);
+    }
+
+    /**
+     * 获取等待出生点
+     * @return 出生点
+     */
+    public Position getWaitSpawn() {
+        String[] s = this.waitSpawn.split(":");
+        return new Position(Integer.parseInt(s[0]),
+                Integer.parseInt(s[1]),
+                Integer.parseInt(s[2]),
+                this.getLevel());
     }
 
 }

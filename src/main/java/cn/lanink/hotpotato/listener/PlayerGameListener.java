@@ -55,7 +55,7 @@ public class PlayerGameListener implements Listener {
             if (room == null || !room.isPlaying(damager) || !room.isPlaying(player)) {
                 return;
             }
-            if (room.getMode() == 2) {
+            if (room.getStatus() == 2) {
                 if (room.getPlayerMode(damager) != 2 && this.playerAttackCooldown.contains(damager)) {
                     event.setCancelled(true);
                     return;
@@ -89,7 +89,7 @@ public class PlayerGameListener implements Listener {
             Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
             if (room == null) return;
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                if (room.getMode() == 2) {
+                if (room.getStatus() == 2) {
                     Server.getInstance().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(room, player));
                 }else {
                     player.teleport(room.getWaitSpawn());
@@ -118,7 +118,7 @@ public class PlayerGameListener implements Listener {
             event.setCancelled(true);
             player.setAllowModifyWorld(false);
         }
-        if (room.getMode() == 1) {
+        if (room.getStatus() == 1) {
             if (!item.hasCompoundTag()) return;
             CompoundTag tag = item.getNamedTag();
             if (tag.getBoolean("isHotPotatoItem") && tag.getInt("HotPotatoType") == 10) {
@@ -138,7 +138,7 @@ public class PlayerGameListener implements Listener {
         Player player = event.getPlayer();
         for (Room room : this.hotPotato.getRooms().values()) {
             if (room.isPlaying(player)) {
-                if (room.getMode() == 2) {
+                if (room.getStatus() == 2) {
                     event.setRespawnPosition(room.getRandomSpawn().get(new Random().nextInt(room.getRandomSpawn().size())));
                 }else {
                     event.setRespawnPosition(room.getWaitSpawn());
@@ -168,12 +168,17 @@ public class PlayerGameListener implements Listener {
         player.sendMessage(this.language.useCmdInRoom);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
         if (player == null || event.getMessage() == null) return;
         Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
         if (room == null || !room.isPlaying(player)) {
+            for (Room r : this.hotPotato.getRooms().values()) {
+                for (Player p : r.getPlayers().keySet()) {
+                    event.getRecipients().remove(p);
+                }
+            }
             return;
         }
         if (room.getPlayerMode(player) == 0) {

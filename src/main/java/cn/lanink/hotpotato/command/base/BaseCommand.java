@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author SmallasWater
  */
-abstract public class BaseCommand extends Command {
+public abstract class BaseCommand extends Command {
 
     private final ArrayList<BaseSubCommand> subCommand = new ArrayList<>();
     private final ConcurrentHashMap<String, Integer> subCommands = new ConcurrentHashMap<>();
@@ -89,7 +89,7 @@ abstract public class BaseCommand extends Command {
         this.commandParameters.clear();
         for(BaseSubCommand subCommand : this.subCommand){
             LinkedList<CommandParameter> parameters = new LinkedList<>();
-            parameters.add(new CommandParameter(subCommand.getName(), new String[]{subCommand.getName()}));
+            parameters.add(CommandParameter.newEnum(subCommand.getName(), new String[]{subCommand.getName()}));
             parameters.addAll(Arrays.asList(subCommand.getParameters()));
             this.commandParameters.put(subCommand.getName(),parameters.toArray(new CommandParameter[0]));
         }

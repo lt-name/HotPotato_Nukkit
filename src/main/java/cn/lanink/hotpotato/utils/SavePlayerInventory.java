@@ -5,7 +5,7 @@ import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.Config;
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -19,7 +19,7 @@ public class SavePlayerInventory {
      * 保存玩家背包
      * @param player 玩家
      */
-    public static void save(Player player) {
+    public static void save(@NotNull Player player) {
         File file = new File(HotPotato.getInstance().getDataFolder() + "/PlayerInventory/" + player.getName() + ".json");
         Config config = new Config(file, 1);
         config.set("Inventory", InventoryToJson(player));
@@ -31,7 +31,7 @@ public class SavePlayerInventory {
      * 还原玩家背包
      * @param player 玩家
      */
-    public static void restore(Player player) {
+    public static void restore(@NotNull Player player) {
         File file = new File(HotPotato.getInstance().getDataFolder() + "/PlayerInventory/" + player.getName() + ".json");
         if (file.exists()) {
             Config config = new Config(file, 1);

@@ -64,7 +64,7 @@ public class HotPotatoListener implements Listener {
             entry.getKey().teleport(room.getRandomSpawn().get(x));
             x++;
         }
-        room.setMode(2);
+        room.setStatus(2);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 this.hotPotato, new TimeTask(this.hotPotato, room), 20);
         Server.getInstance().getScheduler().scheduleRepeatingTask(

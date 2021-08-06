@@ -24,11 +24,11 @@ public class WaitTask extends PluginTask<HotPotato> {
 
     @Override
     public void onRun(int i) {
-        if (this.room.getMode() != 1) {
+        if (this.room.getStatus() != 1) {
             this.cancel();
             return;
         }
-        if (this.room.getPlayers().size() >= 3) {
+        if (this.room.getPlayers().size() >= room.getMinPlayers()) {
             if (this.room.waitTime > 0) {
                 this.room.waitTime--;
                 if (this.room.waitTime <= 5) {

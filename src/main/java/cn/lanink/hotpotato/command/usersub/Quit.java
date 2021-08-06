@@ -27,7 +27,7 @@ public class Quit extends BaseSubCommand {
         Player player = (Player) sender;
         for (Room room : hotPotato.getRooms().values()) {
             if (room.isPlaying(player)) {
-                room.quitRoom(player, true);
+                room.quitRoom(player);
                 sender.sendMessage(this.language.quitRoom);
                 return true;
             }
