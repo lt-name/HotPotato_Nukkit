@@ -70,7 +70,7 @@ public class GuiCreate {
         FormWindowSimple simple = new FormWindowSimple(PLUGIN_NAME, "");
         for (Map.Entry<String, Room> entry : HotPotato.getInstance().getRooms().entrySet()) {
             simple.addButton(new ElementButton("§e" + entry.getKey() +
-                    "\nPlayer: " + entry.getValue().getPlayers().size() + "/16",
+                    "\nPlayer: " + entry.getValue().getPlayers().size() + "/" + entry.getValue().getMaxPlayers(),
                     new ElementButtonImageData("path", "textures/ui/switch_start_button")));
         }
         simple.addButton(new ElementButton(language.buttonReturn, new ElementButtonImageData("path", "textures/ui/cancel")));
@@ -85,11 +85,11 @@ public class GuiCreate {
         Language language = HotPotato.getInstance().getLanguage();
         if (HotPotato.getInstance().getRooms().containsKey(roomName.replace("§e", "").trim())) {
             Room room = HotPotato.getInstance().getRooms().get(roomName.replace("§e", "").trim());
-            if (room.getMode() == 2 || room.getMode() == 3) {
+            if (room.getStatus() == 2 || room.getStatus() == 3) {
                 FormWindowModal modal = new FormWindowModal(
                         PLUGIN_NAME, language.joinRoomIsPlaying, language.buttonReturn, language.buttonReturn);
                 showFormWindow(player, modal, GuiType.ROOM_JOIN_OK);
-            }else if (room.getPlayers().size() > 15){
+            }else if (room.getPlayers().size() >= room.getMaxPlayers()){
                 FormWindowModal modal = new FormWindowModal(
                         PLUGIN_NAME, language.joinRoomIsFull, language.buttonReturn, language.buttonReturn);
                 showFormWindow(player, modal, GuiType.ROOM_JOIN_OK);

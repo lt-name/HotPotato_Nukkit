@@ -16,6 +16,8 @@ public class AdminCommand extends BaseCommand {
         this.addSubCommand(new AddRandomSpawn("AddRandomSpawn"));
         this.addSubCommand(new SetWaitTime("SetWaitTime"));
         this.addSubCommand(new SetGameTime("SetGameTime"));
+        this.addSubCommand(new SetMinPlayers("SetMinPlayers"));
+        this.addSubCommand(new SetMaxPlayers("SetMaxPlayers"));
 
         this.addSubCommand(new StartRoom("StartRoom"));
         this.addSubCommand(new StopRoom("StopRoom"));

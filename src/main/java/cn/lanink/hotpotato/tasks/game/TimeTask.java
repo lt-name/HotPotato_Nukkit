@@ -30,7 +30,7 @@ public class TimeTask extends PluginTask<HotPotato> {
     }
 
     public void onRun(int i) {
-        if (this.room.getMode() != 2) {
+        if (this.room.getStatus() != 2) {
             this.cancel();
             return;
         }
@@ -75,7 +75,7 @@ public class TimeTask extends PluginTask<HotPotato> {
                         break;
                     }
                 }
-                this.room.setMode(3);
+                this.room.setStatus(3);
                 Server.getInstance().getScheduler().scheduleRepeatingTask(owner,
                         new VictoryTask(owner, this.room), 20);
             }

@@ -12,6 +12,7 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
+import lombok.Getter;
 
 import java.util.*;
 
@@ -24,11 +25,19 @@ public class Room {
 
     public int waitTime;
     public int gameTime;
-    protected int mode; //0未初始化 1等待 2游戏 3胜利结算
+
+    protected int status; //0未初始化 1等待 2游戏 3胜利结算
     protected String level;
     protected String waitSpawn;
+
     protected int setWaitTime;
     protected int setGameTime;
+
+    @Getter
+    protected int minPlayers;
+    @Getter
+    protected int maxPlayers;
+
     protected HashMap<Player, Integer> players = new HashMap<>();
 
     private final ArrayList<Position> randomSpawn = new ArrayList<>();
@@ -58,20 +67,31 @@ public class Room {
                     Integer.parseInt(s[2]),
                     this.getLevel()));
         }
+
+        this.minPlayers = config.getInt("minPlayers", 3);
+        if (this.minPlayers < 2) {
+            this.minPlayers = 2;
+        }
+        this.maxPlayers = config.getInt("maxPlayers", 16);
+        if (this.maxPlayers < this.minPlayers) {
+            this.maxPlayers = this.minPlayers;
+        }
+
         this.initTime();
-        this.mode = 0;
+
+        this.status = 0;
     }
 
-    public int getMode() {
-        return this.mode;
+    public int getStatus() {
+        return this.status;
     }
 
     /**
      * 设置房间状态
-     * @param mode 状态
+     * @param status 状态
      */
-    public void setMode(int mode) {
-        this.mode = mode;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     /**
@@ -86,7 +106,7 @@ public class Room {
      * 初始化Task
      */
     public void initTask() {
-        this.setMode(1);
+        this.setStatus(1);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 HotPotato.getInstance(), new WaitTask(HotPotato.getInstance(), this), 20);
     }
@@ -103,7 +123,7 @@ public class Room {
      * @param normal 正常关闭
      */
     public void endGame(boolean normal) {
-        this.mode = 0;
+        this.status = 0;
         if (normal) {
             if (this.players.size() > 0 ) {
                 Iterator<Map.Entry<Player, Integer>> it = this.players.entrySet().iterator();
@@ -125,7 +145,7 @@ public class Room {
     }
 
     public boolean canJoin() {
-        return (this.getMode() == 0 || this.getMode() == 1) && this.getPlayers().size() < 16;
+        return (this.getStatus() == 0 || this.getStatus() == 1) && this.getPlayers().size() < this.getMaxPlayers();
     }
 
     /**
@@ -133,8 +153,8 @@ public class Room {
      * @param player 玩家
      */
     public void joinRoom(Player player) {
-        if (this.players.values().size() < 16) {
-            if (this.mode == 0) {
+        if (this.canJoin()) {
+            if (this.status == 0) {
                 this.initTask();
             }
             this.addPlaying(player);
