@@ -13,10 +13,12 @@ import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.ui.GuiListener;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.MetricsLite;
+import cn.lanink.hotpotato.utils.RsNpcXVariable;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
+import com.smallaswater.npc.variable.VariableManage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -135,12 +137,20 @@ public class HotPotato extends PluginBase {
         getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
         getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
         getServer().getPluginManager().registerEvents(new GuiListener(this), this);
-        
+
+        try {
+            Class.forName("com.smallaswater.npc.variable.BaseVariableV2");
+            VariableManage.addVariableV2("HotPotato", RsNpcXVariable.class);
+        }catch (Exception ignored) {
+
+        }
+
         try {
             new MetricsLite(this, 7464);
         } catch (Exception ignored) {
         
         }
+
         getLogger().info("§e插件加载完成！欢迎使用！");
     }
 
@@ -215,9 +225,9 @@ public class HotPotato extends PluginBase {
                     Config config = getRoomConfig(fileName[0]);
                     if (config.getInt("waitTime", 0) == 0 ||
                             config.getInt("gameTime", 0) == 0 ||
-                            config.getString("waitSpawn", "").trim().equals("") ||
+                            "".equals(config.getString("waitSpawn", "").trim()) ||
                             config.getStringList("randomSpawn").size() == 0 ||
-                            config.getString("World", "").trim().equals("")) {
+                            "".equals(config.getString("World", "").trim())) {
                         this.getLogger().warning("§c房间：" + fileName[0] + " 配置不完整，加载失败！");
                         continue;
                     }
