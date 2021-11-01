@@ -5,16 +5,8 @@ api:
   - 1.0.0
 load: POSTWORLD
 author: "LT_Name"
-softdepend:
-  - "ScoreboardPlugin"
-  - "ScoreboardAPI"
-  - "Tips"
-  - "AutoUpData"
-loadbefore:
-  - "ScoreboardPlugin"
-  - "ScoreboardAPI"
-  - "Tips"
-  - "AutoUpData"
+depend:
+  - "MemoriesOfTime-GameCore"
 
 permissions:
   HotPotato.command.user:

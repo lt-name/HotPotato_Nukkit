@@ -22,7 +22,7 @@ public abstract class BaseCommand extends Command {
     protected Language language = hotPotato.getLanguage();
 
     public BaseCommand(String name, String description) {
-        super(name,description);
+        super(name, description);
     }
 
     /**

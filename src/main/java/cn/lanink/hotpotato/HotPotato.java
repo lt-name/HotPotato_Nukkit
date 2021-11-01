@@ -1,10 +1,9 @@
 package cn.lanink.hotpotato;
 
+import cn.lanink.gamecore.scoreboard.ScoreboardUtil;
+import cn.lanink.gamecore.scoreboard.base.IScoreboard;
 import cn.lanink.hotpotato.command.AdminCommand;
 import cn.lanink.hotpotato.command.UserCommand;
-import cn.lanink.hotpotato.lib.scoreboard.IScoreboard;
-import cn.lanink.hotpotato.lib.scoreboard.ScoreboardDe;
-import cn.lanink.hotpotato.lib.scoreboard.ScoreboardGt;
 import cn.lanink.hotpotato.listener.HotPotatoListener;
 import cn.lanink.hotpotato.listener.PlayerGameListener;
 import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
@@ -80,25 +79,7 @@ public class HotPotato extends PluginBase {
         this.getLogger().info("§e插件开始加载！本插件是免费哒~如果你花钱了，那一定是被骗了~");
         this.getLogger().info("§l§e版本: " + VERSION);
         //加载计分板
-        try {
-            Class.forName("de.theamychan.scoreboard.ScoreboardPlugin");
-            if (getServer().getPluginManager().getPlugin("ScoreboardPlugin").isDisabled()) {
-                throw new Exception("Not Loaded");
-            }
-            this.iScoreboard = new ScoreboardDe();
-        } catch (Exception e) {
-            try {
-                Class.forName("gt.creeperface.nukkit.scoreboardapi.ScoreboardAPI");
-                if (getServer().getPluginManager().getPlugin("ScoreboardAPI").isDisabled()) {
-                    throw new Exception("Not Loaded");
-                }
-                this.iScoreboard = new ScoreboardGt();
-            } catch (Exception ignored) {
-                getLogger().error("§c请安装计分板前置！");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
+        this.iScoreboard = ScoreboardUtil.getScoreboard();
         //检查Tips
         try {
             Class.forName("tip.Main");

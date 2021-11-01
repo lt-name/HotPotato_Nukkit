@@ -1,10 +1,10 @@
 package cn.lanink.hotpotato.room;
 
+import cn.lanink.gamecore.utils.PlayerDataUtils;
+import cn.lanink.gamecore.utils.Tips;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.tasks.WaitTask;
 import cn.lanink.hotpotato.utils.Language;
-import cn.lanink.hotpotato.utils.SavePlayerInventory;
-import cn.lanink.hotpotato.utils.Tips;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
@@ -14,6 +14,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
 import lombok.Getter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -144,7 +145,15 @@ public class Room {
             }
             this.addPlaying(player);
             Tools.rePlayerState(player, true);
-            SavePlayerInventory.save(player);
+
+            File file = new File(HotPotato.getInstance().getDataFolder() + "/PlayerInventory/" + player.getName() + ".json");
+            PlayerDataUtils.PlayerData playerData = PlayerDataUtils.create(player);
+            playerData.saveAll();
+            playerData.saveToFile(file);
+
+            player.getInventory().clearAll();
+            player.getUIInventory().clearAll();
+
             player.teleport(this.getWaitSpawn());
             this.setRandomSkin(player);
             Tools.giveItem(player, 10);
@@ -165,7 +174,15 @@ public class Room {
         }
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
         Tools.rePlayerState(player, false);
-        SavePlayerInventory.restore(player);
+
+        File file = new File(HotPotato.getInstance().getDataFolder() + "/PlayerInventory/" + player.getName() + ".json");
+        if (file.exists()) {
+            PlayerDataUtils.PlayerData playerData = PlayerDataUtils.create(player, file);
+            if (file.delete()) {
+                playerData.restoreAll();
+            }
+        }
+
         this.restoreSkin(player);
         HotPotato.getInstance().getIScoreboard().closeScoreboard(player);
     }

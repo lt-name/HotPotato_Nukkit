@@ -1,9 +1,9 @@
 package cn.lanink.hotpotato.listener;
 
+import cn.lanink.gamecore.utils.PlayerDataUtils;
+import cn.lanink.gamecore.utils.Tips;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
-import cn.lanink.hotpotato.utils.SavePlayerInventory;
-import cn.lanink.hotpotato.utils.Tips;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
@@ -13,6 +13,7 @@ import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.scheduler.Task;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 
 /**
@@ -32,7 +33,15 @@ public class PlayerJoinAndQuit implements Listener {
                             Tips.removeTipsConfig(player.getLevel().getName(), player);
                         }
                         Tools.rePlayerState(player ,false);
-                        SavePlayerInventory.restore(player);
+
+                        File file = new File(HotPotato.getInstance().getDataFolder() + "/PlayerInventory/" + player.getName() + ".json");
+                        if (file.exists()) {
+                            PlayerDataUtils.PlayerData playerData = PlayerDataUtils.create(player, file);
+                            if (file.delete()) {
+                                playerData.restoreAll();
+                            }
+                        }
+
                         player.teleport(HotPotato.getInstance().getServer().getDefaultLevel().getSafeSpawn());
                     }
                 }
