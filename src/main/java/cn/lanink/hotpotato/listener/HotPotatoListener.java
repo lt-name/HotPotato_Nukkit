@@ -120,7 +120,7 @@ public class HotPotatoListener implements Listener {
             room.addPlaying(player, 0);
             Tools.setPlayerInvisible(player, true);
             player.getLevel().addParticle(new HugeExplodeSeedParticle(player));
-            Tools.addSound(room, Sound.RANDOM_EXPLODE);
+            Tools.playSound(room, Sound.RANDOM_EXPLODE);
         }
     }
 

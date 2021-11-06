@@ -102,7 +102,7 @@ public class HotPotato extends PluginBase {
         String s = this.config.getString("language", "zh_CN");
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {
-            this.language = new Language(new Config(languageFile, 2));
+            this.language = new Language(new Config(languageFile, Config.YAML));
             this.getLogger().info("§aLanguage: " + s + " loaded !");
         }else {
             this.language = new Language(new Config());
@@ -189,7 +189,7 @@ public class HotPotato extends PluginBase {
         if (this.roomConfigs.containsKey(level)) {
             return this.roomConfigs.get(level);
         }
-        Config config = new Config(getDataFolder() + "/Rooms/" + level + ".yml", 2);
+        Config config = new Config(getDataFolder() + "/Rooms/" + level + ".yml", Config.YAML);
         this.roomConfigs.put(level, config);
         return config;
     }

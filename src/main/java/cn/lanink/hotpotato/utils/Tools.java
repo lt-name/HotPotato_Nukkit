@@ -119,13 +119,13 @@ public class Tools {
      * @param room 房间
      * @param sound 声音
      */
-    public static void addSound(Room room, Sound sound) {
+    public static void playSound(Room room, Sound sound) {
         for (Player player : room.getPlayers().keySet()) {
-            addSound(player, sound);
+            playSound(player, sound);
         }
     }
 
-    public static void addSound(Player player, Sound sound) {
+    public static void playSound(Player player, Sound sound) {
         PlaySoundPacket packet = new PlaySoundPacket();
         packet.name = sound.getSound();
         packet.volume = 1.0F;
