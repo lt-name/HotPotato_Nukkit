@@ -4,7 +4,7 @@ import cn.lanink.hotpotato.command.base.BaseCommand;
 import cn.lanink.hotpotato.command.usersub.Join;
 import cn.lanink.hotpotato.command.usersub.List;
 import cn.lanink.hotpotato.command.usersub.Quit;
-import cn.lanink.hotpotato.ui.GuiCreate;
+import cn.lanink.hotpotato.utils.FormHelper;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
@@ -28,7 +28,7 @@ public class UserCommand extends BaseCommand {
 
     @Override
     public void sendUI(CommandSender sender) {
-        GuiCreate.sendUserMenu((Player) sender);
+        FormHelper.sendUserMenu((Player) sender);
     }
 
 }

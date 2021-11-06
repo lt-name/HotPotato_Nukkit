@@ -10,7 +10,6 @@ import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
 import cn.lanink.hotpotato.listener.RoomLevelProtection;
 import cn.lanink.hotpotato.player.PlayerDataManager;
 import cn.lanink.hotpotato.room.Room;
-import cn.lanink.hotpotato.ui.GuiListener;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.MetricsLite;
 import cn.lanink.hotpotato.utils.RsNpcXVariable;
@@ -126,7 +125,6 @@ public class HotPotato extends PluginBase {
         this.getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
         this.getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new GuiListener(this), this);
 
         try {
             Class.forName("com.smallaswater.npc.variable.BaseVariableV2");

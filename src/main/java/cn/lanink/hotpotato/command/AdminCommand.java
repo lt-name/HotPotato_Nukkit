@@ -2,7 +2,7 @@ package cn.lanink.hotpotato.command;
 
 import cn.lanink.hotpotato.command.adminsub.*;
 import cn.lanink.hotpotato.command.base.BaseCommand;
-import cn.lanink.hotpotato.ui.GuiCreate;
+import cn.lanink.hotpotato.utils.FormHelper;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
@@ -34,7 +34,7 @@ public class AdminCommand extends BaseCommand {
 
     @Override
     public void sendUI(CommandSender sender) {
-        GuiCreate.sendAdminMenu((Player) sender);
+        FormHelper.sendAdminMenu((Player) sender);
     }
 
 }
