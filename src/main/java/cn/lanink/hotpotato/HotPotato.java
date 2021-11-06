@@ -8,6 +8,7 @@ import cn.lanink.hotpotato.listener.HotPotatoListener;
 import cn.lanink.hotpotato.listener.PlayerGameListener;
 import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
 import cn.lanink.hotpotato.listener.RoomLevelProtection;
+import cn.lanink.hotpotato.player.PlayerDataManager;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.ui.GuiListener;
 import cn.lanink.hotpotato.utils.Language;
@@ -18,6 +19,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import com.smallaswater.npc.variable.VariableManage;
+import lombok.Getter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -50,6 +52,9 @@ public class HotPotato extends PluginBase {
 
     private boolean hasTips = false;
 
+    @Getter
+    private String playerDataPath;
+
     public static HotPotato getInstance() {
         return hotPotato;
     }
@@ -57,6 +62,8 @@ public class HotPotato extends PluginBase {
     @Override
     public void onLoad() {
         hotPotato = this;
+
+        this.playerDataPath = this.getDataFolder() + "/PlayerData/";
     
         File file1 = new File(this.getDataFolder() + "/Rooms");
         File file2 = new File(this.getDataFolder() + "/PlayerInventory");
@@ -97,27 +104,29 @@ public class HotPotato extends PluginBase {
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {
             this.language = new Language(new Config(languageFile, 2));
-            getLogger().info("§aLanguage: " + s + " loaded !");
+            this.getLogger().info("§aLanguage: " + s + " loaded !");
         }else {
             this.language = new Language(new Config());
-            getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
+            this.getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
         }
+
+        PlayerDataManager.load();
         
         this.loadRooms();
         
-        getLogger().info("§e开始加载皮肤");
+        this.getLogger().info("§e开始加载皮肤");
         this.loadSkins();
         
         this.cmdUser = this.config.getString("插件命令", "hotpotato");
         this.cmdAdmin = this.config.getString("管理命令", "hotpotatoadmin");
-        getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
-        getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
-        
-        getServer().getPluginManager().registerEvents(new PlayerJoinAndQuit(), this);
-        getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
-        getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
-        getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
-        getServer().getPluginManager().registerEvents(new GuiListener(this), this);
+        this.getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
+        this.getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
+
+        this.getServer().getPluginManager().registerEvents(new PlayerJoinAndQuit(), this);
+        this.getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new GuiListener(this), this);
 
         try {
             Class.forName("com.smallaswater.npc.variable.BaseVariableV2");
@@ -132,21 +141,19 @@ public class HotPotato extends PluginBase {
         
         }
 
-        getLogger().info("§e插件加载完成！欢迎使用！");
+        this.getLogger().info("§e插件加载完成！欢迎使用！");
     }
 
     @Override
     public void onDisable() {
+        PlayerDataManager.save();
+
         if (!this.rooms.isEmpty()) {
             Iterator<Map.Entry<String, Room>> it = this.rooms.entrySet().iterator();
             while(it.hasNext()){
                 Map.Entry<String, Room> entry = it.next();
-                if (entry.getValue().getPlayers().size() > 0) {
-                    entry.getValue().endGame();
-                    getLogger().info("§c房间：" + entry.getKey() + " 非正常结束！");
-                }else {
-                    getLogger().info("§c房间：" + entry.getKey() + " 已卸载！");
-                }
+                entry.getValue().endGame();
+                this.getLogger().info("§c房间：" + entry.getKey() + " 已卸载！");
                 it.remove();
             }
         }

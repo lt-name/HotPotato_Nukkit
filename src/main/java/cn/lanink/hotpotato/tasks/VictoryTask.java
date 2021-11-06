@@ -2,6 +2,7 @@ package cn.lanink.hotpotato.tasks;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoRoomEndEvent;
+import cn.lanink.hotpotato.player.PlayerDataManager;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
@@ -26,6 +27,10 @@ public class VictoryTask extends PluginTask<HotPotato> {
         ms.add(this.language.victoryMessage.replace("%player%", room.victoryPlayer.getName()));
         for (Player player : this.room.getPlayers().keySet()) {
             owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
+        }
+
+        if (this.room.victoryPlayer != null) {
+            PlayerDataManager.getData(this.room.victoryPlayer).addVictoryCount();
         }
     }
 

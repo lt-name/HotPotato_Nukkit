@@ -123,6 +123,14 @@ public class Room {
         for (Player player : new ArrayList<>(this.getPlayers().keySet())) {
             this.quitRoom(player);
         }
+        for (Player player : this.getLevel().getPlayers().values()) {
+            //不要触发传送事件，防止某些弱智操作阻止我们！
+            player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn(), null);
+        }
+        //因为某些原因无法正常传送走玩家，就全部踹出服务器！
+        for (Player player : this.getLevel().getPlayers().values()) {
+            player.kick("Teleport error!");
+        }
         this.initTime();
         this.skinNumber.clear();
         this.skinCache.clear();
