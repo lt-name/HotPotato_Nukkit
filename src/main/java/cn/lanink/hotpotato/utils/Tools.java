@@ -16,6 +16,7 @@ import cn.nukkit.item.ItemFirework;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
@@ -25,10 +26,35 @@ import cn.nukkit.network.protocol.PlaySoundPacket;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
 import cn.nukkit.utils.DyeColor;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 
 public class Tools {
+
+    public static double toDouble(Object object) {
+        return new BigDecimal(object.toString()).doubleValue();
+    }
+
+    public static int toInt(Object object) {
+        return new BigDecimal(object.toString()).intValue();
+    }
+
+    /**
+     * Map 转为 Vector3
+     *
+     * @param map Map
+     * @return Vector3
+     */
+    @SuppressWarnings("rawtypes")
+    public static Vector3 mapToVector3(Map map) {
+        return new Vector3(
+                toDouble(map.get("x")),
+                toDouble(map.get("y")),
+                toDouble(map.get("z"))
+        );
+    }
 
     public static void cmd(Player player, List<String> cmds) {
         if (player == null || cmds == null || cmds.size() < 1) {

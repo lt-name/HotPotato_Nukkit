@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author LT_Name
@@ -63,6 +65,19 @@ public class PlayerDataManager {
             PLAYER_DATA_MAP.put(player, value);
         }
         return PLAYER_DATA_MAP.get(player);
+    }
+
+    /**
+     * 获取所有玩家胜利次数
+     *
+     * @return 玩家胜利次数（Map）
+     */
+    public static Map<String, Integer> getAllPlayerVictoryCount() {
+        Map<String, Integer> map = new LinkedHashMap<>();
+        for (PlayerData playerData : PLAYER_DATA_MAP.values()) {
+            map.put(playerData.getName(), playerData.getVictoryCount());
+        }
+        return map;
     }
 
 }

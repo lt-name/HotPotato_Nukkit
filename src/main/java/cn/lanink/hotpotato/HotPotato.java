@@ -12,6 +12,7 @@ import cn.lanink.hotpotato.player.PlayerDataManager;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.MetricsLite;
+import cn.lanink.hotpotato.utils.RankingManager;
 import cn.lanink.hotpotato.utils.RsNpcXVariable;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
@@ -39,6 +40,8 @@ public class HotPotato extends PluginBase {
 
     private Language language;
     private Config config;
+    @Getter
+    private Config rankingConfig;
 
     private final HashMap<String, Config> roomConfigs = new HashMap<>();
     private final LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
@@ -77,7 +80,8 @@ public class HotPotato extends PluginBase {
             this.getLogger().warning("Skins 文件夹初始化失败");
         }
         this.saveDefaultConfig();
-        this.config = new Config(getDataFolder() + "/config.yml", 2);
+        this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+        this.rankingConfig = new Config(this.getDataFolder() + "/RankingConfig.yml", Config.YAML);
     }
     
     @Override
@@ -110,6 +114,7 @@ public class HotPotato extends PluginBase {
         }
 
         PlayerDataManager.load();
+        RankingManager.load();
         
         this.loadRooms();
         
