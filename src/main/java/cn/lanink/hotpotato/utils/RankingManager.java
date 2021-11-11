@@ -68,6 +68,18 @@ public class RankingManager {
         HotPotato.getInstance().getLogger().info("排行榜加载完成！成功创建" + RANKING_MAP.size() + " 个排行榜！");
     }
 
+    public static void addRanking(RankingData rankingData) {
+        RANKING_DATA_LIST.add(rankingData);
+    }
+
+    /**
+     * 保存排行榜数据
+     */
+    public static void save() {
+        //TODO
+
+    }
+
     @AllArgsConstructor
     @Data
     public static class RankingData {
