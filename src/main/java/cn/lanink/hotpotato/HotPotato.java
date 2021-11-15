@@ -80,6 +80,7 @@ public class HotPotato extends PluginBase {
             this.getLogger().warning("Skins 文件夹初始化失败");
         }
         this.saveDefaultConfig();
+        this.saveResource("RankingConfig.yml");
         this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
         this.rankingConfig = new Config(this.getDataFolder() + "/RankingConfig.yml", Config.YAML);
     }

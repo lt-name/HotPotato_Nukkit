@@ -7,6 +7,7 @@ import cn.lanink.rankingapi.RankingAPI;
 import cn.lanink.rankingapi.RankingFormat;
 import cn.nukkit.Server;
 import cn.nukkit.level.Position;
+import cn.nukkit.utils.Config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -30,8 +31,14 @@ public class RankingManager {
      */
     public static void load() {
         //读取排行榜数据
-        //TODO 自定义排行榜格式
-        List<Map> list = HotPotato.getInstance().getRankingConfig().getMapList("pos");
+        Config rankingConfig = HotPotato.getInstance().getRankingConfig();
+        RankingFormat rankingFormat = RankingFormat.getDefaultFormat();
+        rankingFormat.setTop(rankingConfig.getString("RankingFormat.Top"));
+        rankingFormat.setLine(rankingConfig.getString("RankingFormat.Line"));
+        rankingFormat.setLineSelf(rankingConfig.getString("RankingFormat.LineSelf"));
+        rankingFormat.setBottom(rankingConfig.getString("RankingFormat.Bottom"));
+
+        List<Map> list = rankingConfig.getMapList("pos");
         for (Map map : list) {
             try {
                 String levelName = (String) map.get("level");
@@ -55,14 +62,7 @@ public class RankingManager {
         for (RankingData rankingData : RANKING_DATA_LIST) {
             Ranking ranking = RankingAPI.createRanking(HotPotato.getInstance(), rankingData.getName(), rankingData.getPosition());
             ranking.setRankingList(PlayerDataManager::getAllPlayerVictoryCount);
-
-            RankingFormat format = RankingFormat.getDefaultFormat();
-            format.setTop("§b<<§a[§e%name%§a]§b>>");
-            format.setLine("§bTop[%ranking%] §cName: §a%player% §cVictory: §b%score%");
-            format.setLineSelf("§bTop[%ranking%] §cName: §e%player%(me) §cVictory: §b%score%");
-            format.setBottom("§b<<§a[§e%name%§a]§b>>");
-            ranking.setRankingFormat(format);
-
+            ranking.setRankingFormat(rankingFormat);
             RANKING_MAP.put(rankingData.getName(), ranking);
         }
         HotPotato.getInstance().getLogger().info("排行榜加载完成！成功创建" + RANKING_MAP.size() + " 个排行榜！");
