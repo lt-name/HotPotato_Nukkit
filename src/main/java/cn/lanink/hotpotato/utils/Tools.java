@@ -27,6 +27,7 @@ import cn.nukkit.network.protocol.PlayerSkinPacket;
 import cn.nukkit.utils.DyeColor;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,20 @@ public class Tools {
 
     public static int toInt(Object object) {
         return new BigDecimal(object.toString()).intValue();
+    }
+
+    /**
+     * Vector3 转为 Map
+     *
+     * @param vector3 Vector3
+     * @return Map
+     */
+    public static LinkedHashMap<String, Double> vector3ToMap(Vector3 vector3) {
+        LinkedHashMap<String, Double> map = new LinkedHashMap<>();
+        map.put("x", vector3.getX());
+        map.put("y", vector3.getY());
+        map.put("z", vector3.getZ());
+        return map;
     }
 
     /**

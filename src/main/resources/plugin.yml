@@ -1,12 +1,14 @@
 name: HotPotato
 main: cn.lanink.hotpotato.HotPotato
-version: "1.0.4-SNAPSHOT"
+version: "1.1.0"
 api:
   - 1.0.0
 load: POSTWORLD
 author: "LT_Name"
 depend:
   - "MemoriesOfTime-GameCore"
+softdepend:
+  - "RankingAPI"
 
 permissions:
   HotPotato.command.user:

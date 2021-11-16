@@ -10,11 +10,9 @@ import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 排行榜管理
@@ -23,13 +21,23 @@ import java.util.Map;
  */
 public class RankingManager {
 
+    @Getter
     private static final ArrayList<RankingData> RANKING_DATA_LIST = new ArrayList<>();
+    @Getter
     private static final HashMap<String, Ranking> RANKING_MAP = new HashMap<>();
 
     /**
-     * 加载排行榜
+     * 加载排行榜 (可当reload用)
      */
     public static void load() {
+        RANKING_DATA_LIST.clear();
+        if (!RANKING_MAP.isEmpty()) {
+            for (Ranking ranking : RANKING_MAP.values()) {
+                ranking.close();
+            }
+            RANKING_MAP.clear();
+        }
+
         //读取排行榜数据
         Config rankingConfig = HotPotato.getInstance().getRankingConfig();
         RankingFormat rankingFormat = RankingFormat.getDefaultFormat();
@@ -52,7 +60,7 @@ public class RankingManager {
                         )
                 );
             } catch (Exception e) {
-                HotPotato.getInstance().getLogger().error("读取排行榜数据出错！ 配置: " + map.toString(), e);
+                HotPotato.getInstance().getLogger().error("读取排行榜数据出错！ 配置: " + map, e);
             }
         }
         if (HotPotato.debug) {
@@ -76,8 +84,17 @@ public class RankingManager {
      * 保存排行榜数据
      */
     public static void save() {
-        //TODO
-
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+        for (RankingData rankingData : RANKING_DATA_LIST) {
+            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+            map.put("name", rankingData.getName());
+            map.putAll(Tools.vector3ToMap(rankingData.getPosition()));
+            map.put("level", rankingData.getPosition().getLevel().getFolderName());
+            list.add(map);
+        }
+        Config rankingConfig = HotPotato.getInstance().getRankingConfig();
+        rankingConfig.set("pos", list);
+        rankingConfig.save();
     }
 
     @AllArgsConstructor

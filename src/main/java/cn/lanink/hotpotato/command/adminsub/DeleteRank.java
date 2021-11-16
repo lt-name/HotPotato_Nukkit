@@ -2,23 +2,24 @@ package cn.lanink.hotpotato.command.adminsub;
 
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.lanink.hotpotato.utils.RankingManager;
-import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 
+import java.util.Iterator;
+
 /**
  * @author LT_Name
  */
-public class CreateRank extends BaseSubCommand {
+public class DeleteRank extends BaseSubCommand {
 
-    public CreateRank(String name) {
+    public DeleteRank(String name) {
         super(name);
     }
 
     @Override
     public boolean canUser(CommandSender sender) {
-        return sender.isPlayer() && sender.isOp();
+        return sender.isOp();
     }
 
     @Override
@@ -32,18 +33,18 @@ public class CreateRank extends BaseSubCommand {
             sender.sendMessage(this.language.needRankName);
             return true;
         }
-        Player player = (Player) sender;
         String name = args[1];
-        for (RankingManager.RankingData rankingData : RankingManager.getRANKING_DATA_LIST()) {
-            if (rankingData.getName().equalsIgnoreCase(name)) {
-                sender.sendMessage(this.language.rankNameRepeat.replace("%name%", name));
+        Iterator<RankingManager.RankingData> iterator = RankingManager.getRANKING_DATA_LIST().iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getName().equalsIgnoreCase(name)) {
+                iterator.remove();
+                sender.sendMessage(this.language.rankDeleteSuccessful.replace("%name%", name));
+                RankingManager.save();
+                RankingManager.load();
                 return true;
             }
         }
-        RankingManager.addRanking(new RankingManager.RankingData(name, player.clone()));
-        RankingManager.save();
-        RankingManager.load();
-        sender.sendMessage(this.language.rankCreationSuccessful.replace("%name%", name));
+        sender.sendMessage(this.language.rankNotFound.replace("%name%", name));
         return true;
     }
 
@@ -51,4 +52,5 @@ public class CreateRank extends BaseSubCommand {
     public CommandParameter[] getParameters() {
         return new CommandParameter[] { CommandParameter.newType("RankName", CommandParamType.TEXT) };
     }
+
 }

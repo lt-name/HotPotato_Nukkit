@@ -48,8 +48,12 @@ public class Language {
     public String adminStopRoom = "§a已强制结束房间！";
     public String adminReload = "§a配置重载完成！请在后台查看信息！";
     public String adminUnload = "§a已卸载所有房间！请在后台查看信息！";
+    public String needRankName = "请输入排行榜名称！";
+    public String rankNameRepeat = "已有名为：%name% 的排行榜了！";
+    public String rankCreationSuccessful = "排行榜：%name% 创建成功！";
+    public String rankDeleteSuccessful = "排行榜：%name% 删除成功！";
+    public String rankNotFound = "未找到名称为 %name% 的排行榜！";
     //游戏内显示
-    public String roomSafeKick = "\n§c房间非正常关闭!\n为了您的背包安全，请稍后重进服务器！";
     public String tpJoinRoomLevel = "§e >> §c要进入游戏地图，请先加入游戏！";
     public String tpQuitRoomLevel = "§e >> §c退出房间请使用命令！";
     public String scoreBoardTitle = "§e烫手山芋";
@@ -111,7 +115,11 @@ public class Language {
         this.adminStopRoom = config.getString("adminStopRoom", this.adminStopRoom);
         this.adminReload = config.getString("adminReload", this.adminReload);
         this.adminUnload = config.getString("adminUnload", this.adminUnload);
-        this.roomSafeKick = config.getString("roomSafeKick", this.roomSafeKick);
+        this.needRankName = config.getString("needRankName", this.needRankName);
+        this.rankNameRepeat = config.getString("rankNameRepeat", this.rankNameRepeat);
+        this.rankCreationSuccessful = config.getString("rankCreationSuccessful", this.rankCreationSuccessful);
+        this.rankDeleteSuccessful = config.getString("rankDeleteSuccessful", this.rankDeleteSuccessful);
+        this.rankNotFound = config.getString("rankNotFound", this.rankNotFound);
         this.tpJoinRoomLevel = config.getString("tpJoinRoomLevel", this.tpJoinRoomLevel);
         this.tpQuitRoomLevel = config.getString("tpQuitRoomLevel", this.tpQuitRoomLevel);
         this.scoreBoardTitle = config.getString("scoreBoardTitle", this.scoreBoardTitle);
