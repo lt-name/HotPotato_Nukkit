@@ -1,19 +1,13 @@
 name: HotPotato
 main: cn.lanink.hotpotato.HotPotato
-version: "1.0.3-PM1E"
+version: "1.1.0-PM1E"
 api: ["Nukkit-PM1E"]
 load: POSTWORLD
 author: "LT_Name"
+depend:
+  - "MemoriesOfTime-GameCore"
 softdepend:
-  - "ScoreboardPlugin"
-  - "ScoreboardAPI"
-  - "Tips"
-  - "AutoUpData"
-loadbefore:
-  - "ScoreboardPlugin"
-  - "ScoreboardAPI"
-  - "Tips"
-  - "AutoUpData"
+  - "RankingAPI"
 
 permissions:
   HotPotato.command.user:

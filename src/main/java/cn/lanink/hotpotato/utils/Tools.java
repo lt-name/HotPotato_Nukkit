@@ -16,6 +16,7 @@ import cn.nukkit.item.ItemFirework;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
@@ -25,10 +26,50 @@ import cn.nukkit.network.protocol.PlaySoundPacket;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
 import cn.nukkit.utils.DyeColor;
 
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Tools {
+
+    public static double toDouble(Object object) {
+        return new BigDecimal(object.toString()).doubleValue();
+    }
+
+    public static int toInt(Object object) {
+        return new BigDecimal(object.toString()).intValue();
+    }
+
+    /**
+     * Vector3 转为 Map
+     *
+     * @param vector3 Vector3
+     * @return Map
+     */
+    public static LinkedHashMap<String, Double> vector3ToMap(Vector3 vector3) {
+        LinkedHashMap<String, Double> map = new LinkedHashMap<>();
+        map.put("x", vector3.getX());
+        map.put("y", vector3.getY());
+        map.put("z", vector3.getZ());
+        return map;
+    }
+
+    /**
+     * Map 转为 Vector3
+     *
+     * @param map Map
+     * @return Vector3
+     */
+    @SuppressWarnings("rawtypes")
+    public static Vector3 mapToVector3(Map map) {
+        return new Vector3(
+                toDouble(map.get("x")),
+                toDouble(map.get("y")),
+                toDouble(map.get("z"))
+        );
+    }
 
     public static void cmd(Player player, List<String> cmds) {
         if (player == null || cmds == null || cmds.size() < 1) {
@@ -119,13 +160,13 @@ public class Tools {
      * @param room 房间
      * @param sound 声音
      */
-    public static void addSound(Room room, Sound sound) {
+    public static void playSound(Room room, Sound sound) {
         for (Player player : room.getPlayers().keySet()) {
-            addSound(player, sound);
+            playSound(player, sound);
         }
     }
 
-    public static void addSound(Player player, Sound sound) {
+    public static void playSound(Player player, Sound sound) {
         PlaySoundPacket packet = new PlaySoundPacket();
         packet.name = sound.getSound();
         packet.volume = 1.0F;

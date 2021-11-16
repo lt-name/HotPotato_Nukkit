@@ -1,22 +1,25 @@
 package cn.lanink.hotpotato;
 
+import cn.lanink.gamecore.scoreboard.ScoreboardUtil;
+import cn.lanink.gamecore.scoreboard.base.IScoreboard;
 import cn.lanink.hotpotato.command.AdminCommand;
 import cn.lanink.hotpotato.command.UserCommand;
-import cn.lanink.hotpotato.lib.scoreboard.IScoreboard;
-import cn.lanink.hotpotato.lib.scoreboard.ScoreboardDe;
-import cn.lanink.hotpotato.lib.scoreboard.ScoreboardGt;
 import cn.lanink.hotpotato.listener.HotPotatoListener;
 import cn.lanink.hotpotato.listener.PlayerGameListener;
 import cn.lanink.hotpotato.listener.PlayerJoinAndQuit;
 import cn.lanink.hotpotato.listener.RoomLevelProtection;
+import cn.lanink.hotpotato.player.PlayerDataManager;
 import cn.lanink.hotpotato.room.Room;
-import cn.lanink.hotpotato.ui.GuiListener;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.MetricsLite;
+import cn.lanink.hotpotato.utils.RankingManager;
+import cn.lanink.hotpotato.utils.RsNpcXVariable;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
+import com.smallaswater.npc.variable.VariableManage;
+import lombok.Getter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -37,6 +40,8 @@ public class HotPotato extends PluginBase {
 
     private Language language;
     private Config config;
+    @Getter
+    private Config rankingConfig;
 
     private final HashMap<String, Config> roomConfigs = new HashMap<>();
     private final LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();
@@ -49,6 +54,9 @@ public class HotPotato extends PluginBase {
 
     private boolean hasTips = false;
 
+    @Getter
+    private String playerDataPath;
+
     public static HotPotato getInstance() {
         return hotPotato;
     }
@@ -56,6 +64,8 @@ public class HotPotato extends PluginBase {
     @Override
     public void onLoad() {
         hotPotato = this;
+
+        this.playerDataPath = this.getDataFolder() + "/PlayerData/";
     
         File file1 = new File(this.getDataFolder() + "/Rooms");
         File file2 = new File(this.getDataFolder() + "/PlayerInventory");
@@ -70,7 +80,9 @@ public class HotPotato extends PluginBase {
             this.getLogger().warning("Skins 文件夹初始化失败");
         }
         this.saveDefaultConfig();
-        this.config = new Config(getDataFolder() + "/config.yml", 2);
+        this.saveResource("RankingConfig.yml");
+        this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+        this.rankingConfig = new Config(this.getDataFolder() + "/RankingConfig.yml", Config.YAML);
     }
     
     @Override
@@ -78,25 +90,7 @@ public class HotPotato extends PluginBase {
         this.getLogger().info("§e插件开始加载！本插件是免费哒~如果你花钱了，那一定是被骗了~");
         this.getLogger().info("§l§e版本: " + VERSION);
         //加载计分板
-        try {
-            Class.forName("de.theamychan.scoreboard.ScoreboardPlugin");
-            if (getServer().getPluginManager().getPlugin("ScoreboardPlugin").isDisabled()) {
-                throw new Exception("Not Loaded");
-            }
-            this.iScoreboard = new ScoreboardDe();
-        } catch (Exception e) {
-            try {
-                Class.forName("gt.creeperface.nukkit.scoreboardapi.ScoreboardAPI");
-                if (getServer().getPluginManager().getPlugin("ScoreboardAPI").isDisabled()) {
-                    throw new Exception("Not Loaded");
-                }
-                this.iScoreboard = new ScoreboardGt();
-            } catch (Exception ignored) {
-                getLogger().error("§c请安装计分板前置！");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
+        this.iScoreboard = ScoreboardUtil.getScoreboard();
         //检查Tips
         try {
             Class.forName("tip.Main");
@@ -113,49 +107,63 @@ public class HotPotato extends PluginBase {
         String s = this.config.getString("language", "zh_CN");
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {
-            this.language = new Language(new Config(languageFile, 2));
-            getLogger().info("§aLanguage: " + s + " loaded !");
+            this.language = new Language(new Config(languageFile, Config.YAML));
+            this.getLogger().info("§aLanguage: " + s + " loaded !");
         }else {
             this.language = new Language(new Config());
-            getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
+            this.getLogger().warning("§cLanguage: " + s + " Not found, Load the default language !");
         }
+
+        PlayerDataManager.load();
+        try {
+            Class.forName("cn.lanink.rankingapi.RankingAPI");
+            RankingManager.load();
+        }catch (Exception ignored) {
+
+        }
+
         
         this.loadRooms();
         
-        getLogger().info("§e开始加载皮肤");
+        this.getLogger().info("§e开始加载皮肤");
         this.loadSkins();
         
         this.cmdUser = this.config.getString("插件命令", "hotpotato");
         this.cmdAdmin = this.config.getString("管理命令", "hotpotatoadmin");
-        getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
-        getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
-        
-        getServer().getPluginManager().registerEvents(new PlayerJoinAndQuit(), this);
-        getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
-        getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
-        getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
-        getServer().getPluginManager().registerEvents(new GuiListener(this), this);
-        
+        this.getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
+        this.getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
+
+        this.getServer().getPluginManager().registerEvents(new PlayerJoinAndQuit(), this);
+        this.getServer().getPluginManager().registerEvents(new RoomLevelProtection(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerGameListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new HotPotatoListener(this), this);
+
+        try {
+            Class.forName("com.smallaswater.npc.variable.BaseVariableV2");
+            VariableManage.addVariableV2("HotPotato", RsNpcXVariable.class);
+        }catch (Exception ignored) {
+
+        }
+
         try {
             new MetricsLite(this, 7464);
         } catch (Exception ignored) {
         
         }
-        getLogger().info("§e插件加载完成！欢迎使用！");
+
+        this.getLogger().info("§e插件加载完成！欢迎使用！");
     }
 
     @Override
     public void onDisable() {
+        PlayerDataManager.save();
+
         if (!this.rooms.isEmpty()) {
             Iterator<Map.Entry<String, Room>> it = this.rooms.entrySet().iterator();
             while(it.hasNext()){
                 Map.Entry<String, Room> entry = it.next();
-                if (entry.getValue().getPlayers().size() > 0) {
-                    entry.getValue().endGame();
-                    getLogger().info("§c房间：" + entry.getKey() + " 非正常结束！");
-                }else {
-                    getLogger().info("§c房间：" + entry.getKey() + " 已卸载！");
-                }
+                entry.getValue().endGame();
+                this.getLogger().info("§c房间：" + entry.getKey() + " 已卸载！");
                 it.remove();
             }
         }
@@ -193,7 +201,7 @@ public class HotPotato extends PluginBase {
         if (this.roomConfigs.containsKey(level)) {
             return this.roomConfigs.get(level);
         }
-        Config config = new Config(getDataFolder() + "/Rooms/" + level + ".yml", 2);
+        Config config = new Config(getDataFolder() + "/Rooms/" + level + ".yml", Config.YAML);
         this.roomConfigs.put(level, config);
         return config;
     }
@@ -215,9 +223,9 @@ public class HotPotato extends PluginBase {
                     Config config = getRoomConfig(fileName[0]);
                     if (config.getInt("waitTime", 0) == 0 ||
                             config.getInt("gameTime", 0) == 0 ||
-                            config.getString("waitSpawn", "").trim().equals("") ||
+                            "".equals(config.getString("waitSpawn", "").trim()) ||
                             config.getStringList("randomSpawn").size() == 0 ||
-                            config.getString("World", "").trim().equals("")) {
+                            "".equals(config.getString("World", "").trim())) {
                         this.getLogger().warning("§c房间：" + fileName[0] + " 配置不完整，加载失败！");
                         continue;
                     }
