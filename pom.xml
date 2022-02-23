@@ -6,7 +6,7 @@
 
     <groupId>cn.lanink</groupId>
     <artifactId>HotPotato</artifactId>
-    <version>1.1.1<!-- -SNAPSHOT--></version>
+    <version>1.1.2-SNAPSHOT</version>
 
     <licenses>
         <license>
@@ -19,6 +19,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
@@ -30,9 +33,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${maven.compiler.encoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -160,14 +163,14 @@
         <dependency>
             <groupId>cn.lanink</groupId>
             <artifactId>MemoriesOfTime-GameCore</artifactId>
-            <version>1.4.1</version>
+            <version>1.5.3</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.smallaswater.npc</groupId>
             <artifactId>RsNPCX</artifactId>
-            <version>1.8.4</version>
+            <version>1.8.7</version>
             <scope>provided</scope>
         </dependency>
 
