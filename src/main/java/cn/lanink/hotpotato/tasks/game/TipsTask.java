@@ -9,6 +9,7 @@ import cn.nukkit.utils.BossBarColor;
 import cn.nukkit.utils.DummyBossBar;
 
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -68,6 +69,14 @@ public class TipsTask extends PluginTask<HotPotato> {
                 owner.getIScoreboard().showScoreboard(player, this.language.scoreBoardTitle, ms);
             }
         }
+    }
+
+    @Override
+    public void onCancel() {
+        for (Map.Entry<Player, DummyBossBar> entry : this.bossBarMap.entrySet()) {
+            entry.getKey().removeBossBar(entry.getValue().getBossBarId());
+        }
+        this.bossBarMap.clear();
     }
 
 }
