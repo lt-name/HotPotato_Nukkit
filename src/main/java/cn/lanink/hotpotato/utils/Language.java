@@ -55,7 +55,6 @@ public class Language {
     public String rankNotFound = "未找到名称为 %name% 的排行榜！";
     //游戏内显示
     public String tpJoinRoomLevel = "§e >> §c要进入游戏地图，请先加入游戏！";
-    public String tpQuitRoomLevel = "§e >> §c退出房间请使用命令！";
     public String scoreBoardTitle = "§e烫手山芋";
     public String waitTimeScoreBoard = " 玩家: §a%playerNumber%/16 \n §a开始倒计时: §e%time% ";
     public String waitScoreBoard = " 玩家: §a%playerNumber%/16 \n 最少游戏人数为 3 人 \n 等待玩家加入中 ";
@@ -65,6 +64,7 @@ public class Language {
     public String gameTimeBottom = "§l§a倒计时: §e %time% §a秒 \n §l§a存活人数: %playerNumber%";
     public String victoryMessage = "§e恭喜 %player% §e获得胜利";
     public String playerDeath = "§c %player% 爆炸了";
+    public String playerDeathOther = "§c %player% 死于意外！";
     //ui相关
     public String userMenuButton1 = "§e随机加入房间";
     public String userMenuButton2 = "§e退出当前房间";
@@ -121,7 +121,6 @@ public class Language {
         this.rankDeleteSuccessful = config.getString("rankDeleteSuccessful", this.rankDeleteSuccessful);
         this.rankNotFound = config.getString("rankNotFound", this.rankNotFound);
         this.tpJoinRoomLevel = config.getString("tpJoinRoomLevel", this.tpJoinRoomLevel);
-        this.tpQuitRoomLevel = config.getString("tpQuitRoomLevel", this.tpQuitRoomLevel);
         this.scoreBoardTitle = config.getString("scoreBoardTitle", this.scoreBoardTitle);
         this.waitTimeScoreBoard = config.getString("waitTimeScoreBoard", this.waitTimeScoreBoard);
         this.waitScoreBoard = config.getString("waitScoreBoard", this.waitScoreBoard);
@@ -131,6 +130,7 @@ public class Language {
         this.gameTimeBottom = config.getString("gameTimeBottom", this.gameTimeBottom);
         this.victoryMessage = config.getString("victoryMessage", this.victoryMessage);
         this.playerDeath = config.getString("playerDeath", this.playerDeath);
+        this.playerDeathOther = config.getString("playerDeathOther", this.playerDeathOther);
         this.userMenuButton1 = config.getString("userMenuButton1", this.userMenuButton1);
         this.userMenuButton2 = config.getString("userMenuButton2", this.userMenuButton2);
         this.userMenuButton3 = config.getString("userMenuButton3", this.userMenuButton3);

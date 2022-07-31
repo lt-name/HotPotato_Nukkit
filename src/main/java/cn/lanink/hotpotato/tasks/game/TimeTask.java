@@ -52,10 +52,11 @@ public class TimeTask extends PluginTask<HotPotato> {
             }
         }else {
             this.room.gameTime = this.room.getSetGameTime();
+            this.room.roundCount++;
             for (Map.Entry<Player, Integer> entry : this.room.getPlayers().entrySet()) {
                 if (entry.getValue() == 2) {
                     owner.getServer().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(this.room, entry.getKey()));
-                    this.sendMessage(this.language.playerDeath.replace("%player%", entry.getKey().getName()));
+                    Tools.broadcastMessage(this.room, this.language.playerDeath.replace("%player%", entry.getKey().getName()));
                 }
             }
             LinkedList<Player> playerList = new LinkedList<>();
@@ -79,12 +80,6 @@ public class TimeTask extends PluginTask<HotPotato> {
                 Server.getInstance().getScheduler().scheduleRepeatingTask(owner,
                         new VictoryTask(owner, this.room), 20);
             }
-        }
-    }
-
-    private void sendMessage(String string) {
-        for (Player player : this.room.getPlayers().keySet()) {
-            player.sendMessage(string);
         }
     }
 

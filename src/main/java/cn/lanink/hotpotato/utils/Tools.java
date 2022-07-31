@@ -34,6 +34,12 @@ import java.util.Map;
 
 public class Tools {
 
+    public static void broadcastMessage(Room room, String string) {
+        for (Player player : room.getPlayers().keySet()) {
+            player.sendMessage(string);
+        }
+    }
+
     public static double toDouble(Object object) {
         return new BigDecimal(object.toString()).doubleValue();
     }

@@ -49,7 +49,6 @@ rankCreationSuccessful: "排行榜：%name% 创建成功！"
 rankDeleteSuccessful: "排行榜：%name% 删除成功！"
 rankNotFound: "未找到名称为 %name% 的排行榜！"
 tpJoinRoomLevel: "§e >> §c要进入游戏地图，请先加入游戏！"
-tpQuitRoomLevel: "§e >> §c退出房间请使用命令！"
 scoreBoardTitle: "§e烫手山芋"
 waitTimeScoreBoard: |-
   玩家: §a%playerNumber%/16
@@ -61,11 +60,13 @@ waitScoreBoard: |-
 waitTimeBottom: "§a游戏还有: %time% 秒开始！"
 waitBottom: "§c等待玩家加入中"
 gameTimeScoreBoard: |-
+  §l§a当前回合:§e %round%
   §l§a爆炸时间:§e %time% 秒
   §l§a存活人数: %playerNumber%
 gameTimeBottom: "§l§a倒计时: §e %time% §a秒"
 victoryMessage: "§e恭喜 %player% §e获得胜利"
 playerDeath: "§c %player% 爆炸了！"
+playerDeathOther: "§c %player% 死于意外！"
 userMenuButton1: "§e随机加入房间"
 userMenuButton2: "§e退出当前房间"
 userMenuButton3: "§e查看房间列表"
