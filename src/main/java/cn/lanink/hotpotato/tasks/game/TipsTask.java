@@ -45,7 +45,8 @@ public class TipsTask extends PluginTask<HotPotato> {
             LinkedList<String> ms = new LinkedList<>();
             for (String string : language.gameTimeScoreBoard.split("\n")) {
                 ms.add(string.replace("%time%", this.room.gameTime + "")
-                        .replace("%playerNumber%", playerNumber + ""));
+                        .replace("%playerNumber%", playerNumber + "")
+                        .replace("%round%", this.room.roundCount + ""));
             }
             for (Player player : this.room.getPlayers().keySet()) {
                 if (!this.bossBarMap.containsKey(player)) {

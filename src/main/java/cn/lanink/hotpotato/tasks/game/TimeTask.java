@@ -52,6 +52,7 @@ public class TimeTask extends PluginTask<HotPotato> {
             }
         }else {
             this.room.gameTime = this.room.getSetGameTime();
+            this.room.roundCount++;
             for (Map.Entry<Player, Integer> entry : this.room.getPlayers().entrySet()) {
                 if (entry.getValue() == 2) {
                     owner.getServer().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(this.room, entry.getKey()));

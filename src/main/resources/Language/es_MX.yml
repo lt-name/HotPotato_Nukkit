@@ -63,6 +63,7 @@ waitScoreBoard: |-
 waitTimeBottom: "§aEl juego comienza en: %time% segundos!"
 waitBottom: "§cEsperando que los jugadores se unan"
 gameTimeScoreBoard: |-
+  §l§aCurrent Round:§e %round%
   §l§aExplosión en:§e %time% segundos
   §l§aSupervivientes: %playerNumber%
 gameTimeBottom: "§l§aTiempo: §e %time% §asegundos"

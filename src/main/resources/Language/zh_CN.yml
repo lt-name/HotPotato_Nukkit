@@ -60,6 +60,7 @@ waitScoreBoard: |-
 waitTimeBottom: "§a游戏还有: %time% 秒开始！"
 waitBottom: "§c等待玩家加入中"
 gameTimeScoreBoard: |-
+  §l§a当前回合:§e %round%
   §l§a爆炸时间:§e %time% 秒
   §l§a存活人数: %playerNumber%
 gameTimeBottom: "§l§a倒计时: §e %time% §a秒"

@@ -50,6 +50,7 @@ public class Room {
     private final LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
 
     public Player victoryPlayer;
+    public int roundCount;
 
     /**
      * 初始化
@@ -81,7 +82,7 @@ public class Room {
             this.maxPlayers = this.minPlayers;
         }
 
-        this.initTime();
+        this.initData();
 
         this.status = 0;
     }
@@ -99,11 +100,18 @@ public class Room {
     }
 
     /**
-     * 初始化倒计时时间
+     * 初始化房间数据
      */
-    protected void initTime() {
+    protected void initData() {
         this.waitTime = this.setWaitTime;
         this.gameTime = this.setGameTime;
+
+        this.skinNumber.clear();
+        this.skinCache.clear();
+
+        this.victoryPlayer = null;
+
+        this.roundCount = 0;
     }
 
     /**
@@ -131,10 +139,7 @@ public class Room {
         for (Player player : this.getLevel().getPlayers().values()) {
             player.kick("Teleport error!");
         }
-        this.initTime();
-        this.skinNumber.clear();
-        this.skinCache.clear();
-        this.victoryPlayer = null;
+        this.initData();
         Tools.cleanEntity(this.getLevel());
     }
 
