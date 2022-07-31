@@ -2,6 +2,13 @@
 language: zh_CN
 插件命令: hotpotato
 管理命令: hotpotatoadmin
+#可以在游戏房间中使用的命令
+cmdWhitelist:
+  - ban
+  - kick
+  - report
+  - hub
+  - lobby
 胜利执行命令:
   - me 我胜利了
   - tell "@p" 恭喜获得胜利！&con

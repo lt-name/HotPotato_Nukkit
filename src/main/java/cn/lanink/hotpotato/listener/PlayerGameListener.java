@@ -155,14 +155,23 @@ public class PlayerGameListener implements Listener {
     @EventHandler
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (player == null || event.getMessage() == null) return;
+        String message = event.getMessage();
+        if (player == null || message == null) {
+            return;
+        }
         Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
         if (room == null || !room.isPlaying(player)) {
             return;
         }
-        if (event.getMessage().startsWith(this.hotPotato.getCmdUser(), 1) ||
-                event.getMessage().startsWith(this.hotPotato.getCmdAdmin(), 1)) {
+        message = message.replace("/", "").split(" ")[0];
+        if (this.hotPotato.getCmdUser().equalsIgnoreCase(message) ||
+                this.hotPotato.getCmdAdmin().equalsIgnoreCase(message)) {
             return;
+        }
+        for (String string : this.hotPotato.getCmdWhitelist()) {
+            if (string.equalsIgnoreCase(message)) {
+                return;
+            }
         }
         event.setCancelled(true);
         player.sendMessage(this.language.useCmdInRoom);

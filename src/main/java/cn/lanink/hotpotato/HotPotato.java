@@ -50,6 +50,8 @@ public class HotPotato extends PluginBase {
 
     private String cmdUser;
     private String cmdAdmin;
+    @Getter
+    private List<String> cmdWhitelist;
     private IScoreboard iScoreboard;
 
     private boolean hasTips = false;
@@ -130,6 +132,8 @@ public class HotPotato extends PluginBase {
         
         this.cmdUser = this.config.getString("插件命令", "hotpotato");
         this.cmdAdmin = this.config.getString("管理命令", "hotpotatoadmin");
+        this.cmdWhitelist = this.config.getStringList("cmdWhitelist");
+
         this.getServer().getCommandMap().register("", new UserCommand(this.cmdUser));
         this.getServer().getCommandMap().register("", new AdminCommand(this.cmdAdmin));
 
