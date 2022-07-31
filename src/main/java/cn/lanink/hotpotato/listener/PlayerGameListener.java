@@ -5,6 +5,8 @@ import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
 import cn.lanink.hotpotato.utils.Language;
+import cn.lanink.hotpotato.utils.Tools;
+import cn.nukkit.AdventureSettings;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.event.EventHandler;
@@ -87,14 +89,37 @@ public class PlayerGameListener implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             Room room = this.hotPotato.getRooms().getOrDefault(player.getLevel().getName(), null);
-            if (room == null) return;
-            if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                if (room.getStatus() == 2) {
-                    Server.getInstance().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(room, player));
-                }else {
-                    player.teleport(room.getWaitSpawn());
-                }
-                event.setCancelled(true);
+            if (room == null) {
+                return;
+            }
+            switch (event.getCause()) {
+                case FALL:
+                    event.setDamage(event.getDamage()/2);
+                case FIRE:
+                case LAVA:
+                case DROWNING:
+                    //正常伤害无需修改
+                    break;
+                case VOID:
+                    if (room.getStatus() == 2) {
+                        Server.getInstance().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(room, player));
+                    }else {
+                        player.teleport(room.getWaitSpawn());
+                    }
+                    event.setCancelled(true);
+                    break;
+                default:
+                    event.setDamage(0);
+                    break;
+            }
+            if (event.getFinalDamage() + 1 >= player.getHealth()) {
+                player.getInventory().clearAll();
+                player.setAllowModifyWorld(true);
+                player.setAdventureSettings((new AdventureSettings(player)).set(AdventureSettings.Type.ALLOW_FLIGHT, true));
+                player.setGamemode(3);
+                room.addPlaying(player, 0);
+                Tools.setPlayerInvisible(player, true);
+                Tools.broadcastMessage(room, this.language.playerDeathOther.replace("%player%", player.getName()));
             }
         }
     }

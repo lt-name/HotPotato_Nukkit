@@ -65,6 +65,7 @@ gameTimeScoreBoard: |-
 gameTimeBottom: "§l§a倒计时: §e %time% §a秒"
 victoryMessage: "§e恭喜 %player% §e获得胜利"
 playerDeath: "§c %player% 爆炸了！"
+playerDeathOther: "§c %player% 死于意外！"
 userMenuButton1: "§e随机加入房间"
 userMenuButton2: "§e退出当前房间"
 userMenuButton3: "§e查看房间列表"

@@ -64,6 +64,7 @@ public class Language {
     public String gameTimeBottom = "§l§a倒计时: §e %time% §a秒 \n §l§a存活人数: %playerNumber%";
     public String victoryMessage = "§e恭喜 %player% §e获得胜利";
     public String playerDeath = "§c %player% 爆炸了";
+    public String playerDeathOther = "§c %player% 死于意外！";
     //ui相关
     public String userMenuButton1 = "§e随机加入房间";
     public String userMenuButton2 = "§e退出当前房间";
@@ -129,6 +130,7 @@ public class Language {
         this.gameTimeBottom = config.getString("gameTimeBottom", this.gameTimeBottom);
         this.victoryMessage = config.getString("victoryMessage", this.victoryMessage);
         this.playerDeath = config.getString("playerDeath", this.playerDeath);
+        this.playerDeathOther = config.getString("playerDeathOther", this.playerDeathOther);
         this.userMenuButton1 = config.getString("userMenuButton1", this.userMenuButton1);
         this.userMenuButton2 = config.getString("userMenuButton2", this.userMenuButton2);
         this.userMenuButton3 = config.getString("userMenuButton3", this.userMenuButton3);

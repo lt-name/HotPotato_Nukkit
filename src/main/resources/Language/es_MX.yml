@@ -68,6 +68,7 @@ gameTimeScoreBoard: |-
 gameTimeBottom: "§l§aTiempo: §e %time% §asegundos"
 victoryMessage: "§eFelicidades %player% §eganó"
 playerDeath: "§c %player% explotó！"
+playerDeathOther: "§c %player% Died by accident!"
 userMenuButton1: "§eUnirse a cualquier partida"
 userMenuButton2: "§eSalir de la habitación actua"
 userMenuButton3: "§eVer lista de habitaciones"
