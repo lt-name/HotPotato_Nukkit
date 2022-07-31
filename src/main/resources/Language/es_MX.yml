@@ -52,7 +52,6 @@ rankCreationSuccessful: "Ranking table:%name% created successfully!"
 rankDeleteSuccessful: "Ranking:%name% deleted successfully!"
 rankNotFound: "No leaderboard named% name% found!"
 tpJoinRoomLevel: "§e >> §cPara ingresar al mapa del juego, ¡únete primero al juego!"
-tpQuitRoomLevel: "§e >> §c¡Utilice el comando para salir de la habitación!"
 scoreBoardTitle: "§ePapa caliente"
 waitTimeScoreBoard: |-
   §eJugadores: §a%playerNumber%/16

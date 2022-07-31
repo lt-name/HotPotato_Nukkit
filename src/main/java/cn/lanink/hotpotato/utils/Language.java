@@ -55,7 +55,6 @@ public class Language {
     public String rankNotFound = "未找到名称为 %name% 的排行榜！";
     //游戏内显示
     public String tpJoinRoomLevel = "§e >> §c要进入游戏地图，请先加入游戏！";
-    public String tpQuitRoomLevel = "§e >> §c退出房间请使用命令！";
     public String scoreBoardTitle = "§e烫手山芋";
     public String waitTimeScoreBoard = " 玩家: §a%playerNumber%/16 \n §a开始倒计时: §e%time% ";
     public String waitScoreBoard = " 玩家: §a%playerNumber%/16 \n 最少游戏人数为 3 人 \n 等待玩家加入中 ";
@@ -121,7 +120,6 @@ public class Language {
         this.rankDeleteSuccessful = config.getString("rankDeleteSuccessful", this.rankDeleteSuccessful);
         this.rankNotFound = config.getString("rankNotFound", this.rankNotFound);
         this.tpJoinRoomLevel = config.getString("tpJoinRoomLevel", this.tpJoinRoomLevel);
-        this.tpQuitRoomLevel = config.getString("tpQuitRoomLevel", this.tpQuitRoomLevel);
         this.scoreBoardTitle = config.getString("scoreBoardTitle", this.scoreBoardTitle);
         this.waitTimeScoreBoard = config.getString("waitTimeScoreBoard", this.waitTimeScoreBoard);
         this.waitScoreBoard = config.getString("waitScoreBoard", this.waitScoreBoard);

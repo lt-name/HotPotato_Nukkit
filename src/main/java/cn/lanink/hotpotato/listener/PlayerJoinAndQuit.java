@@ -71,8 +71,7 @@ public class PlayerJoinAndQuit implements Listener {
         if (!fromLevel.equals(toLevel)) {
             LinkedHashMap<String, Room> room =  HotPotato.getInstance().getRooms();
             if (room.containsKey(fromLevel) && room.get(fromLevel).isPlaying(player)) {
-                event.setCancelled(true);
-                player.sendMessage(HotPotato.getInstance().getLanguage().tpQuitRoomLevel);
+                room.get(fromLevel).quitRoom(player);
             }else if (!player.isOp() && room.containsKey(toLevel) &&
                     !room.get(toLevel).isPlaying(player)) {
                 event.setCancelled(true);
