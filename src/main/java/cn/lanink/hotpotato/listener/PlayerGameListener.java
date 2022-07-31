@@ -95,6 +95,7 @@ public class PlayerGameListener implements Listener {
             switch (event.getCause()) {
                 case FALL:
                     event.setDamage(event.getDamage()/2);
+                case SUFFOCATION:
                 case FIRE:
                 case LAVA:
                 case DROWNING:
