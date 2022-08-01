@@ -10,6 +10,7 @@ import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.AdventureSettings;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
@@ -141,10 +142,37 @@ public class PlayerGameListener implements Listener {
         if (room == null || !room.isPlaying(player)) {
             return;
         }
+
+        //禁止容器交互
+        Block block = event.getBlock();
+        switch (block.getId()) {
+            case Item.CRAFTING_TABLE:
+            case Item.CHEST:
+            case Item.ENDER_CHEST:
+            case Item.ANVIL:
+            case Item.SHULKER_BOX:
+            case Item.UNDYED_SHULKER_BOX:
+            case Item.FURNACE:
+            case Item.BURNING_FURNACE:
+            case Item.DISPENSER:
+            case Item.DROPPER:
+            case Item.HOPPER:
+            case Item.BREWING_STAND:
+            case Item.CAULDRON:
+            case Item.BEACON:
+            case Item.FLOWER_POT:
+            case Item.JUKEBOX:
+                event.setCancelled(true);
+                break;
+            default:
+                break;
+        }
+
         if (event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
             player.setAllowModifyWorld(false);
         }
+
         if (room.getStatus() == RoomStatus.WAIT_PLAYER) {
             if (!item.hasCompoundTag()) return;
             CompoundTag tag = item.getNamedTag();
