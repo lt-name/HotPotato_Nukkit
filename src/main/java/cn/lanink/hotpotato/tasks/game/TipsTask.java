@@ -2,6 +2,7 @@ package cn.lanink.hotpotato.tasks.game;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.lanink.hotpotato.utils.Language;
 import cn.nukkit.Player;
 import cn.nukkit.scheduler.PluginTask;
@@ -31,7 +32,7 @@ public class TipsTask extends PluginTask<HotPotato> {
 
     @Override
     public void onRun(int i) {
-        if (this.room.getStatus() != 2) {
+        if (this.room.getStatus() != RoomStatus.GAME) {
             this.cancel();
             return;
         }

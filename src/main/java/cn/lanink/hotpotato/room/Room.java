@@ -30,7 +30,7 @@ public class Room {
     public int waitTime;
     public int gameTime;
 
-    protected int status; //0未初始化 1等待 2游戏 3胜利结算
+    protected RoomStatus status;
     protected String level;
     protected String waitSpawn;
 
@@ -84,10 +84,10 @@ public class Room {
 
         this.initData();
 
-        this.status = 0;
+        this.status = RoomStatus.WAIT;
     }
 
-    public int getStatus() {
+    public RoomStatus getStatus() {
         return this.status;
     }
 
@@ -95,7 +95,7 @@ public class Room {
      * 设置房间状态
      * @param status 状态
      */
-    public void setStatus(int status) {
+    public void setStatus(RoomStatus status) {
         this.status = status;
     }
 
@@ -118,7 +118,7 @@ public class Room {
      * 初始化Task
      */
     public void initTask() {
-        this.setStatus(1);
+        this.setStatus(RoomStatus.WAIT_PLAYER);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 HotPotato.getInstance(), new WaitTask(HotPotato.getInstance(), this), 20);
     }
@@ -127,7 +127,7 @@ public class Room {
      * 结束本局游戏
      */
     public void endGame() {
-        this.status = 0;
+        this.status = RoomStatus.WAIT;
         for (Player player : new ArrayList<>(this.getPlayers().keySet())) {
             this.quitRoom(player);
         }
@@ -144,7 +144,7 @@ public class Room {
     }
 
     public boolean canJoin() {
-        return (this.getStatus() == 0 || this.getStatus() == 1) && this.getPlayers().size() < this.getMaxPlayers();
+        return (this.getStatus() == RoomStatus.WAIT || this.getStatus() == RoomStatus.WAIT_PLAYER) && this.getPlayers().size() < this.getMaxPlayers();
     }
 
     /**
@@ -153,7 +153,7 @@ public class Room {
      */
     public void joinRoom(Player player) {
         if (this.canJoin()) {
-            if (this.status == 0) {
+            if (this.status == RoomStatus.WAIT) {
                 this.initTask();
             }
             this.addPlaying(player);
@@ -185,7 +185,7 @@ public class Room {
         if (HotPotato.getInstance().isHasTips()) {
             Tips.removeTipsConfig(this.level, player);
         }
-        player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+
         Tools.rePlayerState(player, false);
 
         File file = new File(HotPotato.getInstance().getDataFolder() + "/PlayerInventory/" + player.getName() + ".json");

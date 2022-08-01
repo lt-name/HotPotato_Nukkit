@@ -3,6 +3,7 @@ package cn.lanink.hotpotato.tasks.game;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.lanink.hotpotato.tasks.VictoryTask;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
@@ -30,12 +31,28 @@ public class TimeTask extends PluginTask<HotPotato> {
     }
 
     public void onRun(int i) {
-        if (this.room.getStatus() != 2) {
+        if (this.room.getStatus() != RoomStatus.GAME) {
             this.cancel();
             return;
         }
         if (this.room.gameTime > 0) {
             this.room.gameTime--;
+
+            if (this.room.getPlayers().isEmpty()) {
+                this.room.endGame();
+                this.cancel();
+                return;
+            }
+            if (this.room.getPlayers().size() == 1) {
+                for (Player player : room.getPlayers().keySet()) {
+                    this.room.victoryPlayer = player;
+                }
+                this.room.setStatus(RoomStatus.VICTORY);
+                Server.getInstance().getScheduler().scheduleRepeatingTask(owner,
+                        new VictoryTask(owner, this.room), 20);
+                return;
+            }
+
             for (Map.Entry<Player, Integer> entry : this.room.getPlayers().entrySet()) {
                 if (entry.getValue() == 2) {
                     Effect effect = entry.getKey().getEffect(1);
@@ -76,7 +93,7 @@ public class TimeTask extends PluginTask<HotPotato> {
                         break;
                     }
                 }
-                this.room.setStatus(3);
+                this.room.setStatus(RoomStatus.VICTORY);
                 Server.getInstance().getScheduler().scheduleRepeatingTask(owner,
                         new VictoryTask(owner, this.room), 20);
             }

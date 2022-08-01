@@ -3,6 +3,7 @@ package cn.lanink.hotpotato.command.adminsub;
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
@@ -33,7 +34,7 @@ public class StartRoom extends BaseSubCommand {
         Room room = this.hotPotato.getRooms().get(player.getLevel().getName());
         if (room != null) {
             if (room.getPlayers().size() >= 2) {
-                if (room.getStatus() == 1) {
+                if (room.getStatus() == RoomStatus.WAIT_PLAYER) {
                     Server.getInstance().getPluginManager().callEvent(new HotPotatoRoomStartEvent(room));
                     sender.sendMessage(this.language.adminStartRoom);
                 }else {
