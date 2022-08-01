@@ -2,6 +2,7 @@ package cn.lanink.hotpotato.tasks.game;
 
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.nukkit.Player;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.particle.RedstoneParticle;
@@ -21,7 +22,7 @@ public class ParticleTask extends PluginTask<HotPotato> {
 
     @Override
     public void onRun(int i) {
-        if (this.room.getStatus() != 2) {
+        if (this.room.getStatus() != RoomStatus.GAME) {
             this.cancel();
             return;
         }

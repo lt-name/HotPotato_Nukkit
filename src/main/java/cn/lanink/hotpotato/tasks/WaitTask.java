@@ -3,6 +3,7 @@ package cn.lanink.hotpotato.tasks;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
@@ -24,7 +25,7 @@ public class WaitTask extends PluginTask<HotPotato> {
 
     @Override
     public void onRun(int i) {
-        if (this.room.getStatus() != 1) {
+        if (this.room.getStatus() != RoomStatus.WAIT_PLAYER) {
             this.cancel();
             return;
         }

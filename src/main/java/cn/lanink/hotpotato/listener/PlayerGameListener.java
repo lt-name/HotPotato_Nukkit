@@ -4,6 +4,7 @@ import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoPlayerDeathEvent;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.AdventureSettings;
@@ -57,7 +58,7 @@ public class PlayerGameListener implements Listener {
             if (room == null || !room.isPlaying(damager) || !room.isPlaying(player)) {
                 return;
             }
-            if (room.getStatus() == 2) {
+            if (room.getStatus() == RoomStatus.GAME) {
                 if (room.getPlayerMode(damager) != 2 && this.playerAttackCooldown.contains(damager)) {
                     event.setCancelled(true);
                     return;
@@ -102,7 +103,7 @@ public class PlayerGameListener implements Listener {
                     //正常伤害无需修改
                     break;
                 case VOID:
-                    if (room.getStatus() == 2) {
+                    if (room.getStatus() == RoomStatus.GAME) {
                         Server.getInstance().getPluginManager().callEvent(new HotPotatoPlayerDeathEvent(room, player));
                     }else {
                         player.teleport(room.getWaitSpawn());
@@ -144,7 +145,7 @@ public class PlayerGameListener implements Listener {
             event.setCancelled(true);
             player.setAllowModifyWorld(false);
         }
-        if (room.getStatus() == 1) {
+        if (room.getStatus() == RoomStatus.WAIT_PLAYER) {
             if (!item.hasCompoundTag()) return;
             CompoundTag tag = item.getNamedTag();
             if (tag.getBoolean("isHotPotatoItem") && tag.getInt("HotPotatoType") == 10) {
@@ -164,7 +165,7 @@ public class PlayerGameListener implements Listener {
         Player player = event.getPlayer();
         for (Room room : this.hotPotato.getRooms().values()) {
             if (room.isPlaying(player)) {
-                if (room.getStatus() == 2) {
+                if (room.getStatus() == RoomStatus.GAME) {
                     event.setRespawnPosition(room.getRandomSpawn().get(new Random().nextInt(room.getRandomSpawn().size())));
                 }else {
                     event.setRespawnPosition(room.getWaitSpawn());

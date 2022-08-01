@@ -6,6 +6,7 @@ import cn.lanink.gamecore.form.windows.AdvancedFormWindowModal;
 import cn.lanink.gamecore.form.windows.AdvancedFormWindowSimple;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.nukkit.Player;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.element.ElementInput;
@@ -114,7 +115,7 @@ public class FormHelper {
         Language language = HotPotato.getInstance().getLanguage();
         if (HotPotato.getInstance().getRooms().containsKey(roomName)) {
             Room room = HotPotato.getInstance().getRooms().get(roomName);
-            if (room.getStatus() == 2 || room.getStatus() == 3) {
+            if (room.getStatus() == RoomStatus.GAME || room.getStatus() == RoomStatus.VICTORY) {
                 AdvancedFormWindowModal modal = new AdvancedFormWindowModal(
                         PLUGIN_NAME, language.joinRoomIsPlaying, language.buttonReturn, language.buttonReturn);
 

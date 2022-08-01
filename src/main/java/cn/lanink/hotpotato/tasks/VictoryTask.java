@@ -4,6 +4,7 @@ import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.event.HotPotatoRoomEndEvent;
 import cn.lanink.hotpotato.player.PlayerDataManager;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
 import cn.nukkit.Player;
@@ -36,7 +37,7 @@ public class VictoryTask extends PluginTask<HotPotato> {
 
     @Override
     public void onRun(int i) {
-        if (this.room.getStatus() != 3) {
+        if (this.room.getStatus() != RoomStatus.VICTORY) {
             this.cancel();
             return;
         }

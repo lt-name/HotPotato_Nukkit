@@ -3,6 +3,7 @@ package cn.lanink.hotpotato.command.usersub;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.command.base.BaseSubCommand;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
@@ -42,7 +43,7 @@ public class Join extends BaseSubCommand {
             }
             if (args.length < 2) {
                 for (Room room : this.hotPotato.getRooms().values()) {
-                    if ((room.getStatus() == 0 || room.getStatus() == 1) && room.getPlayers().size() < room.getMaxPlayers()) {
+                    if (room.canJoin()) {
                         room.joinRoom(player);
                         sender.sendMessage(this.language.joinRandomRoom);
                         return true;
@@ -67,7 +68,7 @@ public class Join extends BaseSubCommand {
                 }
             }else if (this.hotPotato.getRooms().containsKey(args[1])) {
                 Room room = this.hotPotato.getRooms().get(args[1]);
-                if (room.getStatus() == 2 || room.getStatus() == 3) {
+                if (room.getStatus() == RoomStatus.GAME || room.getStatus() == RoomStatus.VICTORY) {
                     sender.sendMessage(this.language.joinRoomIsPlaying);
                 }else if (room.getPlayers().values().size() >= room.getMaxPlayers()) {
                     sender.sendMessage(this.language.joinRoomIsFull);

@@ -6,6 +6,7 @@ import cn.lanink.hotpotato.event.HotPotatoRoomEndEvent;
 import cn.lanink.hotpotato.event.HotPotatoRoomStartEvent;
 import cn.lanink.hotpotato.event.HotPotatoTransferEvent;
 import cn.lanink.hotpotato.room.Room;
+import cn.lanink.hotpotato.room.RoomStatus;
 import cn.lanink.hotpotato.tasks.game.ParticleTask;
 import cn.lanink.hotpotato.tasks.game.TimeTask;
 import cn.lanink.hotpotato.tasks.game.TipsTask;
@@ -64,7 +65,7 @@ public class HotPotatoListener implements Listener {
             entry.getKey().teleport(room.getRandomSpawn().get(x));
             x++;
         }
-        room.setStatus(2);
+        room.setStatus(RoomStatus.GAME);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
                 this.hotPotato, new TimeTask(this.hotPotato, room), 20);
         Server.getInstance().getScheduler().scheduleRepeatingTask(
