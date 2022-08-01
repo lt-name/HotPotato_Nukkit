@@ -1,0 +1,85 @@
+useCmdInRoom: "§e >> §c游戏中无法使用其他命令"
+cmdHelp: "§a查看帮助：/%cmdName% help"
+userHelp: |-
+  §eHotPotato--命令帮助
+  §a/%cmdName% §e打开ui
+  §a/%cmdName% join 房间名称 §e加入游戏
+  §a/%cmdName% quit §e退出游戏
+  §a/%cmdName% list §e查看房间列表
+noPermission: "§c你没有权限使用这个命令！"
+joinRoom: "§a你已加入房间: %name%"
+joinRoomIsInRoom: "§c你已经在一个房间中了!"
+joinRoomIsRiding: "§a请勿在骑乘状态下进入房间！"
+joinRandomRoom: "§a已为你随机分配房间！"
+joinRoomIsPlaying: "§a该房间正在游戏中，请稍后"
+joinRoomIsFull: "§a该房间已满人，请稍后"
+joinRoomIsNotFound: "§a该房间不存在！"
+joinRoomNotAvailable: "§a暂无房间可用！"
+quitRoom: "§a你已退出房间"
+quitRoomNotInRoom: "§a你本来就不在游戏房间！"
+listRoom: "§e房间列表： §a %list%"
+useCmdInCon: "请不要在控制台执行此指令!"
+adminHelp: |-
+  §eHotPotato--命令帮助
+  §a/%cmdName% §e打开ui
+  §a/%cmdName% setwaitspawn §e设置当前位置为等待出生点
+  §a/%cmdName% addrandomspawn §e添加当前位置为随机出生点
+  §a/%cmdName% setwaittime 数字 §e设置游戏人数达到最少人数后的等待时间
+  §a/%cmdName% setgametime 数字 §e设置爆炸时间
+  §a/%cmdName% startroom §e强制开启所在地图的房间
+  §a/%cmdName% stoproom §e强制关闭所在地图的房间
+  §a/%cmdName% reloadroom §e重载所有房间
+  §a/%cmdName% unloadroom §e关闭所有房间,并卸载配置
+adminSetWaitSpawn: "§a等待出生点设置成功！"
+adminAddRandomSpawn: "§a随机出生点已添加, 当前已有 %number% 个随机出生点"
+adminNotNumber: "§a时间只能设置为正整数！"
+adminSetWaitTime: "§a等待时间已设置为：%time%"
+adminSetGameTime: "§a爆炸时间已设置为：%time%"
+adminSetGameTimeShort: "§a爆炸等待时间最小不能低于5秒！"
+adminStartRoom: "§a已强制开启游戏！"
+adminStartNoPlayer: "§a房间人数不足2人,无法开始游戏！"
+adminStartRoomIsPlaying: "§c房间已经开始了！"
+adminLevelNoRoom: "§a当前地图不是游戏房间！"
+adminStopRoom: "§a已强制结束房间！"
+adminReload: "§a配置重载完成！请在后台查看信息！"
+adminUnload: "§a已卸载所有房间！请在后台查看信息！"
+needRankName: "请输入排行榜名称！"
+rankNameRepeat: "已有名为：%name% 的排行榜了！"
+rankCreationSuccessful: "排行榜：%name% 创建成功！"
+rankDeleteSuccessful: "排行榜：%name% 删除成功！"
+rankNotFound: "未找到名称为 %name% 的排行榜！"
+tpJoinRoomLevel: "§e >> §c要进入游戏地图，请先加入游戏！"
+scoreBoardTitle: "§e烫手山芋"
+waitTimeScoreBoard: |-
+  玩家: §a%playerNumber%/16
+  §a开始倒计时: §e%time%
+waitScoreBoard: |-
+  玩家: §a%playerNumber%/16
+  最少游戏人数为 3 人
+  等待玩家加入中
+waitTimeBottom: "§a游戏还有: %time% 秒开始！"
+waitBottom: "§c等待玩家加入中"
+gameTimeScoreBoard: |-
+  §l§a当前回合:§e %round%
+  §l§a爆炸时间:§e %time% 秒
+  §l§a存活人数: %playerNumber%
+gameTimeBottom: "§l§a倒计时: §e %time% §a秒"
+victoryMessage: "§e恭喜 %player% §e获得胜利"
+playerDeath: "§c %player% 爆炸了！"
+playerDeathOther: "§c %player% 死于意外！"
+userMenuButton1: "§e随机加入房间"
+userMenuButton2: "§e退出当前房间"
+userMenuButton3: "§e查看房间列表"
+adminMenuSetLevel: "当前设置地图：%name%"
+adminMenuButton1: "§e设置等待出生点"
+adminMenuButton2: "§e添加随机出生点"
+adminMenuButton3: "§e设置时间参数"
+adminMenuButton4: "§e重载所有房间"
+adminMenuButton5: "§c卸载所有房间"
+adminTimeMenuInputText1: "等待时间（秒）"
+adminTimeMenuInputText2: "爆炸等待时间（秒）"
+joinRoomOK: "§l§a确认要加入房间: %name% §l§a？"
+buttonOK: "§a确定"
+buttonReturn: "§c返回"
+itemQuitRoom: "§c退出房间"
+itemQuitRoomLore: "手持点击,即可退出房间"
