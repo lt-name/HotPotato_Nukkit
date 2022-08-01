@@ -37,6 +37,22 @@ public class TimeTask extends PluginTask<HotPotato> {
         }
         if (this.room.gameTime > 0) {
             this.room.gameTime--;
+
+            if (this.room.getPlayers().isEmpty()) {
+                this.room.endGame();
+                this.cancel();
+                return;
+            }
+            if (this.room.getPlayers().size() == 1) {
+                for (Player player : room.getPlayers().keySet()) {
+                    this.room.victoryPlayer = player;
+                }
+                this.room.setStatus(RoomStatus.VICTORY);
+                Server.getInstance().getScheduler().scheduleRepeatingTask(owner,
+                        new VictoryTask(owner, this.room), 20);
+                return;
+            }
+
             for (Map.Entry<Player, Integer> entry : this.room.getPlayers().entrySet()) {
                 if (entry.getValue() == 2) {
                     Effect effect = entry.getKey().getEffect(1);
