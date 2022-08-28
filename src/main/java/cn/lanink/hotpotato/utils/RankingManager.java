@@ -1,10 +1,10 @@
 package cn.lanink.hotpotato.utils;
 
+import cn.lanink.gamecore.ranking.Ranking;
+import cn.lanink.gamecore.ranking.RankingAPI;
+import cn.lanink.gamecore.ranking.RankingFormat;
 import cn.lanink.hotpotato.HotPotato;
 import cn.lanink.hotpotato.player.PlayerDataManager;
-import cn.lanink.rankingapi.Ranking;
-import cn.lanink.rankingapi.RankingAPI;
-import cn.lanink.rankingapi.RankingFormat;
 import cn.nukkit.Server;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;

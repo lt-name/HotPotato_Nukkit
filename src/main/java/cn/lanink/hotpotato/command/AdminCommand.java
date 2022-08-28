@@ -19,13 +19,8 @@ public class AdminCommand extends BaseCommand {
         this.addSubCommand(new SetMinPlayers("SetMinPlayers"));
         this.addSubCommand(new SetMaxPlayers("SetMaxPlayers"));
 
-        try {
-            Class.forName("cn.lanink.rankingapi.RankingAPI");
-            this.addSubCommand(new CreateRank("CreateRank"));
-            this.addSubCommand(new DeleteRank("DeleteRank"));
-        }catch (Exception ignored) {
-
-        }
+        this.addSubCommand(new CreateRank("CreateRank"));
+        this.addSubCommand(new DeleteRank("DeleteRank"));
 
         this.addSubCommand(new StartRoom("StartRoom"));
         this.addSubCommand(new StopRoom("StopRoom"));
