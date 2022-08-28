@@ -3,6 +3,8 @@ package cn.lanink.hotpotato.room;
 import cn.lanink.gamecore.utils.PlayerDataUtils;
 import cn.lanink.gamecore.utils.Tips;
 import cn.lanink.hotpotato.HotPotato;
+import cn.lanink.hotpotato.event.HotPotatoRoomPlayerJoinEvent;
+import cn.lanink.hotpotato.event.HotPotatoRoomPlayerQuitEvent;
 import cn.lanink.hotpotato.tasks.WaitTask;
 import cn.lanink.hotpotato.utils.Language;
 import cn.lanink.hotpotato.utils.Tools;
@@ -153,6 +155,8 @@ public class Room {
      */
     public void joinRoom(Player player) {
         if (this.canJoin()) {
+            Server.getInstance().getPluginManager().callEvent(new HotPotatoRoomPlayerJoinEvent(this, player));
+
             if (this.status == RoomStatus.WAIT) {
                 this.initTask();
             }
@@ -181,6 +185,8 @@ public class Room {
      * @param player 玩家
      */
     public void quitRoom(Player player) {
+        Server.getInstance().getPluginManager().callEvent(new HotPotatoRoomPlayerQuitEvent(this, player));
+
         this.players.remove(player);
         if (HotPotato.getInstance().isHasTips()) {
             Tips.removeTipsConfig(this.level, player);

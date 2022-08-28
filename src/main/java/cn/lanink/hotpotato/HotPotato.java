@@ -117,12 +117,7 @@ public class HotPotato extends PluginBase {
         }
 
         PlayerDataManager.load();
-        try {
-            Class.forName("cn.lanink.rankingapi.RankingAPI");
-            RankingManager.load();
-        }catch (Exception ignored) {
-
-        }
+        RankingManager.load();
 
         
         this.loadRooms();
