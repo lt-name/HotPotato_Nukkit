@@ -52,7 +52,7 @@ public class Room {
     private final LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
 
     public Player victoryPlayer;
-    public int roundCount;
+    public int roundCount = 1;
 
     /**
      * 初始化
@@ -113,7 +113,7 @@ public class Room {
 
         this.victoryPlayer = null;
 
-        this.roundCount = 0;
+        this.roundCount = 1;
     }
 
     /**
