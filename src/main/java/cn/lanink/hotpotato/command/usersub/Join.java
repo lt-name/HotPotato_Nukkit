@@ -42,13 +42,6 @@ public class Join extends BaseSubCommand {
                 }
             }
             if (args.length < 2) {
-                for (Room room : this.hotPotato.getRooms().values()) {
-                    if (room.canJoin()) {
-                        room.joinRoom(player);
-                        sender.sendMessage(this.language.joinRandomRoom);
-                        return true;
-                    }
-                }
                 LinkedList<Room> rooms = new LinkedList<>();
                 for (Room room : this.hotPotato.getRooms().values()) {
                     if (room.canJoin()) {
