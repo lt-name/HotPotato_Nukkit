@@ -217,21 +217,21 @@ public class HotPotato extends PluginBase {
         File[] s = new File(getDataFolder() + "/Rooms").listFiles();
         if (s != null) {
             for (File file1 : s) {
-                String[] fileName = file1.getName().split("\\.");
-                if (fileName.length > 0) {
-                    Config config = getRoomConfig(fileName[0]);
-                    if (config.getInt("waitTime", 0) == 0 ||
-                            config.getInt("gameTime", 0) == 0 ||
-                            "".equals(config.getString("waitSpawn", "").trim()) ||
-                            config.getStringList("randomSpawn").size() == 0 ||
-                            "".equals(config.getString("World", "").trim())) {
-                        this.getLogger().warning("§c房间：" + fileName[0] + " 配置不完整，加载失败！");
-                        continue;
-                    }
-                    Room room = new Room(config);
-                    this.rooms.put(fileName[0], room);
-                    this.getLogger().info("§a房间：" + fileName[0] + " 已加载！");
+                String levelName = file1.getName().split("\\.")[0];
+                if (!this.getServer().loadLevel(levelName)) {
+                    this.getLogger().error("§c房间：" + levelName + " 加载失败！原因：世界不存在！");
+                    continue;
                 }
+                Config config = getRoomConfig(levelName);
+                if (config.getInt("waitTime", 0) == 0 ||
+                        config.getInt("gameTime", 0) == 0 ||
+                        "".equals(config.getString("waitSpawn", "").trim()) ||
+                        config.getStringList("randomSpawn").size() == 0) {
+                    this.getLogger().warning("§c房间：" + levelName + " 配置不完整，加载失败！");
+                    continue;
+                }
+                this.rooms.put(levelName, new Room(this.getServer().getLevelByName(levelName), config));
+                this.getLogger().info("§a房间：" + levelName + " 已加载！");
             }
         }
         this.getLogger().info("§e房间加载完成！当前已加载 " + this.rooms.size() + " 个房间！");
