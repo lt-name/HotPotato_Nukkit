@@ -1,0 +1,85 @@
+useCmdInRoom: "§e >> §cNo other commands can be used in the game."
+cmdHelp: "§aSee help: /%cmdName% help"
+userHelp: |-
+  §eHotPotato--Command help
+  §a/%cmdName% §eOpen ui
+  §a/%cmdName% join RoomName §eJoin the game
+  §a/%cmdName% quit §eQuit the game
+  §a/%cmdName% list §eView room list
+noPermission: "§cYou don't have permission to use this command!"
+joinRoom: "§aYou have joined the room: %name%"
+joinRoomIsInRoom: "§cYou are already in a room!"
+joinRoomIsRiding: "§aDo not enter the room while riding!"
+joinRandomRoom: "§aRooms have been randomly assigned to you!"
+joinRoomIsPlaying: "§aThe room is in the game, please wait a moment."
+joinRoomIsFull: "§aThe room is full, please wait a moment."
+joinRoomIsNotFound: "§aThis room does not exist!"
+joinRoomNotAvailable: "§aNo room available for the time being!"
+quitRoom: "§aYou have withdrawn from the room."
+quitRoomNotInRoom: "§aYou were not in the game room!"
+listRoom: "§eRoom list: §a %list%"
+useCmdInCon: "§cPlease do not execute this command in the console!"
+adminHelp: |-
+  §eHotPotato--Command help
+  §a/%cmdName% §eOpen ui
+  §a/%cmdName% setwaitspawn §eSet the current position to the waiting birth point
+  §a/%cmdName% addrandomspawn §eAdd the current location as a random birth point
+  §a/%cmdName% setwaittime numbers §eSet the waiting time after the number of players reaches the minimum number of players
+  §a/%cmdName% setgametime numbers §eSet explosion time
+  §a/%cmdName% startroom §eForced to open the room in the location map
+  §a/%cmdName% stoproom §eForced closure of rooms in the location map
+  §a/%cmdName% reloadroom §eReload all rooms
+  §a/%cmdName% unloadroom §eClose all rooms and uninstall the configuration
+adminSetWaitSpawn: "§aWait for the birth point to be set successfully!"
+adminAddRandomSpawn: "§aRandom birth points have been added, and there are currently %number% random birth points"
+adminNotNumber: "§aTime can only be set as a positive integer!"
+adminSetWaitTime: "§aThe wait time has been set:%time%"
+adminSetGameTime: "§aThe explosion time has been set:%time%"
+adminSetGameTimeShort: "§aThe minimum waiting time for explosion cannot be less than 5 seconds!"
+adminStartRoom: "§aThe game has been forced to start!"
+adminStartNoPlayer: "§aThe number of people in the room is less than %1%, unable to start the game!"
+adminStartRoomIsPlaying: "§cThe room has already started!"
+adminLevelNoRoom: "§aThe current map is not a game room!"
+adminStopRoom: "§aThe room has been forced to end!"
+adminReload: "§aConfiguration overload complete! Please check the information in the background!"
+adminUnload: "§aAll rooms have been unloaded! Please check the information in the background!"
+needRankName: "§aPlease enter the leaderboard name!"
+rankNameRepeat: "§cThere is already a ranking named: %name%!"
+rankCreationSuccessful: "§aRankings:%name% Created Successfully!"
+rankDeleteSuccessful: "§cRankings:%name% deleted successfully!"
+rankNotFound: "§cNo leaderboard named% name% found!"
+tpJoinRoomLevel: "§e >> §cTo enter the game map, please join the game first!"
+scoreBoardTitle: "§eHotPotato"
+waitTimeScoreBoard: |-
+  Players: §a%playerNumber%/16
+  §aStart the countdown: §e%time%
+waitScoreBoard: |-
+  Players: §a%playerNumber%/16
+  The minimum number of players is 3
+  Waiting for players to join
+waitTimeBottom: "§aThe game also has: %time% seconds to start!"
+waitBottom: "§cWaiting for players to join"
+gameTimeScoreBoard: |-
+  §l§aCurrent Round:§e %round%
+  §l§aExplosion time:§e %time% 秒
+  §l§aNumber of survivors: %playerNumber%
+gameTimeBottom: "§l§aCountdown: §e%time% §asecond"
+victoryMessage: "§eCongratulations %player% §eon winning"
+playerDeath: "§c %player% It exploded!"
+playerDeathOther: "§c %player% Died in an accident!"
+userMenuButton1: "§eJoin the room at random"
+userMenuButton2: "§eExit the current room"
+userMenuButton3: "§eView room list"
+adminMenuSetLevel: "Current setup map:%name%"
+adminMenuButton1: "§eSet the waiting point for birth"
+adminMenuButton2: "§eAdd random birth points"
+adminMenuButton3: "§eSet time parameters"
+adminMenuButton4: "§eReload all rooms"
+adminMenuButton5: "§cUninstall all rooms"
+adminTimeMenuInputText1: "Waiting time (seconds)"
+adminTimeMenuInputText2: "Explosion waiting time (seconds)"
+joinRoomOK: "§l§aConfirm to join the room: %name% §l§a?"
+buttonOK: "§aDetermine"
+buttonReturn: "§cReturn"
+itemQuitRoom: "§cExit the room"
+itemQuitRoomLore: "Hand-held click to exit the room."

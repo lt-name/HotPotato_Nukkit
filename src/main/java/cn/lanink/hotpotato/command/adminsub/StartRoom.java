@@ -33,7 +33,7 @@ public class StartRoom extends BaseSubCommand {
         Player player = (Player) sender;
         Room room = this.hotPotato.getRooms().get(player.getLevel().getName());
         if (room != null) {
-            if (room.getPlayers().size() >= 2) {
+            if (room.getPlayers().size() >= room.getMinPlayers()) {
                 if (room.getStatus() == RoomStatus.WAIT_PLAYER) {
                     Server.getInstance().getPluginManager().callEvent(new HotPotatoRoomStartEvent(room));
                     sender.sendMessage(this.language.adminStartRoom);
@@ -41,7 +41,7 @@ public class StartRoom extends BaseSubCommand {
                     sender.sendMessage(this.language.adminStartRoomIsPlaying);
                 }
             }else {
-                sender.sendMessage(this.language.adminStartNoPlayer);
+                sender.sendMessage(this.language.adminStartNoPlayer.replace("%1%", room.getMinPlayers() + ""));
             }
         }else {
             sender.sendMessage(this.language.adminLevelNoRoom);

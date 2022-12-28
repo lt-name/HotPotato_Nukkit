@@ -27,8 +27,6 @@ public class SetWaitSpawn extends BaseSubCommand {
         Player player = (Player) sender;
         Config config = hotPotato.getRoomConfig(player.getLevel());
         String spawn = player.getFloorX() + ":" + player.getFloorY() + ":" + player.getFloorZ();
-        String world = player.getLevel().getName();
-        config.set("World", world);
         config.set("waitSpawn", spawn);
         config.save();
         sender.sendMessage(this.language.adminSetWaitSpawn);

@@ -15,6 +15,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class Room {
     public int gameTime;
 
     protected RoomStatus status;
-    protected String level;
+    protected Level level;
     protected String waitSpawn;
 
     protected int setWaitTime;
@@ -52,20 +53,19 @@ public class Room {
     private final LinkedHashMap<Player, Skin> skinCache = new LinkedHashMap<>(); //缓存玩家皮肤，用于退出房间时还原
 
     public Player victoryPlayer;
-    public int roundCount;
+    public int roundCount = 1;
 
     /**
      * 初始化
      * @param config 配置文件
      */
-    public Room(Config config) {
+    public Room(@NotNull Level level, @NotNull Config config) {
+        this.level = level;
+
         this.setWaitTime = config.getInt("waitTime", 120);
         this.setGameTime = config.getInt("gameTime", 20);
         this.waitSpawn = config.getString("waitSpawn", null);
-        this.level = config.getString("World", null);
-        if (this.getLevel() == null) {
-            Server.getInstance().loadLevel(this.level);
-        }
+
         for (String string : config.getStringList("randomSpawn")) {
             String[] s = string.split(":");
             this.randomSpawn.add(new Position(
@@ -113,7 +113,7 @@ public class Room {
 
         this.victoryPlayer = null;
 
-        this.roundCount = 0;
+        this.roundCount = 1;
     }
 
     /**
@@ -175,7 +175,7 @@ public class Room {
             this.setRandomSkin(player);
             Tools.giveItem(player, 10);
             if (HotPotato.getInstance().isHasTips()) {
-                Tips.closeTipsShow(this.level, player);
+                Tips.closeTipsShow(this.level.getFolderName(), player);
             }
         }
     }
@@ -189,7 +189,7 @@ public class Room {
 
         this.players.remove(player);
         if (HotPotato.getInstance().isHasTips()) {
-            Tips.removeTipsConfig(this.level, player);
+            Tips.removeTipsConfig(this.level.getFolderName(), player);
         }
 
         Tools.rePlayerState(player, false);
@@ -330,7 +330,7 @@ public class Room {
      * @return 世界
      */
     public Level getLevel() {
-        return Server.getInstance().getLevelByName(this.level);
+        return this.level;
     }
 
     /**
