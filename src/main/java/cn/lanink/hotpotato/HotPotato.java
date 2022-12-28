@@ -33,7 +33,7 @@ import java.util.*;
  */
 public class HotPotato extends PluginBase {
 
-    public static final String VERSION = "?";
+    public static final String VERSION = "1.2.1 git-fcc7b7c";
     public static boolean debug = false;
     public static final Random RANDOM = new Random();
     private static HotPotato hotPotato;
@@ -104,8 +104,9 @@ public class HotPotato extends PluginBase {
 
         }
         //语言文件
-        saveResource("Language/zh_CN.yml");
-        saveResource("Language/es_MX.yml");
+        this.saveResource("Language/zh_CN.yml");
+        this.saveResource("Language/en_US.yml");
+        this.saveResource("Language/es_MX.yml");
         String s = this.config.getString("language", "zh_CN");
         File languageFile = new File(getDataFolder() + "/Language/" + s + ".yml");
         if (languageFile.exists()) {

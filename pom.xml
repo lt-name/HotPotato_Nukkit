@@ -6,7 +6,7 @@
 
     <groupId>cn.lanink</groupId>
     <artifactId>HotPotato</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.1<!-- -SNAPSHOT--></version>
 
     <licenses>
         <license>
@@ -142,7 +142,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>23.1.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -163,14 +163,14 @@
         <dependency>
             <groupId>cn.lanink</groupId>
             <artifactId>MemoriesOfTime-GameCore</artifactId>
-            <version>1.6.1</version>
+            <version>1.6.8</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.smallaswater.npc</groupId>
+            <groupId>com.smallaswater</groupId>
             <artifactId>RsNPC</artifactId>
-            <version>2.1.1</version>
+            <version>2.3.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
