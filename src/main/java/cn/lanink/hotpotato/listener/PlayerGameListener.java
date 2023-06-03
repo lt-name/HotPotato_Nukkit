@@ -225,7 +225,11 @@ public class PlayerGameListener implements Listener {
         if (room == null || !room.isPlaying(player)) {
             return;
         }
-        message = message.replace("/", "").split(" ")[0];
+        String[] split = message.replace("/", "").split(" ");
+        if (split.length == 0) {
+            return;
+        }
+        message = split[0];
         if (this.hotPotato.getCmdUser().equalsIgnoreCase(message) ||
                 this.hotPotato.getCmdAdmin().equalsIgnoreCase(message)) {
             return;

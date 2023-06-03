@@ -6,7 +6,7 @@
 
     <groupId>cn.lanink</groupId>
     <artifactId>HotPotato</artifactId>
-    <version>1.2.1-PM1E<!-- -SNAPSHOT--></version>
+    <version>1.2.2-PM1E-SNAPSHOT</version>
 
     <licenses>
         <license>
@@ -155,8 +155,8 @@
 
         <dependency>
             <groupId>cn.nukkit</groupId>
-            <artifactId>nukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>Nukkit</artifactId>
+            <version>PM1E_1.19.80.2964</version>
             <scope>provided</scope>
         </dependency>
 
