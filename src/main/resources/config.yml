@@ -15,3 +15,7 @@ cmdWhitelist:
 失败执行命令:
   - me 我失败了
   - tell "@p" 很遗憾你失败了！&con
+
+QuitRoom:
+  #退出房间执行命令
+  cmd: []
