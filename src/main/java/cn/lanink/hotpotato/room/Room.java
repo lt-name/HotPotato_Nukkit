@@ -204,6 +204,10 @@ public class Room {
 
         this.restoreSkin(player);
         HotPotato.getInstance().getIScoreboard().closeScoreboard(player);
+
+        if (HotPotato.getInstance().getConfig().exists("QuitRoom.cmd")) {
+            Tools.cmd(player, HotPotato.getInstance().getConfig().getStringList("QuitRoom.cmd"));
+        }
     }
 
     /**
